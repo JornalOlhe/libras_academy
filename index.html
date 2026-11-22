@@ -322,31 +322,38 @@ function finger(x,bx,by,L,w,s,shift){
   for(let i=0;i<3;i++)seg(x,pts[i][0],pts[i][1],pts[i+1][0],pts[i+1][1],ws[i]);
   if(bend<.8){x.strokeStyle='rgba(122,74,47,.55)';x.lineWidth=1.3;[1,2].forEach(i=>{const[px,py]=pts[i];x.beginPath();x.moveTo(px-ws[i]*.28,py);x.lineTo(px+ws[i]*.28,py);x.stroke()})}
   if(s>1.5){x.globalAlpha=clamp((s-1.5)*2);x.fillStyle=ACC;x.beginPath();x.arc(pts[3][0],pts[3][1]-1,3.4,0,7);x.fill();x.globalAlpha=1}
+  return pts[3];
 }
-function thumb(x,t){
+function thumb(x,t,tg){
   const bx=56,by=200,a=t<=1?lerp(70,-5,t):lerp(-5,-50,t-1),a2=a+(2-t)*20,f=lerp(.75,1,t/2),L1=36*f,L2=30*f;
-  const p1=[bx+Math.sin(a*RAD)*L1,by-Math.cos(a*RAD)*L1],p2=[p1[0]+Math.sin(a2*RAD)*L2,p1[1]-Math.cos(a2*RAD)*L2];
+  const p1=[bx+Math.sin(a*RAD)*L1,by-Math.cos(a*RAD)*L1];let p2=[p1[0]+Math.sin(a2*RAD)*L2,p1[1]-Math.cos(a2*RAD)*L2];
+  if(tg){const dx=tg[0]-bx,dy=tg[1]-by,l=Math.hypot(dx,dy)||1,m=Math.min(l,L1+L2-4);p2=[bx+dx/l*m,by+dy/l*m];p1[0]=(bx+p2[0])/2-6;p1[1]=(by+p2[1])/2+2}
   seg(x,bx,by,p1[0],p1[1],23);seg(x,p1[0],p1[1],p2[0],p2[1],19);
   if(t>1.5){x.globalAlpha=clamp((t-1.5)*2);x.fillStyle=ACC;x.beginPath();x.arc(p2[0],p2[1],3.4,0,7);x.fill();x.globalAlpha=1}
 }
-function drawHand(cv,d,spread){
-  const x=cv.getContext('2d'),k=cv.width/190;x.setTransform(k,0,0,k,0,0);x.clearRect(0,0,190,238);
+function drawHand(cv,d,spread,op){
+  op=op||{};const x=cv.getContext('2d'),k=cv.width/190;x.setTransform(k,0,0,k,0,0);x.clearRect(0,0,190,238);
+  const ang0=op.o==='lado'?90:op.o==='baixo'?180:0,sc0=op.o==='lado'?.78:op.o==='baixo'?.9:1;
+  x.save();x.translate(95,119);x.rotate(ang0*RAD);x.scale(sc0,sc0);x.translate(-95,-119);
   const gr=x.createLinearGradient(46,0,146,0);gr.addColorStop(0,'#dcab83');gr.addColorStop(.5,SK);gr.addColorStop(1,'#dcab83');
   x.beginPath();x.moveTo(50,140);x.quadraticCurveTo(44,172,54,204);x.quadraticCurveTo(62,228,80,242);x.lineTo(118,242);x.quadraticCurveTo(138,224,143,196);x.quadraticCurveTo(148,166,142,140);
   x.fillStyle=gr;x.fill();x.strokeStyle=SKD;x.lineWidth=2;x.stroke();
   const th=x.createRadialGradient(70,194,2,70,194,30);th.addColorStop(0,'rgba(190,125,85,.45)');th.addColorStop(1,'rgba(190,125,85,0)');x.fillStyle=th;x.beginPath();x.ellipse(70,194,30,34,0,0,7);x.fill();
   x.strokeStyle='rgba(122,74,47,.4)';x.lineWidth=1.5;x.lineCap='round';[63,84,105,125].forEach(b=>{x.beginPath();x.arc(b,150,9,.15*Math.PI,.85*Math.PI);x.stroke()});
   x.beginPath();x.moveTo(62,176);x.quadraticCurveTo(82,202,100,212);x.stroke();x.beginPath();x.moveTo(60,160);x.quadraticCurveTo(100,170,138,164);x.stroke();
-  const bx=[63,84,105,125],len=[72,80,72,56],w=[19,20,18,15],sh=[-9,-3,4,10];
-  for(let f=3;f>=0;f--)finger(x,bx[f]+(spread&&f<2?(f===0?-4:4):0),142,len[f],w[f],d[f+1],spread?sh[f]:sh[f]*.15);
-  thumb(x,d[0]);
+  const bx=[63,84,105,125],len=[72,80,72,56],w=[19,20,18,15];let sh=[-9,-3,4,10].map(v=>spread?v:v*.15);if(op.cross)sh=[18,-8,2,6];
+  const tips=[];for(const f of (op.cross?[3,2,0,1]:[3,2,1,0]))tips[f]=finger(x,bx[f]+(spread&&f<2?(f===0?-4:4):0),142,len[f],w[f],d[f+1],sh[f]);
+  thumb(x,d[0],op.touch?tips[0]:null);
+  x.restore();
+  if(ang0||op.arrow){x.save();x.strokeStyle=ACC;x.fillStyle=ACC;x.lineWidth=3;x.lineCap='round';const ax=ang0===90?176:ang0===180?95:95,ay=ang0===90?119:ang0===180?228:8;
+    x.translate(ax,ay);x.rotate(ang0*RAD);x.beginPath();x.moveTo(0,16);x.lineTo(0,-6);x.stroke();x.beginPath();x.moveTo(-7,0);x.lineTo(0,-9);x.lineTo(7,0);x.fill();x.restore()}
 }
 
 /* ===== alfabeto (grade) ===== */
 (function(){
   const g=$('#alpha');
   g.innerHTML=Object.keys(ALPHA).map((L,i)=>`<button class="lt reveal" style="--i:${i%6}" type="button" data-l="${L}" aria-label="Praticar a letra ${L}"><canvas width="150" height="188"></canvas><b>${L}</b><small>${esc(ALPHA[L].t)}</small></button>`).join('');
-  $$('.lt',g).forEach(b=>{const L=b.dataset.l;drawHand($('canvas',b),ALPHA[L].d,ALPHA[L].spread);b.onclick=()=>{$('#word').value=L;$('#pratica').scrollIntoView({behavior:reduce?'auto':'smooth'});setTimeout(()=>$('#go').click(),reduce?0:600)}});
+  $$('.lt',g).forEach(b=>{const L=b.dataset.l;drawHand($('canvas',b),ALPHA[L].d,ALPHA[L].spread,{o:ALPHA[L].o,touch:ALPHA[L].touch,cross:L==='R'});b.onclick=()=>{$('#word').value=L;$('#pratica').scrollIntoView({behavior:reduce?'auto':'smooth'});setTimeout(()=>$('#go').click(),reduce?0:600)}});
 })();
 
 /* ===== mão animada do hero: L-I-B-R-A-S ===== */
@@ -429,6 +436,43 @@ const SYN={eu:'EU',voce:'VOCE',voces:'VOCE',seu:'VOCE',sua:'VOCE',ele:'ELE',ela:
 const MULTI={'meu nome e':['meu','nome'],'me chamo':['meu','nome'],'o que':['que'],'por que':['porque'],'tudo bem':['tudo_bem'],'por favor':['por_favor'],'muito prazer':['prazer'],'boa tarde':['bom','tarde'],'boa noite':['bom','noite'],'bom dia':['bom','dia']};
 const STOP=new Set('o a os as um uma uns umas de do da dos das em no na nos nas para pra por pelo pela com ao aos e é são sou estou está estão foi ser estar'.split(' '));
 const WH=new Set(['QUE','COMO','ONDE','QUEM','PORQUE']);
+const K2=(k,t,d,i,o)=>{LEX[k]=K(t,d,i,o||{})};
+K2('FAMILIA','FAMÍLIA',[2,2,0,0,0],'Letra F em círculo à frente do corpo.',{mov:'circulo'});
+K2('PAI','PAI',[0,2,2,2,2],'Mão aberta toca a testa.',{loc:'testa'});
+K2('MAE','MÃE',[0,2,2,2,2],'Mão aberta toca o queixo.',{loc:'queixo'});
+K2('FILHO','FILHO',[0,2,0,0,0],'Indicador aponta para baixo, indicando a criança.',{o:'baixo'});
+K2('ESCOLA','ESCOLA',[0,2,2,2,2],'Mãos batem palmas duas vezes à frente.',{mov:'vertical'});
+K2('ESTUDAR','ESTUDAR',[0,2,2,2,2],'Mão aberta em frente ao rosto, dedos mexendo, como lendo.',{mov:'balanco'});
+K2('ENTENDER','ENTENDER',[0,2,0,0,0],'Indicador toca a testa e se afasta.',{loc:'testa',mov:'frente'});
+K2('SABER','SABER',[0,2,2,2,2],'Mão aberta toca a testa duas vezes.',{loc:'testa',mov:'vertical'});
+K2('PRECISAR','PRECISAR',[0,2,0,0,0],'Indicador curvado desce com firmeza.',{mov:'vertical'});
+K2('AJUDAR','AJUDAR',[2,0,0,0,0],'Punho com polegar para cima é levantado por baixo.',{mov:'vertical'});
+K2('FALAR','FALAR',[0,2,0,0,0],'Indicador faz pequenos círculos junto à boca.',{loc:'boca',mov:'circulo'});
+K2('VER','VER',[0,2,2,0,0],'Indicador e médio saem dos olhos e apontam para frente.',{loc:'testa',mov:'frente'});
+K2('OUVIR','OUVIR',[0,2,0,0,0],'Indicador aponta para o ouvido.',{loc:'testa'});
+K2('MORAR','MORAR',[0,0,0,0,0],'Punho toca o queixo e depois o peito.',{loc:'queixo'});
+K2('COMPRAR','COMPRAR',[1,1,1,1,1],'Mão em concha faz o gesto de entregar dinheiro.',{mov:'frente'});
+K2('DORMIR','DORMIR',[0,2,2,2,2],'Mão aberta no rosto, cabeça inclinada.',{loc:'boca'});
+K2('GRANDE','GRANDE',[2,2,2,2,2],'Mãos se afastam mostrando tamanho grande.',{mov:'balanco'});
+K2('PEQUENO','PEQUENO',[0,2,0,0,0],'Indicador e polegar mostram um espaço pequeno.',{});
+K2('BONITO','BONITO',[1,1,1,1,1],'Mão em garra passa em frente ao rosto, sorrindo.',{loc:'boca',mov:'circulo',expr:'sorriso'});
+K2('MUITO','MUITO',[0,2,2,2,2],'Mão aberta se afasta para os lados.',{mov:'balanco'});
+K2('HOJE','HOJE',[0,2,2,2,2],'Mãos abertas descem à frente, indicando agora.',{mov:'vertical'});
+K2('AMANHA','AMANHÃ',[2,0,0,0,0],'Polegar sobe do queixo e avança para frente.',{loc:'queixo',mov:'frente'});
+K2('ONTEM','ONTEM',[2,0,0,0,0],'Polegar sobe do queixo e vai para trás.',{loc:'queixo',mov:'frente'});
+K2('AGORA','AGORA',[0,2,2,2,2],'Mãos abertas descem com firmeza à frente.',{mov:'vertical'});
+K2('DESCULPA','DESCULPA',[0,2,2,2,2],'Mão aberta na testa; incline levemente a cabeça.',{loc:'testa',head:'afirmar'});
+K2('COMIDA','COMIDA',[1,1,1,1,1],'Dedos juntos levados à boca.',{loc:'boca',mov:'vertical'});
+K2('CAFE','CAFÉ',[0,0,0,0,0],'Punho gira em frente ao queixo, como moendo café.',{loc:'queixo',mov:'circulo'});
+K2('SURDO','SURDO',[0,2,0,0,0],'Indicador toca o ouvido e depois a boca.',{loc:'boca'});
+K2('PROFESSOR','PROFESSOR',[1,1,1,1,1],'Mãos em garra afastam-se da testa, ensinando.',{loc:'testa',mov:'frente'});
+K2('QUANDO','QUANDO',[0,2,0,0,0],'Indicador faz pequeno círculo; franza as sobrancelhas.',{mov:'circulo',expr:'franzir'});
+K2('QUAL','QUAL',[2,2,0,0,0],'Mão em L balança; franza as sobrancelhas.',{mov:'balanco',expr:'franzir'});
+K2('QUANTO','QUANTO',[0,2,2,2,2],'Mão aberta com dedos mexendo; franza as sobrancelhas.',{mov:'balanco',expr:'franzir'});
+Object.assign(LEX.EU,{o:'lado'});Object.assign(LEX.ELE,{o:'lado'});
+const SYN2={familia:'FAMILIA',pai:'PAI',mae:'MAE',filho:'FILHO',filha:'FILHO',escola:'ESCOLA',estudo:'ESTUDAR',estuda:'ESTUDAR',estudar:'ESTUDAR',entendo:'ENTENDER',entende:'ENTENDER',entender:'ENTENDER',sei:'SABER',sabe:'SABER',saber:'SABER',preciso:'PRECISAR',precisa:'PRECISAR',precisar:'PRECISAR',ajudo:'AJUDAR',ajuda:'AJUDAR',ajudar:'AJUDAR',falo:'FALAR',fala:'FALAR',falar:'FALAR',vejo:'VER',ve:'VER',ver:'VER',ouco:'OUVIR',ouve:'OUVIR',ouvir:'OUVIR',moro:'MORAR',mora:'MORAR',morar:'MORAR',compro:'COMPRAR',compra:'COMPRAR',comprar:'COMPRAR',durmo:'DORMIR',dorme:'DORMIR',dormir:'DORMIR',grande:'GRANDE',pequeno:'PEQUENO',pequena:'PEQUENO',bonito:'BONITO',bonita:'BONITO',muito:'MUITO',muita:'MUITO',hoje:'HOJE',amanha:'AMANHA',ontem:'ONTEM',agora:'AGORA',desculpa:'DESCULPA',desculpe:'DESCULPA',comida:'COMIDA',cafe:'CAFE',surdo:'SURDO',surda:'SURDO',professor:'PROFESSOR',professora:'PROFESSOR',quando:'QUANDO',qual:'QUAL',quanto:'QUANTO',quanta:'QUANTO',ele:'ELE',gostei:'GOSTAR',amei:'AMOR',fui:'IR',foi:'IR',comi:'COMER',bebi:'BEBER',trabalhei:'TRABALHAR',aprendi:'APRENDER',quis:'QUERER',tive:'TER'};
+Object.assign(SYN,SYN2);Object.assign(WH,{});['QUANDO','QUAL','QUANTO'].forEach(k=>WH.add(k));
+
 
 function spell(word,group){
   return [...norm(word).toUpperCase()].filter(c=>ALPHA[c]).map(c=>({t:'Letra '+c,key:'L:'+c,g:group||word.toUpperCase().split('').join('-'),d:ALPHA[c].d,o:ALPHA[c].o,toque:!!ALPHA[c].touch,abertos:!!ALPHA[c].spread,i:ALPHA[c].t}));
@@ -443,7 +487,7 @@ function buildPhrase(text){
     for(const len of [3,2]){const k=nw.slice(i,i+len).join(' ');if(nw.length>=i+len&&MULTI[k]){hit=MULTI[k];n=len;break}}
     const toks=hit||[nw[i]];
     toks.forEach((tk,j)=>{
-      const orig=hit?tk:w[i];let key=SYN[tk];
+      const orig=hit?tk:w[i];let key=SYN[tk]||SYN[tk.replace(/s$/,'')]||SYN[tk.replace(/(mos|ram|ndo)$/,'r')];
       if(tk==='como'&&i>0&&['eu','nos'].includes(nw[i-1]))key='COMER';
       if(key&&LEX[key]){const e=LEX[key];items.push({label:e.t,steps:[{...e,key:'S:'+key,g:e.t}]})}
       else if(!STOP.has(tk)){const st=spell(orig,orig.toUpperCase().split('').join('-'));if(st.length){items.push({label:st[0].g,steps:st});spelled.push(orig)}}
@@ -473,7 +517,7 @@ function smooth(a){hist.push(a);if(hist.length>5)hist.shift();
   const d=a.d.map((_,i)=>{const c=[0,0,0];hist.forEach(h=>c[h.d[i]]++);return c.indexOf(Math.max(...c))});
   const maj=k=>hist.filter(h=>h[k]).length>hist.length/2,oc={};hist.forEach(h=>oc[h.orient]=(oc[h.orient]||0)+1);
   return{d,palm:a.palm,orient:Object.keys(oc).sort((x,y)=>oc[y]-oc[x])[0],touch:maj('touch'),spread:maj('spread')}}
-function score(a,s){let sc=0;for(let i=0;i<5;i++){const df=Math.abs(a.d[i]-s.d[i]);sc+=df===0?1:df===1?.5:0}sc/=5;if(s.toque&&!a.touch)sc-=.2;if(s.abertos&&!a.spread)sc-=.2;if(s.o&&a.orient!==s.o)sc-=.25;return Math.max(0,sc)}
+function score(a,s){let sc=0;for(let i=0;i<5;i++){const df=Math.abs(a.d[i]-s.d[i]);sc+=df===0?1:df===1?(i===0?.8:.3):0}sc/=5;if(s.toque&&!a.touch)sc-=.2;if(s.abertos&&!a.spread)sc-=.2;if(s.o&&a.orient!==s.o)sc-=.25;return Math.max(0,sc)}
 
 /* gestos gravados pelo usuário (calibração pessoal) */
 let CAL={};try{CAL=JSON.parse(localStorage.getItem('libras_cal')||'{}')}catch(e){}
@@ -541,17 +585,27 @@ function exprTags(F){
 
 /* ===== avaliação de um passo ===== */
 function evalStep(st,f,now){
-  const r={shape:0,loc:null,mov:null,expr:null,need:{}};
-  let h=score(f.a,{d:st.d,toque:st.toque,abertos:st.abertos,o:st.o});
-  if(CAL[st.key])h=Math.max(h,pScore(nearest(st.key,f.v)));
+  const r={shape:0,loc:null,mov:null,expr:null,need:{},bad:[]},a=f.a;let nOk=0;
+  st.d.forEach((t,i)=>{const g=a.d[i];if(g===t||(i===0&&Math.abs(g-t)<=1))nOk++;else r.bad.push({i,t,g})});
+  let h=nOk/5;
+  if(st.toque&&!a.touch){r.bad.push({x:'toque'});h-=.2}
+  if(st.abertos&&!a.spread){r.bad.push({x:'abertos'});h-=.2}
+  if(st.o&&a.orient!==st.o){r.bad.push({x:'orient'});h-=.2}
+  h=Math.max(0,h);
+  if(CAL[st.key]){const p=pScore(nearest(st.key,f.v));if(p>=.85){r.bad=[];h=Math.max(h,p)}}
   r.shape=h;
   const L=st.loc&&st.loc!=='neutro';
   if(L){r.need.loc=true;const same=f.loc===st.loc||(['boca','queixo'].includes(f.loc)&&['boca','queixo'].includes(st.loc));r.loc=f.loc?same:null}
   if(st.mov&&st.mov!=='estatico'){r.need.mov=true;r.mov=now<f.movUntil}
   const ex=st.exprReq||null;if(ex){r.need.expr=true;r.expr=f.ex.includes(ex)}
-  r.ok=h>=.8&&(!r.need.loc||r.loc===true)&&(!r.need.mov||r.mov)&&(!r.need.expr||r.expr);
+  r.ok=!r.bad.length&&(!r.need.loc||r.loc===true)&&(!r.need.mov||r.mov)&&(!r.need.expr||r.expr);
   return r;
 }
+
+/* ===== avaliação de um passo: mensagem do que corrigir ===== */
+const VERB=['feche','curve','estique'];
+function fixMsg(bad,s){
+  return 'Corrija: '+bad.map(b=>b.x==='toque'?'junte a ponta do polegar com a do indicador':b.x==='abertos'?'afaste os dedos':b.x==='orient'?'vire a mão para '+(s.o==='lado'?'o lado':'baixo'):NAMES[b.i].toLowerCase()+' ('+VERB[b.t]+')').join(', ')}
 
 /* ===== interface do app ===== */
 let steps=[],items=[],cur=0,holdT=0,detected=null,lastT=performance.now(),running=false,holistic,rec=null,movUntil=0;
@@ -584,7 +638,7 @@ function render(){
   if(s){
     const req=[];if(s.loc&&s.loc!=='neutro')req.push('Local: '+s.loc);if(s.mov&&s.mov!=='estatico')req.push('Movimento: '+MOVN[s.mov]);if(s.exprReq||s.expr)req.push('Expressão: '+EXN[s.exprReq||s.expr]);if(s.head)req.push('Cabeça: '+(s.head==='negar'?'negando':'acenando'));
     $('#instr').innerHTML=`<b>${esc(s.g&&s.g!==s.t?s.g+' · ':'')}${esc(s.t)}</b><span>${esc(s.i)}</span><div class="fl">${s.d.map((v,k)=>`<em class="st${v}">${NAMES[k]}: ${ST[v]}</em>`).join('')}</div>${req.length?`<div class="fl req">${req.map(x=>`<em>${esc(x)}</em>`).join('')}</div>`:''}`;
-    drawHand($('#ref'),s.d,s.abertos);mini=document.createElement('canvas');mini.width=190;mini.height=238;drawHand(mini,s.d,s.abertos);
+    const op={o:s.o,touch:s.toque,cross:s.key==='L:R',arrow:false};drawHand($('#ref'),s.d,s.abertos,op);mini=document.createElement('canvas');mini.width=190;mini.height=238;drawHand(mini,s.d,s.abertos,op);
   }
   renderFingers();renderStat(null,null);
 }
@@ -595,7 +649,7 @@ function renderFingers(){
 }
 function renderStat(r,f){
   const s=steps[cur];const box=(n,got,want,ok)=>`<div class="${want==null?'':ok?'ok':'bad'}"><small>${n}</small><b>${got==null?'—':esc(got)}</b>${want!=null?`<small>alvo: ${esc(want)}</small>`:''}</div>`;
-  $('#stat').innerHTML=box('Mão',r?Math.round(r.shape*100)+'%':null,s?'≥ 80%':null,r&&r.shape>=.8)
+  $('#stat').innerHTML=box('Mão',r?(r.bad.length?'errado':'certo'):null,s?'todos os dedos':null,r&&!r.bad.length)
    +box('Local',f?f.loc:null,s&&s.loc&&s.loc!=='neutro'?s.loc:null,r&&r.loc===true)
    +box('Movimento',f?MOVS[f.mv]||f.mv:null,s&&s.mov&&s.mov!=='estatico'?s.mov:null,r&&r.mov)
    +box('Expressão',f?(f.exReady?(f.ex.join(' + ')||'neutra'):'calibrando...'):null,s&&s.exprReq?s.exprReq:null,r&&r.expr);
@@ -620,17 +674,29 @@ function drawBust(t){
   if(ex==='sorriso'){bx.moveTo(104,114);bx.quadraticCurveTo(120,132,136,114)}else if(ex==='franzir'){bx.moveTo(108,122);bx.quadraticCurveTo(120,116,132,122)}else{bx.moveTo(108,120);bx.lineTo(132,120)}bx.stroke();
   bx.strokeStyle='rgba(138,90,60,.5)';bx.lineWidth=1.5;bx.beginPath();bx.moveTo(120,92);bx.lineTo(117,106);bx.lineTo(123,106);bx.stroke();
   if(!s||!mini)return;
-  const lp=LOCP[s.loc&&LOCP[s.loc]?s.loc:'neutro'],w=56,h=70,sp=t*3.2;let ox=0,oy=0,sc2=1;
-  bx.save();bx.strokeStyle='rgba(45,212,191,.7)';bx.lineWidth=2;bx.setLineDash([4,4]);
-  const m=s.mov;
-  if(m==='balanco'){ox=Math.sin(sp)*20;bx.beginPath();bx.moveTo(lp[0]-20,lp[1]+8);bx.lineTo(lp[0]+20,lp[1]+8);bx.stroke()}
-  else if(m==='vertical'){oy=Math.sin(sp)*16;bx.beginPath();bx.moveTo(lp[0]+34,lp[1]-16);bx.lineTo(lp[0]+34,lp[1]+16);bx.stroke()}
-  else if(m==='circulo'){ox=Math.cos(sp)*16;oy=Math.sin(sp)*16;bx.beginPath();bx.arc(lp[0],lp[1],16,0,7);bx.stroke()}
-  else if(m==='frente'){sc2=1+.28*Math.sin(sp);bx.beginPath();bx.arc(lp[0],lp[1],30,0,7);bx.stroke()}
-  else if(s.loc&&s.loc!=='neutro'){bx.beginPath();bx.arc(lp[0],lp[1],30+Math.sin(sp)*3,0,7);bx.stroke()}
+  const lp=LOCP[s.loc&&LOCP[s.loc]?s.loc:'neutro'],rest=LOCP.neutro,w=56,h=70,cyc=5,ph=t%cyc;
+  const ez=p=>1-Math.pow(1-p,3),go=ez(clamp(ph/1.2)),arrive=clamp((ph-1.2)/.4),sp=(ph-1.2)*3.4;
+  const px=lerp(rest[0],lp[0],go),py=lerp(rest[1],lp[1],go);let ox=0,oy=0,sc2=1;
+  const m=s.mov,amp=arrive;
+  if(m==='balanco')ox=Math.sin(sp)*20*amp;else if(m==='vertical')oy=Math.sin(sp)*16*amp;
+  else if(m==='circulo'){ox=Math.cos(sp)*16*amp;oy=Math.sin(sp)*16*amp}else if(m==='frente')sc2=1+.28*Math.sin(sp)*amp;
+  const hx=px+ox,hy=py+oy;
+  /* alvo no corpo: anel pulsante + seta + nome do lugar */
+  if(s.loc&&s.loc!=='neutro'){
+    bx.save();bx.strokeStyle='rgba(45,212,191,.9)';bx.fillStyle='rgba(45,212,191,.14)';bx.lineWidth=2.5;const r=30+Math.sin(t*4)*3;
+    bx.beginPath();bx.arc(lp[0],lp[1],r,0,7);bx.fill();bx.stroke();
+    bx.fillStyle='#2dd4bf';bx.font='700 11px system-ui';bx.textAlign='center';bx.fillText('▶ '+s.loc.toUpperCase(),lp[0]-r-34>6?lp[0]-r-34:lp[0]+r+34,lp[1]+4);bx.restore()}
+  /* braço do boneco */
+  bx.save();bx.lineCap='round';bx.strokeStyle='#2b3b4d';bx.lineWidth=24;bx.beginPath();bx.moveTo(196,268);bx.quadraticCurveTo(214,hy+40>268?268:hy+40,hx+10,hy+24);bx.stroke();bx.restore();
+  /* trajetória do movimento */
+  bx.save();bx.strokeStyle='rgba(45,212,191,.75)';bx.lineWidth=2;bx.setLineDash([4,4]);
+  if(m==='balanco'){bx.beginPath();bx.moveTo(lp[0]-22,lp[1]+8);bx.lineTo(lp[0]+22,lp[1]+8);bx.stroke()}
+  else if(m==='vertical'){bx.beginPath();bx.moveTo(lp[0]+36,lp[1]-18);bx.lineTo(lp[0]+36,lp[1]+18);bx.stroke()}
+  else if(m==='circulo'){bx.beginPath();bx.arc(lp[0],lp[1],16,0,7);bx.stroke()}
+  else if(m==='frente'){bx.beginPath();bx.arc(lp[0],lp[1],34,0,7);bx.stroke()}
   bx.restore();
-  bx.drawImage(mini,lp[0]+ox-w*sc2/2,lp[1]+oy-h*sc2/2,w*sc2,h*sc2);
-  if(s.head){bx.fillStyle='#2dd4bf';bx.font='600 11px system-ui';bx.textAlign='center';bx.fillText(s.head==='negar'?'cabeça: não':'cabeça: sim',120,14+Math.sin(sp)*2)}
+  bx.drawImage(mini,hx-w*sc2/2,hy-h*sc2/2,w*sc2,h*sc2);
+  if(s.head){bx.fillStyle='#2dd4bf';bx.font='600 11px system-ui';bx.textAlign='center';bx.fillText(s.head==='negar'?'cabeça: não':'cabeça: sim',120,14+Math.sin(t*3.2)*2)}
 }
 (function loop(now){drawBust(now/1000);requestAnimationFrame(loop)})(0);
 
@@ -662,8 +728,8 @@ function onResults(res){
   if(!s){const g=guess(detected,v);renderStat(null,f);setBadge('Parece: '+g.letters.join(' / ')+' ('+Math.round(g.conf*100)+'%)',g.conf>=.8);return}
   const r=evalStep(s,f,now);renderStat(r,f);
   if(r.ok){holdT+=dt;setBadge('✓ Segure...',true)}else{holdT=Math.max(0,holdT-dt*2);
-    setBadge(r.shape<.8?'Ajuste os dedos ('+Math.round(r.shape*100)+'%)':r.need.loc&&r.loc!==true?(f.loc==null?'Mostre rosto e ombros':'Leve a mão ao local: '+s.loc):r.need.mov&&!r.mov?'Faça o movimento':r.need.expr&&!r.expr?'Use a expressão do rosto':'Quase...',false)}
-  const need=s.mov&&s.mov!=='estatico'?500:600;$('#hold').style.width=Math.min(100,holdT/need*100)+'%';
+    setBadge(r.bad.length?fixMsg(r.bad,s):r.need.loc&&r.loc!==true?(f.loc==null?'Mostre rosto e ombros':'Leve a mão ao local: '+s.loc):r.need.mov&&!r.mov?'Faça o movimento':r.need.expr&&!r.expr?'Use a expressão do rosto':'Quase...',false)}
+  const need=s.mov&&s.mov!=='estatico'?500:700;$('#hold').style.width=Math.min(100,holdT/need*100)+'%';
   if(holdT>=need){holdT=0;buf.length=0;movUntil=0;
     if(cur<steps.length-1){cur++;render();setBadge('Passo concluído!',true)}
     else{$('#steps').innerHTML=items.map(it=>`<span class="chip done">✓ ${esc(it.label)}</span>`).join('');$('#instr').innerHTML='<b>🎉 Parabéns!</b><span>Você completou a frase. Digite outra ou clique em Reiniciar.</span>';setBadge('Frase concluída!',true)}}
