@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: Versão (ex.: 1.0.0)
+        description: 'Versão, ex 1.0.0'
         default: '1.0.0'
 permissions:
   contents: write
