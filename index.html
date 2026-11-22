@@ -137,6 +137,12 @@ footer .bot{display:flex;flex-direction:column;gap:1rem;padding-top:1.75rem;font
 .gi b{display:grid;place-items:center;width:1.75rem;height:1.75rem;border-radius:50%;background:var(--signal);color:var(--on-signal);font-size:.8125rem;margin-bottom:.75rem}
 .gi h3{font-size:1rem;font-weight:600}.gi p{margin-top:.35rem;font-size:.8125rem;line-height:1.5;color:color-mix(in oklab,var(--paper) 62%,transparent)}
 .gf{position:absolute;inset:10% 24%;z-index:1;display:grid;align-items:end;justify-items:center;padding-bottom:.75rem;border:2px dashed color-mix(in oklab,var(--signal) 75%,transparent);border-radius:48% 48% 36% 36%;font-size:.8125rem;font-weight:600;color:var(--signal);pointer-events:none;opacity:0;transition:opacity .4s}.gf.show{opacity:1}
+.pts{position:absolute;right:.75rem;top:.75rem;z-index:2;padding:.35rem .7rem;border-radius:99px;background:#000a;font-size:.75rem;color:color-mix(in oklab,var(--paper) 70%,transparent)}
+.stat{display:grid;grid-template-columns:repeat(4,1fr);gap:.4rem;margin-top:.5rem;text-align:center}
+.stat div{display:flex;flex-direction:column;gap:.15rem;background:color-mix(in oklab,var(--night) 70%,transparent);border:1px solid transparent;border-radius:.6rem;padding:.45rem .2rem;font-size:.75rem}.stat div.ok{border-color:var(--ok)}.stat div.bad{border-color:var(--destructive)}.stat small{font-size:.625rem;color:color-mix(in oklab,var(--paper) 50%,transparent)}
+.ref{display:flex;gap:.75rem;flex-wrap:wrap}.ref canvas#bust{width:12rem;aspect-ratio:240/280;background:color-mix(in oklab,var(--night) 70%,transparent);border-radius:1rem}
+.hint{margin-top:.75rem;font-size:.75rem;line-height:1.5;color:color-mix(in oklab,var(--paper) 50%,transparent)}.fl.req em{color:var(--signal)}
+#instr{margin-top:.75rem}
 .legend{display:flex;flex-wrap:wrap;gap:.4rem 1rem;margin-bottom:.75rem;font-size:.75rem;color:color-mix(in oklab,var(--paper) 55%,transparent)}
 .st2{color:var(--ok)}.st1{color:#fbbf24}.st0{color:#94a3b8}
 .fl{display:flex;flex-wrap:wrap;gap:.25rem .75rem;margin-top:.6rem}.fl em{font-style:normal;font-size:.75rem}
@@ -177,11 +183,11 @@ html.js .reveal:not(.is-visible),html.js .reveal:not(.is-visible) .split-word>sp
     <div style="max-width:42rem">
       <p class="label eyebrow hero-in" style="--d:150"><i class="ch-line"></i>Aprenda Libras praticando</p>
       <h1 id="hero-title"><span class="m"><span class="ch-rise" style="animation-delay:250ms">Fale com</span></span><span class="m"><span class="ch-rise" style="animation-delay:400ms;color:var(--signal)">as mãos.</span></span></h1>
-      <p class="lead hero-in" style="--d:700">Escolha uma palavra, veja como posicionar cada dedo e receba correção ao vivo pela câmera. Sem instalar nada.</p>
+      <p class="lead hero-in" style="--d:700">Digite uma palavra ou frase, veja como fazer cada sinal e receba correção ao vivo pela câmera. Sem instalar nada.</p>
       <div class="ctas hero-in" style="--d:850"><a class="btn" href="#pratica">Começar a praticar <svg class="i" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><a class="btn sec2" href="#alfabeto">Ver o alfabeto</a></div>
     </div>
     <div class="hero-media handbox hero-focus" style="position:relative;inset:auto" aria-hidden="true"><div class="ring"></div><canvas id="heroHand" width="360" height="450"></canvas><span class="let" id="heroLet">L</span></div>
-    <div class="foot hero-in" style="--d:1000"><div><strong>26</strong><span>letras para treinar</span></div><div><strong>21</strong><span>pontos da mão lidos</span></div><div><strong>A–Z</strong><span>soletre qualquer palavra</span></div></div>
+    <div class="foot hero-in" style="--d:1000"><div><strong>26</strong><span>letras para treinar</span></div><div><strong>543</strong><span>pontos de mãos, rosto e corpo</span></div><div><strong>A–Z</strong><span>soletre qualquer palavra</span></div></div>
   </div>
 </section>
 
@@ -190,14 +196,14 @@ html.js .reveal:not(.is-visible),html.js .reveal:not(.is-visible) .split-word>sp
   <div class="reveal reveal-split heading"><span class="rule"></span><p class="label sig">01 / Por quê</p><h2 data-split>Aprender Libras é mais fácil quando alguém corrige você.</h2></div>
   <div class="about-g"><p class="lead scrub" id="scrub" data-scrub>Livros mostram a mão pronta. Aqui a câmera vê a sua mão, compara com o sinal certo e diz exatamente qual dedo ajustar.</p><p class="txt reveal">A Libras é uma língua com gramática própria, usada pela comunidade surda brasileira. A Libras Academy é uma ferramenta de apoio ao estudo: ela não substitui aulas com professores surdos, mas ajuda a treinar a forma das mãos todos os dias.</p></div>
   <div class="feats">
-    <div class="feat reveal" style="--i:0"><span class="label sig">01</span><div><h3>Veja o sinal</h3><p>Uma mão de referência mostra quais dedos ficam esticados, curvos ou fechados.</p></div></div>
+    <div class="feat reveal" style="--i:0"><span class="label sig">01</span><div><h3>Veja o sinal</h3><p>Um boneco mostra o formato da mão, onde ela vai no corpo, o movimento e a expressão do rosto.</p></div></div>
     <div class="feat reveal" style="--i:1"><span class="label sig">02</span><div><h3>Pratique na câmera</h3><p>A leitura roda no seu navegador. O vídeo não sai do seu computador.</p></div></div>
-    <div class="feat reveal" style="--i:2"><span class="label sig">03</span><div><h3>Qualquer palavra</h3><p>Soletre qualquer palavra com o alfabeto manual e aprenda sinais comuns do dia a dia.</p></div></div>
+    <div class="feat reveal" style="--i:2"><span class="label sig">03</span><div><h3>Frases completas</h3><p>Digite uma frase: o site monta a sequência de sinais, com movimento, local e expressão.</p></div></div>
   </div></div></section>
 
 <section class="nums" aria-label="Números"><div class="shell">
   <div class="reveal"><strong><span class="count tab" data-v="26">26</span></strong><p>letras do alfabeto manual</p></div>
-  <div class="reveal" style="--i:1"><strong><span class="count tab" data-v="21">21</span></strong><p>pontos da mão acompanhados pela câmera</p></div>
+  <div class="reveal" style="--i:1"><strong><span class="count tab" data-v="543">543</span></strong><p>pontos de mãos, rosto e corpo acompanhados</p></div>
   <div class="reveal" style="--i:2"><strong><span class="count tab" data-v="0">0</span></strong><p>programas para instalar</p></div></div></section>
 
 <section class="sec dark" id="alfabeto"><div class="shell">
@@ -217,29 +223,32 @@ html.js .reveal:not(.is-visible),html.js .reveal:not(.is-visible) .split-word>sp
 <section class="sec dark" id="pratica" style="padding-bottom:5rem"><div class="shell">
   <div class="reveal reveal-split heading light"><span class="rule"></span><p class="label sig">04 / Praticar</p><h2 data-split>Ligue a câmera e mostre a mão.</h2></div>
   <div class="guide">
-    <div class="gi reveal"><b>1</b><h3>Posicione</h3><p>Fique a um braço de distância, com a mão inteira dentro da moldura tracejada.</p></div>
-    <div class="gi reveal" style="--i:1"><b>2</b><h3>Ilumine</h3><p>Luz de frente e fundo liso. Evite ficar de costas para a janela.</p></div>
-    <div class="gi reveal" style="--i:2"><b>3</b><h3>Imite o desenho</h3><p>Palma virada para a câmera. Siga o desenho e a lista de dedos.</p></div>
-    <div class="gi reveal" style="--i:3"><b>4</b><h3>Segure</h3><p>Mantenha a posição até a barra encher. O passo conclui sozinho.</p></div>
+    <div class="gi reveal"><b>1</b><h3>Posicione</h3><p>Fique a um braço de distância, com cabeça, ombros e mão dentro do quadro.</p></div>
+    <div class="gi reveal" style="--i:1"><b>2</b><h3>Rosto neutro</h3><p>Ao ligar, mantenha o rosto neutro por 1 segundo para calibrar as expressões.</p></div>
+    <div class="gi reveal" style="--i:2"><b>3</b><h3>Imite o boneco</h3><p>Ele mostra o formato da mão, o local do corpo, o movimento e a expressão.</p></div>
+    <div class="gi reveal" style="--i:3"><b>4</b><h3>Segure</h3><p>Acertou tudo? A barra enche e o próximo sinal aparece.</p></div>
   </div>
   <div class="app">
     <div class="card reveal">
-      <div class="cam"><video id="v" playsinline muted></video><canvas id="c"></canvas><div class="gf" id="gf">Coloque a mão aqui</div><div class="badge" id="badge">Câmera desligada</div></div>
+      <div class="cam"><video id="v" playsinline muted></video><canvas id="c"></canvas><div class="gf" id="gf">Coloque a mão aqui</div><div class="badge" id="badge">Câmera desligada</div><div class="pts" id="pts"></div></div>
       <div class="bar"><i id="hold"></i></div>
-      <div class="row"><button class="btn" id="camBtn" type="button">Ligar câmera</button><label class="chk"><input type="checkbox" id="skel"> mostrar linhas da mão</label></div>
+      <div class="row"><button class="btn" id="camBtn" type="button">Ligar câmera</button><label class="chk"><input type="checkbox" id="skel"> mostrar pontos rastreados</label></div>
       <div class="fing" id="fing"></div>
-      <p style="margin-top:.75rem;font-size:.75rem;color:color-mix(in oklab,var(--paper) 50%,transparent)">Dica: boa luz, mão inteira no quadro, palma virada para a câmera.</p>
+      <div class="stat" id="stat"></div>
+      <p class="hint">Dica: boa luz de frente e fundo liso. Se um sinal não for reconhecido do seu jeito, use "Gravar meu gesto".</p>
     </div>
     <div class="card reveal" style="--i:1">
-      
-      <div class="row first"><input id="word" type="text" placeholder="Qual palavra? Ex.: oi, obrigado, casa"><button class="btn" id="go" type="button">Ensinar</button></div>
+      <div class="row first"><input id="word" type="text" placeholder="Digite uma palavra ou frase. Ex.: meu nome é Ana"><button class="btn" id="go" type="button">Ensinar</button></div>
       <div id="msg" role="status"></div>
-      <h4>Passos</h4><div id="steps"></div>
+      <h4>Frase</h4><div id="steps"></div>
       <h4>Como fazer</h4>
+      <div class="ref"><canvas id="bust" width="240" height="280"></canvas><canvas id="ref" width="190" height="238"></canvas></div>
+      <div id="instr"><b>—</b><span>Digite uma palavra ou frase para começar.</span></div>
       <div class="legend"><span class="st2">▲ esticado</span><span class="st1">◠ curvo</span><span class="st0">● fechado</span><span>pontos verdes = dedos esticados</span></div>
-      <div class="ref"><canvas id="ref" width="190" height="238"></canvas><div id="instr"><b>—</b><span>Digite uma palavra para começar.</span></div></div>
-      <div class="row"><button class="btn sec2" id="prev" type="button">‹ Anterior</button><button class="btn sec2" id="skip" type="button">Pular ›</button><button class="btn sec2" id="restart" type="button">Reiniciar</button></div>
-    </div></div></div></section>
+      <div class="row"><button class="btn sec2" id="prev" type="button">‹ Anterior</button><button class="btn sec2" id="skip" type="button">Pular ›</button><button class="btn sec2" id="restart" type="button">Reiniciar</button><button class="btn sec2" id="rec" type="button">Gravar meu gesto</button></div>
+      <p class="hint">Descrições de apoio ao estudo. Confirme os sinais com um professor de Libras. Palavras fora do dicionário e nomes são soletrados.</p>
+    </div></div></div>
+  </section>
 
 <footer><div class="shell"><div class="top">
   <div class="c1"><a href="#inicio" class="brand"><b>L</b>IBRAS <small>Academy</small></a><p class="tag">Treine as mãos. Aprenda a língua.</p></div>
@@ -249,7 +258,7 @@ html.js .reveal:not(.is-visible),html.js .reveal:not(.is-visible) .split-word>sp
   <p class="footer-mark" id="mark" aria-hidden="true"><span style="--i:0">L</span><span style="--i:1">I</span><span style="--i:2">B</span><span style="--i:3">R</span><span style="--i:4">A</span><span style="--i:5">S</span></p></footer>
 </div></main>
 
-<script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/holistic/holistic.js" crossorigin="anonymous"></script>
 <script>
 const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
 const clamp=(n,a=0,b=1)=>Math.min(b,Math.max(a,n));
@@ -297,17 +306,6 @@ X:{d:[0,1,0,0,0],t:'Indicador dobrado em gancho.'},
 Y:{d:[2,0,0,0,2],t:'Polegar e mindinho esticados.'},
 Z:{d:[0,2,0,0,0],t:'Indicador esticado; desenhe um "Z" no ar.'}
 };
-const SIGNS={
-oi:[{titulo:'OI',instrucao:'Mão aberta, palma para frente, perto da cabeça; balance levemente.',d:[2,2,2,2,2]}],
-obrigado:[{titulo:'OBRIGADO',instrucao:'Mão aberta e esticada tocando o queixo, depois afaste para frente.',d:[0,2,2,2,2]}],
-sim:[{titulo:'SIM',instrucao:'Punho fechado, balance para baixo e para cima como um aceno de cabeça.',d:[0,0,0,0,0]}],
-eu:[{titulo:'EU',instrucao:'Aponte o indicador para o próprio peito.',d:[0,2,0,0,0]}],
-tchau:[{titulo:'TCHAU',instrucao:'Mão aberta, palma para frente; balance de um lado para o outro.',d:[2,2,2,2,2]}],
-nao:[{titulo:'NÃO',instrucao:'Indicador esticado; balance de um lado para o outro.',d:[0,2,0,0,0]}],
-voce:[{titulo:'VOCÊ',instrucao:'Aponte o indicador para a pessoa à sua frente.',d:[0,2,0,0,0]}],
-legal:[{titulo:'LEGAL',instrucao:'Punho com o polegar para cima.',d:[2,0,0,0,0]}]
-};
-SIGNS.ola=SIGNS.oi;
 const NAMES=['Polegar','Indicador','Médio','Anelar','Mindinho'],ST=['fechado','curvo','esticado'];
 const norm=s=>s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').trim();
 
@@ -316,7 +314,7 @@ const SK='#efc7a1',SKD='#8a5a3c',ACC='#2dd4bf',lerp=(a,b,t)=>a+(b-a)*t,RAD=Math.
 function seg(x,x1,y1,x2,y2,w){
   x.lineCap='round';x.strokeStyle=SKD;x.lineWidth=w+3;x.beginPath();x.moveTo(x1,y1);x.lineTo(x2,y2);x.stroke();
   x.strokeStyle=SK;x.lineWidth=w;x.beginPath();x.moveTo(x1,y1);x.lineTo(x2,y2);x.stroke();
-  const l=Math.hypot(x2-x1,y2-y1);if(l>1){const nx=-(y2-y1)/l*w*.2,ny=(x2-x1)/l*w*.2;x.strokeStyle='rgba(255,236,214,.55)';x.lineWidth=w*.28;x.beginPath();x.moveTo(x1+nx,y1+ny);x.lineTo(x2+nx,y2+ny);x.stroke()}
+  const l=Math.hypot(x2-x1,y2-y1);if(l>1){const sx=(y2-y1)/l*w*.3,sy=-(x2-x1)/l*w*.3;x.strokeStyle='rgba(150,95,60,.28)';x.lineWidth=w*.22;x.beginPath();x.moveTo(x1+sx,y1+sy);x.lineTo(x2+sx,y2+sy);x.stroke();const nx=-(y2-y1)/l*w*.2,ny=(x2-x1)/l*w*.2;x.strokeStyle='rgba(255,236,214,.55)';x.lineWidth=w*.28;x.beginPath();x.moveTo(x1+nx,y1+ny);x.lineTo(x2+nx,y2+ny);x.stroke()}
 }
 function finger(x,bx,by,L,w,s,shift){
   const bend=2-s,P=[.46,.3,.24],A=[bend*42,bend*52,bend*38],ws=[w,w*.92,w*.82];let cx=bx,cy=by,cum=0;const pts=[[cx,cy]];
@@ -336,7 +334,8 @@ function drawHand(cv,d,spread){
   const gr=x.createLinearGradient(46,0,146,0);gr.addColorStop(0,'#dcab83');gr.addColorStop(.5,SK);gr.addColorStop(1,'#dcab83');
   x.beginPath();x.moveTo(50,140);x.quadraticCurveTo(44,172,54,204);x.quadraticCurveTo(62,228,80,242);x.lineTo(118,242);x.quadraticCurveTo(138,224,143,196);x.quadraticCurveTo(148,166,142,140);
   x.fillStyle=gr;x.fill();x.strokeStyle=SKD;x.lineWidth=2;x.stroke();
-  x.strokeStyle='rgba(122,74,47,.4)';x.lineWidth=1.5;x.lineCap='round';
+  const th=x.createRadialGradient(70,194,2,70,194,30);th.addColorStop(0,'rgba(190,125,85,.45)');th.addColorStop(1,'rgba(190,125,85,0)');x.fillStyle=th;x.beginPath();x.ellipse(70,194,30,34,0,0,7);x.fill();
+  x.strokeStyle='rgba(122,74,47,.4)';x.lineWidth=1.5;x.lineCap='round';[63,84,105,125].forEach(b=>{x.beginPath();x.arc(b,150,9,.15*Math.PI,.85*Math.PI);x.stroke()});
   x.beginPath();x.moveTo(62,176);x.quadraticCurveTo(82,202,100,212);x.stroke();x.beginPath();x.moveTo(60,160);x.quadraticCurveTo(100,170,138,164);x.stroke();
   const bx=[63,84,105,125],len=[72,80,72,56],w=[19,20,18,15],sh=[-9,-3,4,10];
   for(let f=3;f>=0;f--)finger(x,bx[f]+(spread&&f<2?(f===0?-4:4):0),142,len[f],w[f],d[f+1],spread?sh[f]:sh[f]*.15);
@@ -382,33 +381,84 @@ function drawHand(cv,d,spread){
   scrollVar($("#mark"),"--enter",(r,v)=>(v-r.top)/r.height);
 })();
 
-/* ===== app: passos e câmera ===== */
-let steps=[],cur=0,holdT=0,detected=null,lastT=performance.now();
-const spell=w=>[...norm(w).toUpperCase()].filter(c=>ALPHA[c]).map(c=>({titulo:'Letra '+c,instrucao:ALPHA[c].t,d:ALPHA[c].d,o:ALPHA[c].o,toque:!!ALPHA[c].touch,abertos:!!ALPHA[c].spread}));
-
-$('#go').onclick=()=>{
-  const w=$('#word').value.trim();if(!w)return;const k=norm(w);
-  if(SIGNS[k]){steps=SIGNS[k];msg('Sinal pronto. Siga o desenho e as instruções.')}
-  else{steps=spell(w);msg(steps.length?'Vamos soletrar com o alfabeto manual, letra por letra.':'Use letras de A a Z.')}
-  if(!steps.length)return;cur=0;holdT=0;render();
+/* ===== dicionário de sinais (referência de estudo) ===== */
+const K=(t,d,i,o={})=>({t,d,i,...o});
+const LEX={
+EU:K('EU',[0,2,0,0,0],'Aponte o indicador para o próprio peito.',{loc:'peito'}),
+VOCE:K('VOCÊ',[0,2,0,0,0],'Aponte o indicador para a pessoa à sua frente.'),
+ELE:K('ELE/ELA',[0,2,0,0,0],'Aponte o indicador para o lado, indicando a pessoa.'),
+NOS:K('NÓS',[0,2,0,0,0],'Indicador faz um círculo entre você e as outras pessoas.',{mov:'circulo'}),
+MEU:K('MEU',[0,2,2,2,2],'Palma da mão aberta toca o peito.',{loc:'peito'}),
+NOME:K('NOME',[0,2,2,0,0],'Indicador e médio juntos, na altura do peito, batendo duas vezes.',{mov:'vertical'}),
+OI:K('OI',[2,2,2,2,2],'Mão aberta, palma para frente, perto da cabeça; balance levemente. Sorria.',{loc:'testa',mov:'balanco',expr:'sorriso'}),
+TCHAU:K('TCHAU',[2,2,2,2,2],'Mão aberta, palma para frente; balance de um lado para o outro.',{mov:'balanco',expr:'sorriso'}),
+OBRIGADO:K('OBRIGADO',[0,2,2,2,2],'Mão aberta na altura do queixo; afaste para frente. Sorria.',{loc:'queixo',mov:'frente',expr:'sorriso'}),
+POR_FAVOR:K('POR FAVOR',[0,2,2,2,2],'Mão aberta no peito, em movimento circular.',{loc:'peito',mov:'circulo'}),
+SIM:K('SIM',[0,0,0,0,0],'Punho fechado balançando para cima e para baixo, com a cabeça acenando.',{mov:'vertical',head:'afirmar'}),
+NAO:K('NÃO',[0,2,0,0,0],'Indicador esticado balançando de lado a lado, com a cabeça negando.',{mov:'balanco',head:'negar'}),
+BOM:K('BOM',[2,0,0,0,0],'Polegar para cima perto do queixo; afaste para frente.',{loc:'queixo',mov:'frente'}),
+DIA:K('DIA',[0,2,2,2,2],'Mão aberta sobe em arco, como o sol nascendo.',{mov:'circulo'}),
+TARDE:K('TARDE',[0,2,2,2,2],'Mão aberta desce devagar, como o sol se pondo.',{mov:'vertical'}),
+NOITE:K('NOITE',[0,2,2,2,2],'Mão aberta desce à frente do corpo, como a noite caindo.',{mov:'vertical'}),
+TUDO_BEM:K('TUDO BEM',[2,0,0,0,0],'Polegar para cima, sorrindo.',{expr:'sorriso'}),
+PRAZER:K('PRAZER',[0,2,2,2,2],'Mão aberta no peito, sorrindo.',{loc:'peito',expr:'sorriso'}),
+LEGAL:K('LEGAL',[2,0,0,0,0],'Punho com o polegar para cima, sorrindo.',{expr:'sorriso'}),
+FELIZ:K('FELIZ',[0,2,2,2,2],'Mão aberta sobe e desce no peito, sorrindo.',{loc:'peito',mov:'vertical',expr:'sorriso'}),
+TRISTE:K('TRISTE',[0,2,2,2,2],'Mão aberta desce em frente ao rosto, com expressão triste.',{mov:'vertical'}),
+AMOR:K('AMOR',[0,0,0,0,0],'Punho fechado sobre o peito (como braços cruzados).',{loc:'peito',expr:'sorriso'}),
+AMIGO:K('AMIGO',[0,2,0,0,0],'Indicadores enganchados e soltos, em frente ao corpo.'),
+AGUA:K('ÁGUA',[0,2,2,2,0],'Três dedos esticados (W) tocam o queixo duas vezes.',{loc:'queixo',mov:'vertical'}),
+CASA:K('CASA',[0,2,2,2,2],'Mãos inclinadas formam o telhado de uma casa.'),
+LIBRAS:K('LIBRAS',[2,2,0,0,0],'Mão em L fazendo um pequeno círculo à frente.',{mov:'circulo'}),
+QUERER:K('QUERER',[1,1,1,1,1],'Mão em garra puxa para perto do corpo.',{mov:'frente'}),
+GOSTAR:K('GOSTAR',[0,2,2,2,2],'Mão aberta no peito, movendo para cima e para baixo, sorrindo.',{loc:'peito',mov:'vertical',expr:'sorriso'}),
+TER:K('TER',[0,2,2,2,2],'Mão aberta toca o peito e afasta para frente.',{loc:'peito',mov:'frente'}),
+IR:K('IR',[0,2,0,0,0],'Indicador aponta e se afasta do corpo.',{mov:'frente'}),
+VIR:K('VIR',[0,2,0,0,0],'Indicador aponta e se aproxima do corpo.',{mov:'frente'}),
+COMER:K('COMER',[1,1,1,1,1],'Dedos juntos levados à boca duas vezes.',{loc:'boca',mov:'vertical'}),
+BEBER:K('BEBER',[1,1,1,1,1],'Mão em "C" levada à boca, como segurar um copo.',{loc:'boca',mov:'vertical'}),
+TRABALHAR:K('TRABALHAR',[0,0,0,0,0],'Punhos batem um no outro, em frente ao corpo.',{mov:'vertical'}),
+APRENDER:K('APRENDER',[1,1,1,1,1],'Mão pega algo da palma da outra e leva à testa.',{loc:'testa',mov:'vertical'}),
+QUE:K('O QUÊ',[0,2,0,0,0],'Indicador balançando; franza as sobrancelhas.',{mov:'balanco',expr:'franzir'}),
+COMO:K('COMO',[2,2,2,2,2],'Mão aberta balançando, palma para cima; franza as sobrancelhas.',{mov:'balanco',expr:'franzir'}),
+ONDE:K('ONDE',[0,2,0,0,0],'Indicador em pequeno círculo; franza as sobrancelhas.',{mov:'circulo',expr:'franzir'}),
+QUEM:K('QUEM',[2,2,0,0,0],'Polegar e indicador em círculo junto ao queixo; franza as sobrancelhas.',{loc:'queixo',mov:'circulo',expr:'franzir'}),
+PORQUE:K('POR QUE',[0,2,0,0,0],'Indicador na testa, afastando; franza as sobrancelhas.',{loc:'testa',expr:'franzir'})
 };
-$('#word').addEventListener('keydown',e=>e.key==='Enter'&&$('#go').click());
-$('#prev').onclick=()=>{if(cur>0){cur--;holdT=0;render()}};
-$('#skip').onclick=()=>{if(cur<steps.length-1){cur++;holdT=0;render()}};
-$('#restart').onclick=()=>{cur=0;holdT=0;render()};
+const SYN={eu:'EU',voce:'VOCE',voces:'VOCE',seu:'VOCE',sua:'VOCE',ele:'ELE',ela:'ELE',nos:'NOS',meu:'MEU',minha:'MEU',nome:'NOME',oi:'OI',ola:'OI',tchau:'TCHAU',obrigado:'OBRIGADO',obrigada:'OBRIGADO',por_favor:'POR_FAVOR',sim:'SIM',nao:'NAO',bom:'BOM',boa:'BOM',dia:'DIA',tarde:'TARDE',noite:'NOITE',tudo_bem:'TUDO_BEM',prazer:'PRAZER',legal:'LEGAL',joia:'LEGAL',feliz:'FELIZ',triste:'TRISTE',amor:'AMOR',amo:'AMOR',amigo:'AMIGO',amiga:'AMIGO',agua:'AGUA',casa:'CASA',libras:'LIBRAS',quero:'QUERER',quer:'QUERER',querer:'QUERER',queremos:'QUERER',gosto:'GOSTAR',gosta:'GOSTAR',gostar:'GOSTAR',tenho:'TER',tem:'TER',ter:'TER',vou:'IR',vai:'IR',ir:'IR',vem:'VIR',venho:'VIR',vir:'VIR',come:'COMER',comer:'COMER',comemos:'COMER',bebo:'BEBER',bebe:'BEBER',beber:'BEBER',trabalho:'TRABALHAR',trabalha:'TRABALHAR',trabalhar:'TRABALHAR',aprendo:'APRENDER',aprende:'APRENDER',aprender:'APRENDER',que:'QUE',ond:'ONDE',onde:'ONDE',quem:'QUEM',porque:'PORQUE'};
+const MULTI={'meu nome e':['meu','nome'],'me chamo':['meu','nome'],'o que':['que'],'por que':['porque'],'tudo bem':['tudo_bem'],'por favor':['por_favor'],'muito prazer':['prazer'],'boa tarde':['bom','tarde'],'boa noite':['bom','noite'],'bom dia':['bom','dia']};
+const STOP=new Set('o a os as um uma uns umas de do da dos das em no na nos nas para pra por pelo pela com ao aos e é são sou estou está estão foi ser estar'.split(' '));
+const WH=new Set(['QUE','COMO','ONDE','QUEM','PORQUE']);
 
-function render(){
-  $('#steps').innerHTML=steps.map((s,i)=>`<span class="chip ${i<cur?'done':i===cur?'cur':''}">${i<cur?'✓ ':''}${esc(s.titulo)}</span>`).join('');
-  const s=steps[cur];
-  if(s){$('#instr').innerHTML=`<b>${esc(s.titulo)}</b><span>${esc(s.instrucao)}</span><div class="fl">${s.d.map((v,k)=>`<em class="st${v}">${NAMES[k]}: ${ST[v]}</em>`).join('')}</div>`;drawHand($('#ref'),s.d,s.abertos)}
-  renderFingers();
+function spell(word,group){
+  return [...norm(word).toUpperCase()].filter(c=>ALPHA[c]).map(c=>({t:'Letra '+c,key:'L:'+c,g:group||word.toUpperCase().split('').join('-'),d:ALPHA[c].d,o:ALPHA[c].o,toque:!!ALPHA[c].touch,abertos:!!ALPHA[c].spread,i:ALPHA[c].t}));
 }
-function renderFingers(){
-  const s=steps[cur];
-  $('#fing').innerHTML=NAMES.map((n,i)=>{const got=detected?detected.d[i]:null,want=s?s.d[i]:null;const c=got==null||want==null?'':(got===want?'ok':'bad');
-    return `<div class="${c}">${n}<br><b>${got==null?'—':ST[got]}</b><br><small>${want==null?'':'alvo: '+ST[want]}</small></div>`}).join('');
+function buildPhrase(text){
+  const clean=text.replace(/[?!.,;:]/g,' ').trim(),q=/\?\s*$/.test(text.trim());
+  const w=clean.split(/\s+/).filter(Boolean);
+  if(w.length===1&&w[0].length===1)return{items:[{label:w[0].toUpperCase(),steps:spell(w[0])}],steps:spell(w[0]),spelled:[],q:false};
+  const nw=w.map(norm),items=[],spelled=[];
+  for(let i=0;i<w.length;){
+    let hit=null,n=1;
+    for(const len of [3,2]){const k=nw.slice(i,i+len).join(' ');if(nw.length>=i+len&&MULTI[k]){hit=MULTI[k];n=len;break}}
+    const toks=hit||[nw[i]];
+    toks.forEach((tk,j)=>{
+      const orig=hit?tk:w[i];let key=SYN[tk];
+      if(tk==='como'&&i>0&&['eu','nos'].includes(nw[i-1]))key='COMER';
+      if(key&&LEX[key]){const e=LEX[key];items.push({label:e.t,steps:[{...e,key:'S:'+key,g:e.t}]})}
+      else if(!STOP.has(tk)){const st=spell(orig,orig.toUpperCase().split('').join('-'));if(st.length){items.push({label:st[0].g,steps:st});spelled.push(orig)}}
+    });
+    i+=n;
+  }
+  if(!items.length){const st=spell(clean.replace(/\s+/g,''));if(st.length)items.push({label:st[0].g,steps:st})}
+  const steps=items.flatMap(it=>it.steps);
+  if(q){const wh=steps.some(s=>WH.has((s.key||'').slice(2)));steps.forEach(s=>{if(!s.key.startsWith('L:'))s.exprReq=wh?'franzir':'sobrancelha'});}
+  return{items,steps,spelled,q};
 }
+
+/* ===== análise da mão ===== */
 const dist=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
+const d3=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y,a.z-b.z);
 const ang=(a,b,c)=>{const u=[a.x-b.x,a.y-b.y,a.z-b.z],v=[c.x-b.x,c.y-b.y,c.z-b.z];const m=Math.hypot(...u)*Math.hypot(...v)||1e-6;return Math.acos(clamp((u[0]*v[0]+u[1]*v[1]+u[2]*v[2])/m,-1,1))*180/Math.PI};
 function analyze(L){
   const palm=dist(L[0],L[9])||1e-3,d=[];
@@ -416,40 +466,219 @@ function analyze(L){
   d.push(ts>150&&td>.75?2:td<.5?0:1);
   [[5,6,7,8],[9,10,11,12],[13,14,15,16],[17,18,19,20]].forEach(([m,p,i,t])=>{const a=(ang(L[m],L[p],L[i])+ang(L[p],L[i],L[t]))/2;d.push(a>155?2:a>115?1:0)});
   const dx=L[9].x-L[0].x,dy=L[9].y-L[0].y;
-  return{d,orient:Math.abs(dx)>Math.abs(dy)*1.1?'lado':dy>0?'baixo':'cima',touch:dist(L[4],L[8])/palm<.35,spread:dist(L[8],L[12])/palm>.38};
+  return{d,palm,orient:Math.abs(dx)>Math.abs(dy)*1.1?'lado':dy>0?'baixo':'cima',touch:dist(L[4],L[8])/palm<.35,spread:dist(L[8],L[12])/palm>.38};
 }
 const hist=[];
 function smooth(a){hist.push(a);if(hist.length>5)hist.shift();
   const d=a.d.map((_,i)=>{const c=[0,0,0];hist.forEach(h=>c[h.d[i]]++);return c.indexOf(Math.max(...c))});
   const maj=k=>hist.filter(h=>h[k]).length>hist.length/2,oc={};hist.forEach(h=>oc[h.orient]=(oc[h.orient]||0)+1);
-  return{d,orient:Object.keys(oc).sort((x,y)=>oc[y]-oc[x])[0],touch:maj('touch'),spread:maj('spread')}}
+  return{d,palm:a.palm,orient:Object.keys(oc).sort((x,y)=>oc[y]-oc[x])[0],touch:maj('touch'),spread:maj('spread')}}
 function score(a,s){let sc=0;for(let i=0;i<5;i++){const df=Math.abs(a.d[i]-s.d[i]);sc+=df===0?1:df===1?.5:0}sc/=5;if(s.toque&&!a.touch)sc-=.2;if(s.abertos&&!a.spread)sc-=.2;if(s.o&&a.orient!==s.o)sc-=.25;return Math.max(0,sc)}
-function guess(a){const r=Object.entries(ALPHA).map(([k,v])=>[k,score(a,{d:v.d,toque:!!v.touch,abertos:!!v.spread,o:v.o})]).sort((x,y)=>y[1]-x[1]);const best=r[0][1];return{letters:r.filter(x=>best-x[1]<.01).slice(0,4).map(x=>x[0]),conf:best}}
 
-const cv=$('#c'),ctx=cv.getContext('2d');let running=false,hands;
+/* gestos gravados pelo usuário (calibração pessoal) */
+let CAL={};try{CAL=JSON.parse(localStorage.getItem('libras_cal')||'{}')}catch(e){}
+const vec=L=>{const w=L[0],sc=d3(L[0],L[9])||1e-3,v=[];for(const p of L)v.push((p.x-w.x)/sc,(p.y-w.y)/sc,(p.z-w.z)/sc);return v};
+const vd=(a,b)=>{let s=0;for(let i=0;i<a.length;i++){const d=a[i]-b[i];s+=d*d}return Math.sqrt(s/a.length)};
+const nearest=(key,v)=>(CAL[key]||[]).reduce((m,c)=>Math.min(m,vd(v,c)),9);
+const pScore=d=>clamp(1-(d-.04)/.14);
+function guess(a,v){
+  const r=Object.entries(ALPHA).map(([k,x])=>[k,score(a,{d:x.d,toque:!!x.touch,abertos:!!x.spread,o:x.o})]);
+  let best=0;r.forEach(x=>{if(x[1]>best)best=x[1]});
+  let letters=r.filter(x=>best-x[1]<.01).slice(0,4).map(x=>x[0]),conf=best;
+  for(const k of Object.keys(CAL)){if(!k.startsWith('L:'))continue;const p=pScore(nearest(k,v));if(p>conf+.02&&p>.6){letters=[k.slice(2)];conf=p}}
+  return{letters,conf}}
+
+/* ===== corpo, rosto e movimento ===== */
+let asp=4/3;
+const sc=p=>({x:p.x*asp,y:p.y,z:p.z*asp});
+function bodyCtx(pose,face,hand){
+  if(!pose)return null;
+  const P=l=>({x:l.x*asp,y:l.y}),ls=P(pose[11]),rs=P(pose[12]),sw=dist(ls,rs);if(sw<.05)return null;
+  const mid={x:(ls.x+rs.x)/2,y:(ls.y+rs.y)/2},nose=P(pose[0]);
+  const mouth=face?P(face[13]):{x:(P(pose[9]).x+P(pose[10]).x)/2,y:(P(pose[9]).y+P(pose[10]).y)/2};
+  const pts={testa:face?P(face[10]):{x:nose.x,y:nose.y-.35*sw},boca:mouth,queixo:face?P(face[152]):{x:mouth.x,y:mouth.y+.15*sw},peito:{x:mid.x,y:mid.y+.6*sw}};
+  const th={testa:.45,boca:.3,queixo:.35,peito:.6},h=P(hand[9]);let loc='neutro',bd=9;
+  for(const k in pts){const d=dist(h,pts[k])/sw;if(d<th[k]&&d<bd){bd=d;loc=k}}
+  return{loc,sw,rx:(h.x-mid.x)/sw,ry:(h.y-mid.y)/sw,hx:(nose.x-mid.x)/sw,hy:(nose.y-mid.y)/sw};
+}
+function reversals(a,amp){let r=0,dir=0,hi=a[0],lo=a[0];
+  for(const v of a){if(v>hi)hi=v;if(v<lo)lo=v;
+    if(dir<=0&&v-lo>amp){if(dir===-1)r++;dir=1;hi=v}else if(dir>=0&&hi-v>amp){if(dir===1)r++;dir=-1;lo=v}}
+  return r}
+const rng=a=>Math.max(...a)-Math.min(...a);
+function classifyMove(b){
+  if(b.length<8)return'estatico';
+  const x=b.map(p=>p.x),y=b.map(p=>p.y),s=b.map(p=>p.s),rx=rng(x),ry=rng(y);
+  const cx=x.reduce((p,c)=>p+c,0)/x.length,cy=y.reduce((p,c)=>p+c,0)/y.length;
+  let tot=0,pa=Math.atan2(y[0]-cy,x[0]-cx),rad=0;
+  for(let i=1;i<b.length;i++){const a=Math.atan2(y[i]-cy,x[i]-cx);let d=a-pa;while(d>Math.PI)d-=2*Math.PI;while(d<-Math.PI)d+=2*Math.PI;tot+=d;pa=a;rad+=Math.hypot(x[i]-cx,y[i]-cy)}
+  rad/=b.length;
+  if(Math.abs(tot)>4.7&&rad>.06)return'circulo';
+  if(reversals(x,.08)>=2&&rx>.18&&rx>ry*1.2)return'balanco';
+  if(reversals(y,.08)>=2&&ry>.18&&ry>rx*1.2)return'vertical';
+  const ratio=Math.max(...s)/Math.min(...s);
+  if(ratio>1.18&&rx<.3&&ry<.3)return'frente';
+  if(rx<.1&&ry<.1)return'estatico';
+  return'livre';
+}
+function headMove(h){
+  if(h.length<8)return null;const x=h.map(p=>p.x),y=h.map(p=>p.y);
+  if(reversals(y,.035)>=2&&rng(y)>rng(x))return'afirmar';
+  if(reversals(x,.035)>=2)return'negar';return null}
+let base=null,baseBuf=[];
+const med=a=>[...a].sort((x,y)=>x-y)[a.length>>1];
+function exprTags(F){
+  if(!F)return{tags:[],ready:false};
+  const fh=dist(F[10],F[152])||1e-3,fw=dist(F[234],F[454])||1e-3;
+  const brow=((F[159].y-F[105].y)+(F[386].y-F[334].y))/2/fh,mw=dist(F[61],F[291])/fw,lift=((F[13].y+F[14].y)/2-(F[61].y+F[291].y)/2)/fh;
+  if(!base){baseBuf.push({brow,mw,lift});if(baseBuf.length>=30)base={brow:med(baseBuf.map(b=>b.brow)),mw:med(baseBuf.map(b=>b.mw)),lift:med(baseBuf.map(b=>b.lift))};return{tags:[],ready:false}}
+  const t=[];
+  if(brow>base.brow*1.18)t.push('sobrancelha');else if(brow<base.brow*.84)t.push('franzir');
+  if(lift>base.lift+.012||mw>base.mw*1.1)t.push('sorriso');
+  if(!t.length){base.brow+=(brow-base.brow)*.01}
+  return{tags:t,ready:true};
+}
+
+/* ===== avaliação de um passo ===== */
+function evalStep(st,f,now){
+  const r={shape:0,loc:null,mov:null,expr:null,need:{}};
+  let h=score(f.a,{d:st.d,toque:st.toque,abertos:st.abertos,o:st.o});
+  if(CAL[st.key])h=Math.max(h,pScore(nearest(st.key,f.v)));
+  r.shape=h;
+  const L=st.loc&&st.loc!=='neutro';
+  if(L){r.need.loc=true;const same=f.loc===st.loc||(['boca','queixo'].includes(f.loc)&&['boca','queixo'].includes(st.loc));r.loc=f.loc?same:null}
+  if(st.mov&&st.mov!=='estatico'){r.need.mov=true;r.mov=now<f.movUntil}
+  const ex=st.exprReq||null;if(ex){r.need.expr=true;r.expr=f.ex.includes(ex)}
+  r.ok=h>=.8&&(!r.need.loc||r.loc===true)&&(!r.need.mov||r.mov)&&(!r.need.expr||r.expr);
+  return r;
+}
+
+/* ===== interface do app ===== */
+let steps=[],items=[],cur=0,holdT=0,detected=null,lastT=performance.now(),running=false,holistic,rec=null,movUntil=0;
+const buf=[],hbuf=[];
+const MOVN={balanco:'balançar de lado a lado',vertical:'subir e descer',circulo:'círculo',frente:'para frente/trás'};
+const EXN={sorriso:'sorrindo',franzir:'sobrancelhas franzidas',sobrancelha:'sobrancelhas levantadas'};
+const MOVS={estatico:'parada',balanco:'balançando',vertical:'subindo/descendo',circulo:'círculo',frente:'frente/trás',livre:'livre'};
+
+$('#go').onclick=()=>{
+  const w=$('#word').value.trim();if(!w)return;
+  const r=buildPhrase(w);if(!r.steps.length){msg('Digite palavras com letras de A a Z.');return}
+  steps=r.steps;items=r.items;cur=0;holdT=0;buf.length=0;movUntil=0;render();
+  msg(`${items.length} ${items.length>1?'sinais':'sinal'}`+(r.spelled.length?` · vai soletrar: ${r.spelled.join(', ')}`:'')+(r.q?' · pergunta: use a expressão do rosto':''));
+};
+$('#word').addEventListener('keydown',e=>e.key==='Enter'&&$('#go').click());
+const goTo=i=>{if(!steps.length)return;cur=clamp(i,0,steps.length-1);holdT=0;buf.length=0;movUntil=0;render()};
+$('#prev').onclick=()=>goTo(cur-1);$('#skip').onclick=()=>goTo(cur+1);$('#restart').onclick=()=>goTo(0);
+$('#rec').onclick=()=>{
+  const st=steps[cur];if(!st){msg('Escolha uma letra ou palavra primeiro.');return}
+  if(!running){msg('Ligue a câmera e mostre a mão.');return}
+  rec={key:st.key,v:[]};msg('Gravando seu gesto... mantenha a posição.');
+};
+
+let mini=null;
+function render(){
+  let idx=0;
+  $('#steps').innerHTML=items.map(it=>{const a=idx,b=idx+it.steps.length;idx=b;const st=cur>=b?'done':cur>=a?'cur':'';
+    const extra=it.steps.length>1&&st==='cur'?` (${cur-a+1}/${it.steps.length})`:'';return `<span class="chip ${st}">${st==='done'?'✓ ':''}${esc(it.label)}${extra}</span>`}).join('');
+  const s=steps[cur];
+  if(s){
+    const req=[];if(s.loc&&s.loc!=='neutro')req.push('Local: '+s.loc);if(s.mov&&s.mov!=='estatico')req.push('Movimento: '+MOVN[s.mov]);if(s.exprReq||s.expr)req.push('Expressão: '+EXN[s.exprReq||s.expr]);if(s.head)req.push('Cabeça: '+(s.head==='negar'?'negando':'acenando'));
+    $('#instr').innerHTML=`<b>${esc(s.g&&s.g!==s.t?s.g+' · ':'')}${esc(s.t)}</b><span>${esc(s.i)}</span><div class="fl">${s.d.map((v,k)=>`<em class="st${v}">${NAMES[k]}: ${ST[v]}</em>`).join('')}</div>${req.length?`<div class="fl req">${req.map(x=>`<em>${esc(x)}</em>`).join('')}</div>`:''}`;
+    drawHand($('#ref'),s.d,s.abertos);mini=document.createElement('canvas');mini.width=190;mini.height=238;drawHand(mini,s.d,s.abertos);
+  }
+  renderFingers();renderStat(null,null);
+}
+function renderFingers(){
+  const s=steps[cur];
+  $('#fing').innerHTML=NAMES.map((n,i)=>{const got=detected?detected.d[i]:null,want=s?s.d[i]:null;const c=got==null||want==null?'':(got===want?'ok':'bad');
+    return `<div class="${c}">${n}<br><b>${got==null?'—':ST[got]}</b><br><small>${want==null?'':'alvo: '+ST[want]}</small></div>`}).join('');
+}
+function renderStat(r,f){
+  const s=steps[cur];const box=(n,got,want,ok)=>`<div class="${want==null?'':ok?'ok':'bad'}"><small>${n}</small><b>${got==null?'—':esc(got)}</b>${want!=null?`<small>alvo: ${esc(want)}</small>`:''}</div>`;
+  $('#stat').innerHTML=box('Mão',r?Math.round(r.shape*100)+'%':null,s?'≥ 80%':null,r&&r.shape>=.8)
+   +box('Local',f?f.loc:null,s&&s.loc&&s.loc!=='neutro'?s.loc:null,r&&r.loc===true)
+   +box('Movimento',f?MOVS[f.mv]||f.mv:null,s&&s.mov&&s.mov!=='estatico'?s.mov:null,r&&r.mov)
+   +box('Expressão',f?(f.exReady?(f.ex.join(' + ')||'neutra'):'calibrando...'):null,s&&s.exprReq?s.exprReq:null,r&&r.expr);
+}
+
+/* boneco que ensina local, movimento e expressão */
+const bust=$('#bust'),bx=bust.getContext('2d');
+const LOCP={testa:[120,50],boca:[120,118],queixo:[120,146],peito:[120,228],neutro:[184,214]};
+function drawBust(t){
+  const s=steps[cur];bx.clearRect(0,0,240,280);
+  bx.fillStyle='#2b3b4d';bx.beginPath();bx.moveTo(14,282);bx.quadraticCurveTo(16,200,80,192);bx.lineTo(160,192);bx.quadraticCurveTo(224,200,226,282);bx.fill();
+  bx.fillStyle='#d9a67c';bx.fillRect(102,140,36,58);
+  bx.fillStyle=SK;bx.strokeStyle=SKD;bx.lineWidth=2;bx.beginPath();bx.ellipse(120,92,46,56,0,0,7);bx.fill();bx.stroke();
+  bx.fillStyle='#3a2a20';bx.beginPath();bx.ellipse(120,70,48,40,0,Math.PI,0);bx.fill();
+  const ex=s?(s.exprReq||s.expr):null;
+  bx.strokeStyle='#3a2a20';bx.lineWidth=3;bx.lineCap='round';
+  const by=ex==='sobrancelha'?64:ex==='franzir'?78:72;
+  [-1,1].forEach(k=>{const cx=120+k*16;bx.strokeStyle='#3a2a20';bx.beginPath();
+    if(ex==='franzir'){bx.moveTo(cx+k*14,by-6);bx.lineTo(cx-k*4,by+4)}else if(ex==='sobrancelha'){bx.moveTo(cx+k*14,by+3);bx.quadraticCurveTo(cx,by-8,cx-k*4,by+2)}else{bx.moveTo(cx+k*14,by);bx.lineTo(cx-k*4,by)}bx.stroke();
+    bx.fillStyle='#fff';bx.beginPath();bx.arc(cx,88,5,0,7);bx.fill();bx.fillStyle='#222';bx.beginPath();bx.arc(cx,88,2.4,0,7);bx.fill()});
+  bx.strokeStyle='#8a4a3a';bx.lineWidth=2.6;bx.beginPath();
+  if(ex==='sorriso'){bx.moveTo(104,114);bx.quadraticCurveTo(120,132,136,114)}else if(ex==='franzir'){bx.moveTo(108,122);bx.quadraticCurveTo(120,116,132,122)}else{bx.moveTo(108,120);bx.lineTo(132,120)}bx.stroke();
+  bx.strokeStyle='rgba(138,90,60,.5)';bx.lineWidth=1.5;bx.beginPath();bx.moveTo(120,92);bx.lineTo(117,106);bx.lineTo(123,106);bx.stroke();
+  if(!s||!mini)return;
+  const lp=LOCP[s.loc&&LOCP[s.loc]?s.loc:'neutro'],w=56,h=70,sp=t*3.2;let ox=0,oy=0,sc2=1;
+  bx.save();bx.strokeStyle='rgba(45,212,191,.7)';bx.lineWidth=2;bx.setLineDash([4,4]);
+  const m=s.mov;
+  if(m==='balanco'){ox=Math.sin(sp)*20;bx.beginPath();bx.moveTo(lp[0]-20,lp[1]+8);bx.lineTo(lp[0]+20,lp[1]+8);bx.stroke()}
+  else if(m==='vertical'){oy=Math.sin(sp)*16;bx.beginPath();bx.moveTo(lp[0]+34,lp[1]-16);bx.lineTo(lp[0]+34,lp[1]+16);bx.stroke()}
+  else if(m==='circulo'){ox=Math.cos(sp)*16;oy=Math.sin(sp)*16;bx.beginPath();bx.arc(lp[0],lp[1],16,0,7);bx.stroke()}
+  else if(m==='frente'){sc2=1+.28*Math.sin(sp);bx.beginPath();bx.arc(lp[0],lp[1],30,0,7);bx.stroke()}
+  else if(s.loc&&s.loc!=='neutro'){bx.beginPath();bx.arc(lp[0],lp[1],30+Math.sin(sp)*3,0,7);bx.stroke()}
+  bx.restore();
+  bx.drawImage(mini,lp[0]+ox-w*sc2/2,lp[1]+oy-h*sc2/2,w*sc2,h*sc2);
+  if(s.head){bx.fillStyle='#2dd4bf';bx.font='600 11px system-ui';bx.textAlign='center';bx.fillText(s.head==='negar'?'cabeça: não':'cabeça: sim',120,14+Math.sin(sp)*2)}
+}
+(function loop(now){drawBust(now/1000);requestAnimationFrame(loop)})(0);
+
+/* ===== câmera + MediaPipe Holistic (mãos, rosto e corpo) ===== */
+const cv=$('#c'),ctx=cv.getContext('2d');
 const setBadge=(t,ok)=>{$('#badge').textContent=t;$('#badge').className='badge'+(ok?' ok':'')};
+const HC=[[0,1,2,3,4],[0,5,6,7,8],[9,10,11,12],[13,14,15,16],[0,17,18,19,20],[5,9,13,17]];
+function dots(L,r,col){ctx.fillStyle=col;L.forEach(q=>{ctx.beginPath();ctx.arc(q.x*cv.width,q.y*cv.height,r,0,7);ctx.fill()})}
 function onResults(res){
-  cv.width=res.image.width;cv.height=res.image.height;ctx.clearRect(0,0,cv.width,cv.height);
-  const now=performance.now(),dt=now-lastT;lastT=now;const L=res.multiHandLandmarks&&res.multiHandLandmarks[0];
-  $('#gf').classList.toggle('show',!L);if(!L){hist.length=0;detected=null;holdT=0;$('#hold').style.width='0';setBadge('Mostre a mão',false);renderFingers();return}
-  if($('#skel').checked){ctx.strokeStyle='#34d399';ctx.lineWidth=3;[[0,1,2,3,4],[0,5,6,7,8],[9,10,11,12],[13,14,15,16],[0,17,18,19,20],[5,9,13,17]].forEach(p=>{ctx.beginPath();p.forEach((k,i)=>{const q=L[k];i?ctx.lineTo(q.x*cv.width,q.y*cv.height):ctx.moveTo(q.x*cv.width,q.y*cv.height)});ctx.stroke()});ctx.fillStyle='#fff';L.forEach(q=>{ctx.beginPath();ctx.arc(q.x*cv.width,q.y*cv.height,3,0,7);ctx.fill()})}
-  detected=smooth(analyze(L));renderFingers();const s=steps[cur];if(!s){const g=guess(detected);setBadge('Parece: '+g.letters.join(' / ')+' ('+Math.round(g.conf*100)+'%)',g.conf>=.8);return}
-  const sc=score(detected,s);
-  if(sc>=.8){holdT+=dt;setBadge('✓ Quase! Segure...',true)}else{holdT=Math.max(0,holdT-dt*2);setBadge('Ajuste a mão ('+Math.round(sc*100)+'%)',false)}
-  $('#hold').style.width=Math.min(100,holdT/6)+'%';
-  if(holdT>=600){holdT=0;if(cur<steps.length-1){cur++;render();setBadge('Passo concluído!',true)}else{$('#steps').innerHTML=steps.map(s=>`<span class="chip done">✓ ${esc(s.titulo)}</span>`).join('');$('#instr').innerHTML='<b>🎉 Parabéns!</b><span>Você completou a palavra. Digite outra ou clique em Reiniciar.</span>';setBadge('Palavra concluída!',true)}}
+  const W=res.image.width,H=res.image.height;asp=W/H;cv.width=W;cv.height=H;ctx.clearRect(0,0,W,H);
+  const now=performance.now(),dt=Math.min(100,now-lastT);lastT=now;
+  const pose=res.poseLandmarks,face=res.faceLandmarks,lh=res.leftHandLandmarks,rh=res.rightHandLandmarks,hand=rh||lh;
+  const n=(pose?33:0)+(face?face.length:0)+(lh?21:0)+(rh?21:0);$('#pts').textContent=n+' pontos';
+  if($('#skel').checked){
+    if(face)dots(face,1.2,'rgba(255,255,255,.35)');if(pose)dots(pose,3,'#fbbf24');
+    [lh,rh].forEach(h=>{if(!h)return;ctx.strokeStyle='#34d399';ctx.lineWidth=2.5;HC.forEach(p=>{ctx.beginPath();p.forEach((k,i)=>{const q=h[k];i?ctx.lineTo(q.x*W,q.y*H):ctx.moveTo(q.x*W,q.y*H)});ctx.stroke()});dots(h,3,'#fff')});
+  }
+  $('#gf').classList.toggle('show',!hand);
+  const exr=exprTags(face),bc=hand?bodyCtx(pose,face,hand):null;
+  if(!hand){hist.length=0;detected=null;holdT=0;buf.length=0;$('#hold').style.width='0';setBadge('Mostre a mão',false);renderFingers();renderStat(null,{loc:null,mv:null,ex:exr.tags,exReady:exr.ready});return}
+  const L2=hand.map(sc);detected=smooth(analyze(L2));const v=vec(L2);
+  if(rec){rec.v.push(v);if(rec.v.length>=14){CAL[rec.key]=(CAL[rec.key]||[]).concat(rec.v).slice(-40);try{localStorage.setItem('libras_cal',JSON.stringify(CAL))}catch(e){}msg('Gesto gravado! O site agora reconhece o seu jeito de fazer.');rec=null}}
+  let mv=null;
+  if(bc){buf.push({t:now,x:bc.rx,y:bc.ry,s:detected.palm/bc.sw});while(buf.length&&now-buf[0].t>1400)buf.shift();hbuf.push({t:now,x:bc.hx,y:bc.hy});while(hbuf.length&&now-hbuf[0].t>1400)hbuf.shift();mv=classifyMove(buf)}
+  const hd=headMove(hbuf);
+  const s=steps[cur];if(s&&s.mov&&mv===s.mov)movUntil=now+900;
+  const f={a:detected,v,loc:bc?bc.loc:null,mv,ex:exr.tags,exReady:exr.ready,head:hd,movUntil};
+  renderFingers();
+  if(!s){const g=guess(detected,v);renderStat(null,f);setBadge('Parece: '+g.letters.join(' / ')+' ('+Math.round(g.conf*100)+'%)',g.conf>=.8);return}
+  const r=evalStep(s,f,now);renderStat(r,f);
+  if(r.ok){holdT+=dt;setBadge('✓ Segure...',true)}else{holdT=Math.max(0,holdT-dt*2);
+    setBadge(r.shape<.8?'Ajuste os dedos ('+Math.round(r.shape*100)+'%)':r.need.loc&&r.loc!==true?(f.loc==null?'Mostre rosto e ombros':'Leve a mão ao local: '+s.loc):r.need.mov&&!r.mov?'Faça o movimento':r.need.expr&&!r.expr?'Use a expressão do rosto':'Quase...',false)}
+  const need=s.mov&&s.mov!=='estatico'?500:600;$('#hold').style.width=Math.min(100,holdT/need*100)+'%';
+  if(holdT>=need){holdT=0;buf.length=0;movUntil=0;
+    if(cur<steps.length-1){cur++;render();setBadge('Passo concluído!',true)}
+    else{$('#steps').innerHTML=items.map(it=>`<span class="chip done">✓ ${esc(it.label)}</span>`).join('');$('#instr').innerHTML='<b>🎉 Parabéns!</b><span>Você completou a frase. Digite outra ou clique em Reiniciar.</span>';setBadge('Frase concluída!',true)}}
 }
 $('#camBtn').onclick=async()=>{
   if(running)return;
   try{
     const stream=await navigator.mediaDevices.getUserMedia({video:{width:640,height:480,facingMode:'user'}});
-    const v=$('#v');v.srcObject=stream;await v.play();running=true;$('#camBtn').textContent='Câmera ligada';setBadge('Carregando modelo...',false);
-    hands=new Hands({locateFile:f=>`https://cdn.jsdelivr.net/npm/@mediapipe/hands/${f}`});
-    hands.setOptions({maxNumHands:1,modelComplexity:1,minDetectionConfidence:.6,minTrackingConfidence:.6});hands.onResults(onResults);
-    const loop=async()=>{if(v.readyState>=2)await hands.send({image:v});requestAnimationFrame(loop)};loop();
+    const vd=$('#v');vd.srcObject=stream;await vd.play();running=true;$('#camBtn').textContent='Câmera ligada';setBadge('Carregando modelos... mantenha o rosto neutro',false);
+    holistic=new Holistic({locateFile:f=>`https://cdn.jsdelivr.net/npm/@mediapipe/holistic/${f}`});
+    holistic.setOptions({modelComplexity:1,smoothLandmarks:true,refineFaceLandmarks:false,minDetectionConfidence:.5,minTrackingConfidence:.5});holistic.onResults(onResults);
+    const loop=async()=>{if(vd.readyState>=2)await holistic.send({image:vd});requestAnimationFrame(loop)};loop();
   }catch(e){setBadge('Erro na câmera',false);msg('Não consegui abrir a câmera: '+e.message+' (use Chrome, HTTPS e permita o acesso).')}
 };
-drawHand($('#ref'),[1,1,1,1,1]);renderFingers();
+drawHand($('#ref'),[1,1,1,1,1]);renderFingers();renderStat(null,null);
 </script>
 </body>
 </html>
