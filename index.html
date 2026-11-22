@@ -162,6 +162,7 @@ footer{padding-top:6rem}footer .top{grid-template-columns:repeat(12,1fr)}footer 
 @media(min-width:1024px){.heading h2{font-size:4.25rem}.alpha{grid-template-columns:repeat(6,1fr)}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,::before,::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;transition-delay:0ms!important}
 html.js .reveal:not(.is-visible),html.js .reveal:not(.is-visible) .split-word>span{opacity:1;filter:none;transform:none}html.js .reveal:not(.is-visible)>.rule{transform:none}html.js .scrub>span{opacity:1}.hero-media,.hero-copy,.footer-mark>span{transform:none}.hero-copy{opacity:1}}
+.hv{margin:0;display:grid;gap:.35rem;justify-items:center}.hv canvas{width:7.5rem!important}.hv figcaption{font-size:.7rem;line-height:1.3;color:var(--muted-fg);text-align:center;max-width:8rem}
 </style>
 </head>
 <body>
@@ -232,7 +233,7 @@ html.js .reveal:not(.is-visible),html.js .reveal:not(.is-visible) .split-word>sp
     <div class="card reveal">
       <div class="cam"><video id="v" playsinline muted></video><canvas id="c"></canvas><div class="gf" id="gf">Coloque a mão aqui</div><div class="badge" id="badge">Câmera desligada</div><div class="pts" id="pts"></div></div>
       <div class="bar"><i id="hold"></i></div>
-      <div class="row"><button class="btn" id="camBtn" type="button">Ligar câmera</button><label class="chk"><input type="checkbox" id="skel"> mostrar pontos rastreados</label></div>
+      <div class="row"><button class="btn" id="camBtn" type="button">Ligar câmera</button><label class="chk"><input type="checkbox" id="skel" checked> mostrar pontos rastreados</label><label class="chk"><input type="checkbox" id="inv"> inverter palma/dorso</label></div>
       <div class="fing" id="fing"></div>
       <div class="stat" id="stat"></div>
       <p class="hint">Dica: boa luz de frente e fundo liso. Se um sinal não for reconhecido do seu jeito, use "Gravar meu gesto".</p>
@@ -242,7 +243,7 @@ html.js .reveal:not(.is-visible),html.js .reveal:not(.is-visible) .split-word>sp
       <div id="msg" role="status"></div>
       <h4>Frase</h4><div id="steps"></div>
       <h4>Como fazer</h4>
-      <div class="ref"><canvas id="bust" width="240" height="280"></canvas><canvas id="ref" width="190" height="238"></canvas></div>
+      <div class="ref"><canvas id="bust" width="240" height="280"></canvas><figure class="hv"><canvas id="ref" width="190" height="238"></canvas><figcaption id="refA"></figcaption></figure><figure class="hv"><canvas id="ref2" width="190" height="238"></canvas><figcaption id="refB"></figcaption></figure></div>
       <div id="instr"><b>—</b><span>Digite uma palavra ou frase para começar.</span></div>
       <div class="legend"><span class="st2">▲ esticado</span><span class="st1">◠ curvo</span><span class="st0">● fechado</span><span>pontos verdes = dedos esticados</span></div>
       <div class="row"><button class="btn sec2" id="prev" type="button">‹ Anterior</button><button class="btn sec2" id="skip" type="button">Pular ›</button><button class="btn sec2" id="restart" type="button">Reiniciar</button><button class="btn sec2" id="rec" type="button">Gravar meu gesto</button></div>
@@ -258,7 +259,6 @@ html.js .reveal:not(.is-visible),html.js .reveal:not(.is-visible) .split-word>sp
   <p class="footer-mark" id="mark" aria-hidden="true"><span style="--i:0">L</span><span style="--i:1">I</span><span style="--i:2">B</span><span style="--i:3">R</span><span style="--i:4">A</span><span style="--i:5">S</span></p></footer>
 </div></main>
 
-<script src="https://cdn.jsdelivr.net/npm/@mediapipe/holistic/holistic.js" crossorigin="anonymous"></script>
 <script>
 const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
 const clamp=(n,a=0,b=1)=>Math.min(b,Math.max(a,n));
@@ -334,15 +334,18 @@ function thumb(x,t,tg){
 function drawHand(cv,d,spread,op){
   op=op||{};const x=cv.getContext('2d'),k=cv.width/190;x.setTransform(k,0,0,k,0,0);x.clearRect(0,0,190,238);
   const ang0=op.o==='lado'?90:op.o==='baixo'?180:0,sc0=op.o==='lado'?.78:op.o==='baixo'?.9:1;
-  x.save();x.translate(95,119);x.rotate(ang0*RAD);x.scale(sc0,sc0);x.translate(-95,-119);
+  x.save();x.translate(95,119);x.rotate(ang0*RAD);x.scale(sc0,sc0);x.translate(-95,-119);if(op.back){x.translate(95,0);x.scale(-1,1);x.translate(-95,0)}
   const gr=x.createLinearGradient(46,0,146,0);gr.addColorStop(0,'#dcab83');gr.addColorStop(.5,SK);gr.addColorStop(1,'#dcab83');
   x.beginPath();x.moveTo(50,140);x.quadraticCurveTo(44,172,54,204);x.quadraticCurveTo(62,228,80,242);x.lineTo(118,242);x.quadraticCurveTo(138,224,143,196);x.quadraticCurveTo(148,166,142,140);
   x.fillStyle=gr;x.fill();x.strokeStyle=SKD;x.lineWidth=2;x.stroke();
+  if(!op.back){
   const th=x.createRadialGradient(70,194,2,70,194,30);th.addColorStop(0,'rgba(190,125,85,.45)');th.addColorStop(1,'rgba(190,125,85,0)');x.fillStyle=th;x.beginPath();x.ellipse(70,194,30,34,0,0,7);x.fill();
   x.strokeStyle='rgba(122,74,47,.4)';x.lineWidth=1.5;x.lineCap='round';[63,84,105,125].forEach(b=>{x.beginPath();x.arc(b,150,9,.15*Math.PI,.85*Math.PI);x.stroke()});
   x.beginPath();x.moveTo(62,176);x.quadraticCurveTo(82,202,100,212);x.stroke();x.beginPath();x.moveTo(60,160);x.quadraticCurveTo(100,170,138,164);x.stroke();
+  }else{x.fillStyle='rgba(120,75,50,.35)';[63,84,105,125].forEach(b=>{x.beginPath();x.arc(b,146,3.2,0,7);x.fill()});x.strokeStyle='rgba(122,74,47,.3)';x.lineWidth=1.4;[63,84,105,125].forEach(b=>{x.beginPath();x.moveTo(b,150);x.lineTo(b+(b-94)*.05,196);x.stroke()})}
   const bx=[63,84,105,125],len=[72,80,72,56],w=[19,20,18,15];let sh=[-9,-3,4,10].map(v=>spread?v:v*.15);if(op.cross)sh=[18,-8,2,6];
   const tips=[];for(const f of (op.cross?[3,2,0,1]:[3,2,1,0]))tips[f]=finger(x,bx[f]+(spread&&f<2?(f===0?-4:4):0),142,len[f],w[f],d[f+1],sh[f]);
+  if(op.back)tips.forEach(t=>{if(!t)return;x.fillStyle='rgba(255,238,228,.85)';x.strokeStyle='rgba(140,90,60,.6)';x.lineWidth=1;x.beginPath();x.ellipse(t[0],t[1]+4,5.5,7.5,0,0,7);x.fill();x.stroke()});
   thumb(x,d[0],op.touch?tips[0]:null);
   x.restore();
   if(ang0||op.arrow){x.save();x.strokeStyle=ACC;x.fillStyle=ACC;x.lineWidth=3;x.lineCap='round';const ax=ang0===90?176:ang0===180?95:95,ay=ang0===90?119:ang0===180?228:8;
@@ -469,13 +472,14 @@ K2('PROFESSOR','PROFESSOR',[1,1,1,1,1],'Mãos em garra afastam-se da testa, ensi
 K2('QUANDO','QUANDO',[0,2,0,0,0],'Indicador faz pequeno círculo; franza as sobrancelhas.',{mov:'circulo',expr:'franzir'});
 K2('QUAL','QUAL',[2,2,0,0,0],'Mão em L balança; franza as sobrancelhas.',{mov:'balanco',expr:'franzir'});
 K2('QUANTO','QUANTO',[0,2,2,2,2],'Mão aberta com dedos mexendo; franza as sobrancelhas.',{mov:'balanco',expr:'franzir'});
+['EU','MEU','POR_FAVOR','PRAZER','FELIZ','GOSTAR','TER','AMOR'].forEach(k=>LEX[k].pm='dentro');['OI','TCHAU'].forEach(k=>LEX[k].pm='frente');
 Object.assign(LEX.EU,{o:'lado'});Object.assign(LEX.ELE,{o:'lado'});
 const SYN2={familia:'FAMILIA',pai:'PAI',mae:'MAE',filho:'FILHO',filha:'FILHO',escola:'ESCOLA',estudo:'ESTUDAR',estuda:'ESTUDAR',estudar:'ESTUDAR',entendo:'ENTENDER',entende:'ENTENDER',entender:'ENTENDER',sei:'SABER',sabe:'SABER',saber:'SABER',preciso:'PRECISAR',precisa:'PRECISAR',precisar:'PRECISAR',ajudo:'AJUDAR',ajuda:'AJUDAR',ajudar:'AJUDAR',falo:'FALAR',fala:'FALAR',falar:'FALAR',vejo:'VER',ve:'VER',ver:'VER',ouco:'OUVIR',ouve:'OUVIR',ouvir:'OUVIR',moro:'MORAR',mora:'MORAR',morar:'MORAR',compro:'COMPRAR',compra:'COMPRAR',comprar:'COMPRAR',durmo:'DORMIR',dorme:'DORMIR',dormir:'DORMIR',grande:'GRANDE',pequeno:'PEQUENO',pequena:'PEQUENO',bonito:'BONITO',bonita:'BONITO',muito:'MUITO',muita:'MUITO',hoje:'HOJE',amanha:'AMANHA',ontem:'ONTEM',agora:'AGORA',desculpa:'DESCULPA',desculpe:'DESCULPA',comida:'COMIDA',cafe:'CAFE',surdo:'SURDO',surda:'SURDO',professor:'PROFESSOR',professora:'PROFESSOR',quando:'QUANDO',qual:'QUAL',quanto:'QUANTO',quanta:'QUANTO',ele:'ELE',gostei:'GOSTAR',amei:'AMOR',fui:'IR',foi:'IR',comi:'COMER',bebi:'BEBER',trabalhei:'TRABALHAR',aprendi:'APRENDER',quis:'QUERER',tive:'TER'};
 Object.assign(SYN,SYN2);Object.assign(WH,{});['QUANDO','QUAL','QUANTO'].forEach(k=>WH.add(k));
 
 
 function spell(word,group){
-  return [...norm(word).toUpperCase()].filter(c=>ALPHA[c]).map(c=>({t:'Letra '+c,key:'L:'+c,g:group||word.toUpperCase().split('').join('-'),d:ALPHA[c].d,o:ALPHA[c].o,toque:!!ALPHA[c].touch,abertos:!!ALPHA[c].spread,i:ALPHA[c].t}));
+  return [...norm(word).toUpperCase()].filter(c=>ALPHA[c]).map(c=>({t:'Letra '+c,key:'L:'+c,g:group||word.toUpperCase().split('').join('-'),d:ALPHA[c].d,o:ALPHA[c].o,pm:ALPHA[c].o?undefined:'frente',toque:!!ALPHA[c].touch,abertos:!!ALPHA[c].spread,i:ALPHA[c].t}));
 }
 function buildPhrase(text){
   const clean=text.replace(/[?!.,;:]/g,' ').trim(),q=/\?\s*$/.test(text.trim());
@@ -504,19 +508,21 @@ function buildPhrase(text){
 const dist=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
 const d3=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y,a.z-b.z);
 const ang=(a,b,c)=>{const u=[a.x-b.x,a.y-b.y,a.z-b.z],v=[c.x-b.x,c.y-b.y,c.z-b.z];const m=Math.hypot(...u)*Math.hypot(...v)||1e-6;return Math.acos(clamp((u[0]*v[0]+u[1]*v[1]+u[2]*v[2])/m,-1,1))*180/Math.PI};
-function analyze(L){
+function analyze(L,isRight){
   const palm=dist(L[0],L[9])||1e-3,d=[];
   const ts=(ang(L[1],L[2],L[3])+ang(L[2],L[3],L[4]))/2,td=dist(L[4],L[5])/palm;
   d.push(ts>150&&td>.75?2:td<.5?0:1);
   [[5,6,7,8],[9,10,11,12],[13,14,15,16],[17,18,19,20]].forEach(([m,p,i,t])=>{const a=(ang(L[m],L[p],L[i])+ang(L[p],L[i],L[t]))/2;d.push(a>155?2:a>115?1:0)});
   const dx=L[9].x-L[0].x,dy=L[9].y-L[0].y;
-  return{d,palm,orient:Math.abs(dx)>Math.abs(dy)*1.1?'lado':dy>0?'baixo':'cima',touch:dist(L[4],L[8])/palm<.35,spread:dist(L[8],L[12])/palm>.38};
+  const cr=(L[5].x-L[0].x)*(L[17].y-L[0].y)-(L[5].y-L[0].y)*(L[17].x-L[0].x),face=Math.abs(cr)/(palm*palm)>.1?((cr<0)===!!isRight?'frente':'dentro'):null;
+  return{d,palm,face,orient:Math.abs(dx)>Math.abs(dy)*1.1?'lado':dy>0?'baixo':'cima',touch:dist(L[4],L[8])/palm<.35,spread:dist(L[8],L[12])/palm>.38};
 }
 const hist=[];
 function smooth(a){hist.push(a);if(hist.length>5)hist.shift();
   const d=a.d.map((_,i)=>{const c=[0,0,0];hist.forEach(h=>c[h.d[i]]++);return c.indexOf(Math.max(...c))});
   const maj=k=>hist.filter(h=>h[k]).length>hist.length/2,oc={};hist.forEach(h=>oc[h.orient]=(oc[h.orient]||0)+1);
-  return{d,palm:a.palm,orient:Object.keys(oc).sort((x,y)=>oc[y]-oc[x])[0],touch:maj('touch'),spread:maj('spread')}}
+  const fo={};hist.forEach(h=>fo[h.face]=(fo[h.face]||0)+1);const fb=Object.keys(fo).sort((x,y)=>fo[y]-fo[x])[0];
+  return{d,palm:a.palm,face:fb==='null'?null:fb,orient:Object.keys(oc).sort((x,y)=>oc[y]-oc[x])[0],touch:maj('touch'),spread:maj('spread')}}
 function score(a,s){let sc=0;for(let i=0;i<5;i++){const df=Math.abs(a.d[i]-s.d[i]);sc+=df===0?1:df===1?(i===0?.8:.3):0}sc/=5;if(s.toque&&!a.touch)sc-=.2;if(s.abertos&&!a.spread)sc-=.2;if(s.o&&a.orient!==s.o)sc-=.25;return Math.max(0,sc)}
 
 /* gestos gravados pelo usuário (calibração pessoal) */
@@ -591,6 +597,7 @@ function evalStep(st,f,now){
   if(st.toque&&!a.touch){r.bad.push({x:'toque'});h-=.2}
   if(st.abertos&&!a.spread){r.bad.push({x:'abertos'});h-=.2}
   if(st.o&&a.orient!==st.o){r.bad.push({x:'orient'});h-=.2}
+  if(st.pm&&a.face!==st.pm){r.bad.push({x:'palma'});h-=.2}
   h=Math.max(0,h);
   if(CAL[st.key]){const p=pScore(nearest(st.key,f.v));if(p>=.85){r.bad=[];h=Math.max(h,p)}}
   r.shape=h;
@@ -605,7 +612,7 @@ function evalStep(st,f,now){
 /* ===== avaliação de um passo: mensagem do que corrigir ===== */
 const VERB=['feche','curve','estique'];
 function fixMsg(bad,s){
-  return 'Corrija: '+bad.map(b=>b.x==='toque'?'junte a ponta do polegar com a do indicador':b.x==='abertos'?'afaste os dedos':b.x==='orient'?'vire a mão para '+(s.o==='lado'?'o lado':'baixo'):NAMES[b.i].toLowerCase()+' ('+VERB[b.t]+')').join(', ')}
+  return 'Corrija: '+bad.map(b=>b.x==='toque'?'junte a ponta do polegar com a do indicador':b.x==='abertos'?'afaste os dedos':b.x==='palma'?'vire a palma para '+(s.pm==='frente'?'a câmera (dorso para você)':'você (dorso para a câmera)'):b.x==='orient'?'vire a mão para '+(s.o==='lado'?'o lado':'baixo'):NAMES[b.i].toLowerCase()+' ('+VERB[b.t]+')').join(', ')}
 
 /* ===== interface do app ===== */
 let steps=[],items=[],cur=0,holdT=0,detected=null,lastT=performance.now(),running=false,holistic,rec=null,movUntil=0;
@@ -638,7 +645,9 @@ function render(){
   if(s){
     const req=[];if(s.loc&&s.loc!=='neutro')req.push('Local: '+s.loc);if(s.mov&&s.mov!=='estatico')req.push('Movimento: '+MOVN[s.mov]);if(s.exprReq||s.expr)req.push('Expressão: '+EXN[s.exprReq||s.expr]);if(s.head)req.push('Cabeça: '+(s.head==='negar'?'negando':'acenando'));
     $('#instr').innerHTML=`<b>${esc(s.g&&s.g!==s.t?s.g+' · ':'')}${esc(s.t)}</b><span>${esc(s.i)}</span><div class="fl">${s.d.map((v,k)=>`<em class="st${v}">${NAMES[k]}: ${ST[v]}</em>`).join('')}</div>${req.length?`<div class="fl req">${req.map(x=>`<em>${esc(x)}</em>`).join('')}</div>`:''}`;
-    const op={o:s.o,touch:s.toque,cross:s.key==='L:R',arrow:false};drawHand($('#ref'),s.d,s.abertos,op);mini=document.createElement('canvas');mini.width=190;mini.height=238;drawHand(mini,s.d,s.abertos,op);
+    const op={o:s.o,touch:s.toque,cross:s.key==='L:R',arrow:false},pm=s.pm||'frente',oA={...op,back:pm==='dentro'},oB={...op,back:pm!=='dentro'};drawHand($('#ref'),s.d,s.abertos,oA);drawHand($('#ref2'),s.d,s.abertos,oB);
+    $('#refA').textContent='Quem está à sua frente vê: '+(pm==='dentro'?'dorso':'palma');$('#refB').textContent='Você vê: '+(pm==='dentro'?'palma':'dorso');
+    mini=document.createElement('canvas');mini.width=190;mini.height=238;drawHand(mini,s.d,s.abertos,oA);
   }
   renderFingers();renderStat(null,null);
 }
@@ -649,7 +658,7 @@ function renderFingers(){
 }
 function renderStat(r,f){
   const s=steps[cur];const box=(n,got,want,ok)=>`<div class="${want==null?'':ok?'ok':'bad'}"><small>${n}</small><b>${got==null?'—':esc(got)}</b>${want!=null?`<small>alvo: ${esc(want)}</small>`:''}</div>`;
-  $('#stat').innerHTML=box('Mão',r?(r.bad.length?'errado':'certo'):null,s?'todos os dedos':null,r&&!r.bad.length)
+  $('#stat').innerHTML=box('Mão',r?(r.bad.length?'errado':'certo')+(f&&f.a&&f.a.face?' · palma '+(f.a.face==='frente'?'p/ câmera':'p/ você'):''):null,s?'todos os dedos'+(s.pm?' · palma '+(s.pm==='frente'?'p/ câmera':'p/ você'):''):null,r&&!r.bad.length)
    +box('Local',f?f.loc:null,s&&s.loc&&s.loc!=='neutro'?s.loc:null,r&&r.loc===true)
    +box('Movimento',f?MOVS[f.mv]||f.mv:null,s&&s.mov&&s.mov!=='estatico'?s.mov:null,r&&r.mov)
    +box('Expressão',f?(f.exReady?(f.ex.join(' + ')||'neutra'):'calibrando...'):null,s&&s.exprReq?s.exprReq:null,r&&r.expr);
@@ -700,7 +709,7 @@ function drawBust(t){
 }
 (function loop(now){drawBust(now/1000);requestAnimationFrame(loop)})(0);
 
-/* ===== câmera + MediaPipe Holistic (mãos, rosto e corpo) ===== */
+/* ===== câmera + MediaPipe Tasks (mãos a cada quadro; corpo e rosto em paralelo) ===== */
 const cv=$('#c'),ctx=cv.getContext('2d');
 const setBadge=(t,ok)=>{$('#badge').textContent=t;$('#badge').className='badge'+(ok?' ok':'')};
 const HC=[[0,1,2,3,4],[0,5,6,7,8],[9,10,11,12],[13,14,15,16],[0,17,18,19,20],[5,9,13,17]];
@@ -717,7 +726,7 @@ function onResults(res){
   $('#gf').classList.toggle('show',!hand);
   const exr=exprTags(face),bc=hand?bodyCtx(pose,face,hand):null;
   if(!hand){hist.length=0;detected=null;holdT=0;buf.length=0;$('#hold').style.width='0';setBadge('Mostre a mão',false);renderFingers();renderStat(null,{loc:null,mv:null,ex:exr.tags,exReady:exr.ready});return}
-  const L2=hand.map(sc);detected=smooth(analyze(L2));const v=vec(L2);
+  const L2=hand.map(sc);detected=smooth(analyze(L2,res.isRight));const v=vec(L2);
   if(rec){rec.v.push(v);if(rec.v.length>=14){CAL[rec.key]=(CAL[rec.key]||[]).concat(rec.v).slice(-40);try{localStorage.setItem('libras_cal',JSON.stringify(CAL))}catch(e){}msg('Gesto gravado! O site agora reconhece o seu jeito de fazer.');rec=null}}
   let mv=null;
   if(bc){buf.push({t:now,x:bc.rx,y:bc.ry,s:detected.palm/bc.sw});while(buf.length&&now-buf[0].t>1400)buf.shift();hbuf.push({t:now,x:bc.hx,y:bc.hy});while(hbuf.length&&now-hbuf[0].t>1400)hbuf.shift();mv=classifyMove(buf)}
@@ -734,17 +743,37 @@ function onResults(res){
     if(cur<steps.length-1){cur++;render();setBadge('Passo concluído!',true)}
     else{$('#steps').innerHTML=items.map(it=>`<span class="chip done">✓ ${esc(it.label)}</span>`).join('');$('#instr').innerHTML='<b>🎉 Parabéns!</b><span>Você completou a frase. Digite outra ou clique em Reiniciar.</span>';setBadge('Frase concluída!',true)}}
 }
+let INV=false;try{INV=localStorage.getItem('libras_inv')==='1'}catch(e){}$('#inv').checked=INV;$('#inv').onchange=e=>{INV=e.target.checked;try{localStorage.setItem('libras_inv',INV?'1':'0')}catch(x){}};
+const TV='https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14',MM='https://storage.googleapis.com/mediapipe-models/';
 $('#camBtn').onclick=async()=>{
   if(running)return;
   try{
-    const stream=await navigator.mediaDevices.getUserMedia({video:{width:640,height:480,facingMode:'user'}});
-    const vd=$('#v');vd.srcObject=stream;await vd.play();running=true;$('#camBtn').textContent='Câmera ligada';setBadge('Carregando modelos... mantenha o rosto neutro',false);
-    holistic=new Holistic({locateFile:f=>`https://cdn.jsdelivr.net/npm/@mediapipe/holistic/${f}`});
-    holistic.setOptions({modelComplexity:1,smoothLandmarks:true,refineFaceLandmarks:false,minDetectionConfidence:.5,minTrackingConfidence:.5});holistic.onResults(onResults);
-    const loop=async()=>{if(vd.readyState>=2)await holistic.send({image:vd});requestAnimationFrame(loop)};loop();
-  }catch(e){setBadge('Erro na câmera',false);msg('Não consegui abrir a câmera: '+e.message+' (use Chrome, HTTPS e permita o acesso).')}
+    setBadge('Abrindo a câmera...',false);
+    const stream=await navigator.mediaDevices.getUserMedia({video:{width:{ideal:960},height:{ideal:720},facingMode:'user'},audio:false});
+    const vd=$('#v');vd.srcObject=stream;await vd.play();running=true;$('#camBtn').textContent='Câmera ligada';
+    setBadge('Carregando o detector de mãos...',false);
+    const V=await import(TV+'/vision_bundle.mjs'),fs=await V.FilesetResolver.forVisionTasks(TV+'/wasm');
+    const mk=async(C,u,o)=>{for(const del of ['GPU','CPU']){try{return await C.createFromOptions(fs,{baseOptions:{modelAssetPath:MM+u,delegate:del},runningMode:'VIDEO',...o})}catch(e){if(del==='CPU')throw e}}};
+    const HL=await mk(V.HandLandmarker,'hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task',{numHands:2,minHandDetectionConfidence:.35,minHandPresenceConfidence:.35,minTrackingConfidence:.35});
+    let PL=null,FL=null,poseR=null,faceR=null,lastV=-1,fc=0;
+    mk(V.PoseLandmarker,'pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task',{}).then(m=>PL=m).catch(e=>console.warn('pose',e));
+    mk(V.FaceLandmarker,'face_landmarker/face_landmarker/float16/1/face_landmarker.task',{}).then(m=>FL=m).catch(e=>console.warn('face',e));
+    setBadge('Mostre a mão (rosto neutro por 1 s para calibrar)',false);
+    const loop=()=>{
+      if(vd.readyState>=2&&vd.currentTime!==lastV){lastV=vd.currentTime;const ts=performance.now();fc++;
+        try{
+          const hr=HL.detectForVideo(vd,ts);
+          if(PL&&fc%3===0){const p=PL.detectForVideo(vd,ts);poseR=(p.landmarks&&p.landmarks[0])||null}
+          if(FL&&fc%2===0){const f=FL.detectForVideo(vd,ts);faceR=(f.faceLandmarks&&f.faceLandmarks[0])||null}
+          let lh=null,rh=null;
+          (hr.landmarks||[]).forEach((L,i)=>{const right=(hr.handedness[i][0].categoryName==='Left')!==INV;if(right&&!rh)rh=L;else if(!lh)lh=L;else if(!rh)rh=L});
+          onResults({image:{width:vd.videoWidth,height:vd.videoHeight},poseLandmarks:poseR,faceLandmarks:faceR,leftHandLandmarks:lh,rightHandLandmarks:rh,isRight:!!rh});
+        }catch(e){console.error(e);setBadge('Erro no detector: '+e.message,false)}}
+      requestAnimationFrame(loop)};
+    loop();
+  }catch(e){running=false;setBadge('Erro: '+e.message,false);msg('Não consegui iniciar: '+e.message+' (use Chrome, HTTPS e permita a câmera).')}
 };
-drawHand($('#ref'),[1,1,1,1,1]);renderFingers();renderStat(null,null);
+drawHand($('#ref'),[1,1,1,1,1]);drawHand($('#ref2'),[1,1,1,1,1],0,{back:true});renderFingers();renderStat(null,null);
 </script>
 </body>
 </html>
