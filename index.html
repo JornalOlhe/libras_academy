@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Libras Academy — Aprenda Libras com a câmera</title>
-<meta name="description" content="Aprenda Libras praticando: escolha uma palavra, veja como posicionar as mãos e receba correção em tempo real pela câmera, com IA Gemini.">
+<meta name="description" content="Aprenda Libras praticando: escolha uma palavra, veja como posicionar as mãos e receba correção em tempo real pela câmera,.">
 <script>document.documentElement.classList.add('js')</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Sora:wght@400;500;600;700&display=swap">
@@ -132,7 +132,15 @@ footer .hd{color:color-mix(in oklab,var(--paper) 40%,transparent)}footer ul{disp
 footer .bot{display:flex;flex-direction:column;gap:1rem;padding-top:1.75rem;font-size:.75rem;color:color-mix(in oklab,var(--paper) 40%,transparent)}
 .footer-mark{margin:2.5rem 0 0;user-select:none;white-space:nowrap;text-align:center;font-family:var(--font-display);font-size:21vw;font-weight:700;line-height:.8;letter-spacing:-.03em;color:color-mix(in oklab,var(--paper) 7%,transparent)}
 .footer-mark>span{display:inline-block;transform:translate3d(0,calc((1 - var(--enter,1))*(40% + var(--i,0)*14%)),0)}
-@media(min-width:640px){.brand small{display:inline}.alpha{grid-template-columns:repeat(3,1fr)}.hero h1{font-size:clamp(3.2rem,8vw,7rem)}.card{padding:1.25rem}}
+.guide{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-top:3rem}
+.gi{border:1px solid color-mix(in oklab,var(--paper) 14%,transparent);border-radius:1rem;padding:1.1rem;background:color-mix(in oklab,var(--paper) 3%,transparent)}
+.gi b{display:grid;place-items:center;width:1.75rem;height:1.75rem;border-radius:50%;background:var(--signal);color:var(--on-signal);font-size:.8125rem;margin-bottom:.75rem}
+.gi h3{font-size:1rem;font-weight:600}.gi p{margin-top:.35rem;font-size:.8125rem;line-height:1.5;color:color-mix(in oklab,var(--paper) 62%,transparent)}
+.gf{position:absolute;inset:10% 24%;z-index:1;display:grid;align-items:end;justify-items:center;padding-bottom:.75rem;border:2px dashed color-mix(in oklab,var(--signal) 75%,transparent);border-radius:48% 48% 36% 36%;font-size:.8125rem;font-weight:600;color:var(--signal);pointer-events:none;opacity:0;transition:opacity .4s}.gf.show{opacity:1}
+.legend{display:flex;flex-wrap:wrap;gap:.4rem 1rem;margin-bottom:.75rem;font-size:.75rem;color:color-mix(in oklab,var(--paper) 55%,transparent)}
+.st2{color:var(--ok)}.st1{color:#fbbf24}.st0{color:#94a3b8}
+.fl{display:flex;flex-wrap:wrap;gap:.25rem .75rem;margin-top:.6rem}.fl em{font-style:normal;font-size:.75rem}
+@media(min-width:640px){.guide{grid-template-columns:repeat(4,1fr)}.brand small{display:inline}.alpha{grid-template-columns:repeat(3,1fr)}.hero h1{font-size:clamp(3.2rem,8vw,7rem)}.card{padding:1.25rem}}
 @media(min-width:768px){.shell{width:min(100% - 5rem,80rem)}.grid-bg{background-size:calc((100% - 5rem)/12) 100%}.sec{padding:9rem 0}
 .hdr .barx{height:6rem}.hdr.sm .barx{height:5rem}.nav{display:flex}.burger,.mnav{display:none!important}
 .heading{grid-template-columns:repeat(12,1fr)}.heading .label{grid-column:span 2}.heading h2{grid-column:span 9;font-size:3.5rem}
@@ -173,7 +181,7 @@ html.js .reveal:not(.is-visible),html.js .reveal:not(.is-visible) .split-word>sp
       <div class="ctas hero-in" style="--d:850"><a class="btn" href="#pratica">Começar a praticar <svg class="i" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><a class="btn sec2" href="#alfabeto">Ver o alfabeto</a></div>
     </div>
     <div class="hero-media handbox hero-focus" style="position:relative;inset:auto" aria-hidden="true"><div class="ring"></div><canvas id="heroHand" width="360" height="450"></canvas><span class="let" id="heroLet">L</span></div>
-    <div class="foot hero-in" style="--d:1000"><div><strong>26</strong><span>letras para treinar</span></div><div><strong>21</strong><span>pontos da mão lidos</span></div><div><strong>IA</strong><span>Gemini cria os passos</span></div></div>
+    <div class="foot hero-in" style="--d:1000"><div><strong>26</strong><span>letras para treinar</span></div><div><strong>21</strong><span>pontos da mão lidos</span></div><div><strong>A–Z</strong><span>soletre qualquer palavra</span></div></div>
   </div>
 </section>
 
@@ -184,7 +192,7 @@ html.js .reveal:not(.is-visible),html.js .reveal:not(.is-visible) .split-word>sp
   <div class="feats">
     <div class="feat reveal" style="--i:0"><span class="label sig">01</span><div><h3>Veja o sinal</h3><p>Uma mão de referência mostra quais dedos ficam esticados, curvos ou fechados.</p></div></div>
     <div class="feat reveal" style="--i:1"><span class="label sig">02</span><div><h3>Pratique na câmera</h3><p>A leitura roda no seu navegador. O vídeo não sai do seu computador.</p></div></div>
-    <div class="feat reveal" style="--i:2"><span class="label sig">03</span><div><h3>Qualquer palavra</h3><p>Com a chave Gemini, a IA monta os passos de qualquer palavra que você digitar.</p></div></div>
+    <div class="feat reveal" style="--i:2"><span class="label sig">03</span><div><h3>Qualquer palavra</h3><p>Soletre qualquer palavra com o alfabeto manual e aprenda sinais comuns do dia a dia.</p></div></div>
   </div></div></section>
 
 <section class="nums" aria-label="Números"><div class="shell">
@@ -208,24 +216,29 @@ html.js .reveal:not(.is-visible),html.js .reveal:not(.is-visible) .split-word>sp
 
 <section class="sec dark" id="pratica" style="padding-bottom:5rem"><div class="shell">
   <div class="reveal reveal-split heading light"><span class="rule"></span><p class="label sig">04 / Praticar</p><h2 data-split>Ligue a câmera e mostre a mão.</h2></div>
+  <div class="guide">
+    <div class="gi reveal"><b>1</b><h3>Posicione</h3><p>Fique a um braço de distância, com a mão inteira dentro da moldura tracejada.</p></div>
+    <div class="gi reveal" style="--i:1"><b>2</b><h3>Ilumine</h3><p>Luz de frente e fundo liso. Evite ficar de costas para a janela.</p></div>
+    <div class="gi reveal" style="--i:2"><b>3</b><h3>Imite o desenho</h3><p>Palma virada para a câmera. Siga o desenho e a lista de dedos.</p></div>
+    <div class="gi reveal" style="--i:3"><b>4</b><h3>Segure</h3><p>Mantenha a posição até a barra encher. O passo conclui sozinho.</p></div>
+  </div>
   <div class="app">
     <div class="card reveal">
-      <div class="cam"><video id="v" playsinline muted></video><canvas id="c"></canvas><div class="badge" id="badge">Câmera desligada</div></div>
+      <div class="cam"><video id="v" playsinline muted></video><canvas id="c"></canvas><div class="gf" id="gf">Coloque a mão aqui</div><div class="badge" id="badge">Câmera desligada</div></div>
       <div class="bar"><i id="hold"></i></div>
       <div class="row"><button class="btn" id="camBtn" type="button">Ligar câmera</button><label class="chk"><input type="checkbox" id="skel"> mostrar linhas da mão</label></div>
       <div class="fing" id="fing"></div>
       <p style="margin-top:.75rem;font-size:.75rem;color:color-mix(in oklab,var(--paper) 50%,transparent)">Dica: boa luz, mão inteira no quadro, palma virada para a câmera.</p>
     </div>
     <div class="card reveal" style="--i:1">
-      <details id="cfg"><summary>⚙️ Chave da API Gemini (para gerar passos de qualquer palavra)</summary>
-        <div class="row"><input id="key" type="password" placeholder="Cole sua chave Gemini (AIza... ou AQ....)" autocomplete="off"><button class="btn sec2" id="saveKey" type="button">Salvar</button></div>
-        <p style="margin-top:.5rem;font-size:.75rem;color:color-mix(in oklab,var(--paper) 50%,transparent)">Fica salva só neste navegador. Sem chave, o site soletra a palavra offline.</p></details>
+      
       <div class="row first"><input id="word" type="text" placeholder="Qual palavra? Ex.: oi, obrigado, casa"><button class="btn" id="go" type="button">Ensinar</button></div>
       <div id="msg" role="status"></div>
       <h4>Passos</h4><div id="steps"></div>
       <h4>Como fazer</h4>
+      <div class="legend"><span class="st2">▲ esticado</span><span class="st1">◠ curvo</span><span class="st0">● fechado</span><span>pontos verdes = dedos esticados</span></div>
       <div class="ref"><canvas id="ref" width="190" height="238"></canvas><div id="instr"><b>—</b><span>Digite uma palavra para começar.</span></div></div>
-      <div class="row"><button class="btn sec2" id="prev" type="button">‹ Anterior</button><button class="btn sec2" id="skip" type="button">Pular ›</button><button class="btn sec2" id="restart" type="button">Reiniciar</button><button class="btn sec2" id="verify" type="button">🤖 Verificar com IA</button></div>
+      <div class="row"><button class="btn sec2" id="prev" type="button">‹ Anterior</button><button class="btn sec2" id="skip" type="button">Pular ›</button><button class="btn sec2" id="restart" type="button">Reiniciar</button></div>
     </div></div></div></section>
 
 <footer><div class="shell"><div class="top">
@@ -289,29 +302,45 @@ oi:[{titulo:'OI',instrucao:'Mão aberta, palma para frente, perto da cabeça; ba
 obrigado:[{titulo:'OBRIGADO',instrucao:'Mão aberta e esticada tocando o queixo, depois afaste para frente.',d:[0,2,2,2,2]}],
 sim:[{titulo:'SIM',instrucao:'Punho fechado, balance para baixo e para cima como um aceno de cabeça.',d:[0,0,0,0,0]}],
 eu:[{titulo:'EU',instrucao:'Aponte o indicador para o próprio peito.',d:[0,2,0,0,0]}],
+tchau:[{titulo:'TCHAU',instrucao:'Mão aberta, palma para frente; balance de um lado para o outro.',d:[2,2,2,2,2]}],
+nao:[{titulo:'NÃO',instrucao:'Indicador esticado; balance de um lado para o outro.',d:[0,2,0,0,0]}],
+voce:[{titulo:'VOCÊ',instrucao:'Aponte o indicador para a pessoa à sua frente.',d:[0,2,0,0,0]}],
 legal:[{titulo:'LEGAL',instrucao:'Punho com o polegar para cima.',d:[2,0,0,0,0]}]
 };
+SIGNS.ola=SIGNS.oi;
 const NAMES=['Polegar','Indicador','Médio','Anelar','Mindinho'],ST=['fechado','curvo','esticado'];
 const norm=s=>s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').trim();
 
 /* ===== desenho da mão (aceita valores fracionados 0..2 para animar) ===== */
-const INK='#e8f1f2',ACC='#2dd4bf',SOFT='rgba(232,241,242,.14)';
-const lerp=(a,b,t)=>a+(b-a)*t, fac=s=>s<=1?lerp(.2,.62,s):lerp(.62,1,s-1);
+const SK='#efc7a1',SKD='#8a5a3c',ACC='#2dd4bf',lerp=(a,b,t)=>a+(b-a)*t,RAD=Math.PI/180;
+function seg(x,x1,y1,x2,y2,w){
+  x.lineCap='round';x.strokeStyle=SKD;x.lineWidth=w+3;x.beginPath();x.moveTo(x1,y1);x.lineTo(x2,y2);x.stroke();
+  x.strokeStyle=SK;x.lineWidth=w;x.beginPath();x.moveTo(x1,y1);x.lineTo(x2,y2);x.stroke();
+  const l=Math.hypot(x2-x1,y2-y1);if(l>1){const nx=-(y2-y1)/l*w*.2,ny=(x2-x1)/l*w*.2;x.strokeStyle='rgba(255,236,214,.55)';x.lineWidth=w*.28;x.beginPath();x.moveTo(x1+nx,y1+ny);x.lineTo(x2+nx,y2+ny);x.stroke()}
+}
+function finger(x,bx,by,L,w,s,shift){
+  const bend=2-s,P=[.46,.3,.24],A=[bend*42,bend*52,bend*38],ws=[w,w*.92,w*.82];let cx=bx,cy=by,cum=0;const pts=[[cx,cy]];
+  for(let i=0;i<3;i++){cum+=A[i];cy-=L*P[i]*Math.cos(cum*RAD);cx+=shift/3*Math.max(0,1-bend);pts.push([cx,cy])}
+  for(let i=0;i<3;i++)seg(x,pts[i][0],pts[i][1],pts[i+1][0],pts[i+1][1],ws[i]);
+  if(bend<.8){x.strokeStyle='rgba(122,74,47,.55)';x.lineWidth=1.3;[1,2].forEach(i=>{const[px,py]=pts[i];x.beginPath();x.moveTo(px-ws[i]*.28,py);x.lineTo(px+ws[i]*.28,py);x.stroke()})}
+  if(s>1.5){x.globalAlpha=clamp((s-1.5)*2);x.fillStyle=ACC;x.beginPath();x.arc(pts[3][0],pts[3][1]-1,3.4,0,7);x.fill();x.globalAlpha=1}
+}
+function thumb(x,t){
+  const bx=56,by=200,a=t<=1?lerp(70,-5,t):lerp(-5,-50,t-1),a2=a+(2-t)*20,f=lerp(.75,1,t/2),L1=36*f,L2=30*f;
+  const p1=[bx+Math.sin(a*RAD)*L1,by-Math.cos(a*RAD)*L1],p2=[p1[0]+Math.sin(a2*RAD)*L2,p1[1]-Math.cos(a2*RAD)*L2];
+  seg(x,bx,by,p1[0],p1[1],23);seg(x,p1[0],p1[1],p2[0],p2[1],19);
+  if(t>1.5){x.globalAlpha=clamp((t-1.5)*2);x.fillStyle=ACC;x.beginPath();x.arc(p2[0],p2[1],3.4,0,7);x.fill();x.globalAlpha=1}
+}
 function drawHand(cv,d,spread){
   const x=cv.getContext('2d'),k=cv.width/190;x.setTransform(k,0,0,k,0,0);x.clearRect(0,0,190,238);
-  x.lineCap='round';x.lineJoin='round';
-  x.fillStyle=SOFT;x.strokeStyle=INK;x.lineWidth=2;x.beginPath();x.roundRect(50,128,92,84,24);x.fill();x.stroke();
-  const bx=[66,87,108,128],len=[62,72,66,52];
-  for(let f=0;f<4;f++){
-    const s=d[f+1],px=bx[f]+(spread&&f<2?(f===0?-7:7):0),py=136,L=len[f]*fac(s);
-    x.strokeStyle=INK;x.lineWidth=19;x.beginPath();x.moveTo(px,py);x.lineTo(px,py-L);x.stroke();
-    x.strokeStyle='#14202b';x.lineWidth=15;x.beginPath();x.moveTo(px,py);x.lineTo(px,py-L);x.stroke();
-    x.fillStyle=ACC;x.beginPath();x.arc(px,py-L,3.2,0,7);x.fill();
-  }
-  const t=d[0],tx=t<=1?lerp(76,36,t):lerp(36,12,t-1),ty=t<=1?lerp(168,152,t):lerp(152,128,t-1);
-  x.strokeStyle=INK;x.lineWidth=20;x.beginPath();x.moveTo(54,188);x.lineTo(tx,ty);x.stroke();
-  x.strokeStyle='#14202b';x.lineWidth=16;x.beginPath();x.moveTo(54,188);x.lineTo(tx,ty);x.stroke();
-  x.fillStyle=ACC;x.beginPath();x.arc(tx,ty,3.2,0,7);x.fill();
+  const gr=x.createLinearGradient(46,0,146,0);gr.addColorStop(0,'#dcab83');gr.addColorStop(.5,SK);gr.addColorStop(1,'#dcab83');
+  x.beginPath();x.moveTo(50,140);x.quadraticCurveTo(44,172,54,204);x.quadraticCurveTo(62,228,80,242);x.lineTo(118,242);x.quadraticCurveTo(138,224,143,196);x.quadraticCurveTo(148,166,142,140);
+  x.fillStyle=gr;x.fill();x.strokeStyle=SKD;x.lineWidth=2;x.stroke();
+  x.strokeStyle='rgba(122,74,47,.4)';x.lineWidth=1.5;x.lineCap='round';
+  x.beginPath();x.moveTo(62,176);x.quadraticCurveTo(82,202,100,212);x.stroke();x.beginPath();x.moveTo(60,160);x.quadraticCurveTo(100,170,138,164);x.stroke();
+  const bx=[63,84,105,125],len=[72,80,72,56],w=[19,20,18,15],sh=[-9,-3,4,10];
+  for(let f=3;f>=0;f--)finger(x,bx[f]+(spread&&f<2?(f===0?-4:4):0),142,len[f],w[f],d[f+1],spread?sh[f]:sh[f]*.15);
+  thumb(x,d[0]);
 }
 
 /* ===== alfabeto (grade) ===== */
@@ -353,68 +382,25 @@ function drawHand(cv,d,spread){
   scrollVar($("#mark"),"--enter",(r,v)=>(v-r.top)/r.height);
 })();
 
-/* ===== app: passos, Gemini e câmera ===== */
+/* ===== app: passos e câmera ===== */
 let steps=[],cur=0,holdT=0,detected=null,lastT=performance.now();
-$('#key').value=localStorage.getItem('libras_gemini_key')||'';
-if(location.hash.startsWith('#key=')){localStorage.setItem('libras_gemini_key',decodeURIComponent(location.hash.slice(5)));$('#key').value=localStorage.getItem('libras_gemini_key');history.replaceState(null,'',location.pathname)}
-$('#saveKey').onclick=()=>{localStorage.setItem('libras_gemini_key',$('#key').value.trim());msg('Chave salva neste navegador.')};
-
 const spell=w=>[...norm(w).toUpperCase()].filter(c=>ALPHA[c]).map(c=>({titulo:'Letra '+c,instrucao:ALPHA[c].t,d:ALPHA[c].d,o:ALPHA[c].o,toque:!!ALPHA[c].touch,abertos:!!ALPHA[c].spread}));
 
-/* modelos Gemini, do mais capaz ao mais leve; cai para o próximo se não houver acesso/cota no plano gratuito */
-const MODELS=['gemini-3.5-flash','gemini-3-flash','gemini-2.5-flash','gemini-2.5-flash-lite'];
-async function askGemini(word,key){
-  const prompt=`Você é professor de Libras (Língua Brasileira de Sinais). Para a palavra "${word}", responda APENAS um JSON válido neste formato:
-{"passos":[{"titulo":"curto","instrucao":"1-2 frases simples em português: posição da mão, local do corpo e movimento","dedos":[polegar,indicador,medio,anelar,mindinho],"toque":false,"abertos":false}]}
-Regras: dedos usa 0=fechado,1=curvo,2=esticado. "toque"=true se a ponta do polegar toca o indicador. "abertos"=true se indicador e médio ficam separados. Use de 1 a 4 passos (poses-chave do sinal). Se a palavra não tem sinal simples, use o alfabeto manual, um passo por letra.`;
-  let last='';
-  for(const m of MODELS){
-    const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent`,{method:'POST',headers:{'content-type':'application/json','x-goog-api-key':key},body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{responseMimeType:'application/json',temperature:.3}})});
-    if(r.ok){const j=await r.json();const txt=j.candidates[0].content.parts.map(p=>p.text||'').join('');const o=JSON.parse(txt.slice(txt.indexOf('{'),txt.lastIndexOf('}')+1));
-      return{model:m,steps:o.passos.map(p=>({titulo:p.titulo,instrucao:p.instrucao,d:p.dedos.map(n=>Math.max(0,Math.min(2,n|0))),toque:!!p.toque,abertos:!!p.abertos}))}}
-    last=r.status;if(r.status===400||r.status===401||r.status===403)throw new Error('chave inválida ou sem permissão ('+r.status+')');
-  }
-  throw new Error('sem cota nos modelos ('+last+')');
-}
-async function geminiParts(parts,key){let last='';
-  for(const m of MODELS){const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent`,{method:'POST',headers:{'content-type':'application/json','x-goog-api-key':key},body:JSON.stringify({contents:[{parts}],generationConfig:{responseMimeType:'application/json',temperature:.2}})});
-    if(r.ok){const j=await r.json();return{model:m,text:j.candidates[0].content.parts.map(p=>p.text||'').join('')}}
-    last=r.status;if([400,401,403].includes(r.status))throw new Error('chave inválida ou sem permissão ('+r.status+')')}
-  throw new Error('sem cota nos modelos ('+last+')')}
-async function verifyAI(){
-  const key=localStorage.getItem('libras_gemini_key');
-  if(!key){msg('Cole a chave Gemini para usar a verificação por IA.');$('#cfg').open=true;return}
-  if(!running){msg('Ligue a câmera primeiro.');return}
-  msg('Capturando imagens... mantenha o sinal.');
-  const v=$('#v'),cc=document.createElement('canvas');cc.width=480;cc.height=360;const g=cc.getContext('2d'),imgs=[];
-  for(let i=0;i<4;i++){g.drawImage(v,0,0,480,360);imgs.push(cc.toDataURL('image/jpeg',.7).split(',')[1]);await new Promise(r=>setTimeout(r,350))}
-  const s=steps[cur],alvo=s?`A pessoa tenta fazer o sinal "${$('#word').value}". Passo atual: ${s.titulo} — ${s.instrucao}`:'Não sei qual sinal a pessoa tenta fazer.';
-  const prompt=`Você é professor de Libras. ${alvo}\nAs ${imgs.length} imagens são quadros em sequência (cerca de 1 segundo) da câmera frontal. Analise formato das mãos, orientação, local no corpo e movimento. Responda APENAS JSON: {"sinal_provavel":"...","correto":true|false|null,"nota":0-100,"certo":"o que está certo","corrigir":"o que ajustar, curto"}. Seja honesto: se a imagem estiver ruim ou você não tiver certeza, diga em "corrigir" e use nota baixa.`;
-  msg('Analisando com Gemini...');
-  try{const r=await geminiParts([{text:prompt},...imgs.map(b=>({inline_data:{mime_type:'image/jpeg',data:b}}))],key);
-    const o=JSON.parse(r.text.slice(r.text.indexOf('{'),r.text.lastIndexOf('}')+1));
-    msg(`🤖 ${o.sinal_provavel?'Parece: '+o.sinal_provavel+' · ':''}nota ${o.nota}/100${o.certo?' — '+o.certo:''}${o.corrigir?' · Ajuste: '+o.corrigir:''} (${r.model})`)}
-  catch(e){msg('Gemini: '+e.message)}
-}
-$('#go').onclick=async()=>{
-  const w=$('#word').value.trim();if(!w)return;const key=localStorage.getItem('libras_gemini_key');msg('Preparando...');
-  try{
-    if(key&&!(w.length===1&&ALPHA[w.toUpperCase()])){const r=await askGemini(w,key);steps=r.steps;msg('Passos gerados pelo '+r.model+'.')}
-    else if(SIGNS[norm(w)]){steps=SIGNS[norm(w)];msg('Sinal pronto (offline).')}
-    else{steps=spell(w);msg(key?'Soletrando com o alfabeto manual.':'Sem chave: soletrando com o alfabeto manual (offline).')}
-  }catch(e){steps=SIGNS[norm(w)]||spell(w);msg('Gemini indisponível ('+e.message+'). Usando modo offline.')}
-  if(!steps.length){msg('Não consegui montar passos para essa palavra.');return}
-  cur=0;holdT=0;render();
+$('#go').onclick=()=>{
+  const w=$('#word').value.trim();if(!w)return;const k=norm(w);
+  if(SIGNS[k]){steps=SIGNS[k];msg('Sinal pronto. Siga o desenho e as instruções.')}
+  else{steps=spell(w);msg(steps.length?'Vamos soletrar com o alfabeto manual, letra por letra.':'Use letras de A a Z.')}
+  if(!steps.length)return;cur=0;holdT=0;render();
 };
 $('#word').addEventListener('keydown',e=>e.key==='Enter'&&$('#go').click());
 $('#prev').onclick=()=>{if(cur>0){cur--;holdT=0;render()}};
 $('#skip').onclick=()=>{if(cur<steps.length-1){cur++;holdT=0;render()}};
-$('#verify').onclick=verifyAI;$('#restart').onclick=()=>{cur=0;holdT=0;render()};
+$('#restart').onclick=()=>{cur=0;holdT=0;render()};
 
 function render(){
   $('#steps').innerHTML=steps.map((s,i)=>`<span class="chip ${i<cur?'done':i===cur?'cur':''}">${i<cur?'✓ ':''}${esc(s.titulo)}</span>`).join('');
   const s=steps[cur];
-  if(s){$('#instr').innerHTML=`<b>${esc(s.titulo)}</b><span>${esc(s.instrucao)}</span><br><small style="color:color-mix(in oklab,var(--paper) 50%,transparent)">${s.d.map((v,i)=>NAMES[i]+' '+ST[v]).join(' · ')}</small>`;drawHand($('#ref'),s.d,s.abertos)}
+  if(s){$('#instr').innerHTML=`<b>${esc(s.titulo)}</b><span>${esc(s.instrucao)}</span><div class="fl">${s.d.map((v,k)=>`<em class="st${v}">${NAMES[k]}: ${ST[v]}</em>`).join('')}</div>`;drawHand($('#ref'),s.d,s.abertos)}
   renderFingers();
 }
 function renderFingers(){
@@ -445,7 +431,7 @@ const setBadge=(t,ok)=>{$('#badge').textContent=t;$('#badge').className='badge'+
 function onResults(res){
   cv.width=res.image.width;cv.height=res.image.height;ctx.clearRect(0,0,cv.width,cv.height);
   const now=performance.now(),dt=now-lastT;lastT=now;const L=res.multiHandLandmarks&&res.multiHandLandmarks[0];
-  if(!L){hist.length=0;detected=null;holdT=0;$('#hold').style.width='0';setBadge('Mostre a mão',false);renderFingers();return}
+  $('#gf').classList.toggle('show',!L);if(!L){hist.length=0;detected=null;holdT=0;$('#hold').style.width='0';setBadge('Mostre a mão',false);renderFingers();return}
   if($('#skel').checked){ctx.strokeStyle='#34d399';ctx.lineWidth=3;[[0,1,2,3,4],[0,5,6,7,8],[9,10,11,12],[13,14,15,16],[0,17,18,19,20],[5,9,13,17]].forEach(p=>{ctx.beginPath();p.forEach((k,i)=>{const q=L[k];i?ctx.lineTo(q.x*cv.width,q.y*cv.height):ctx.moveTo(q.x*cv.width,q.y*cv.height)});ctx.stroke()});ctx.fillStyle='#fff';L.forEach(q=>{ctx.beginPath();ctx.arc(q.x*cv.width,q.y*cv.height,3,0,7);ctx.fill()})}
   detected=smooth(analyze(L));renderFingers();const s=steps[cur];if(!s){const g=guess(detected);setBadge('Parece: '+g.letters.join(' / ')+' ('+Math.round(g.conf*100)+'%)',g.conf>=.8);return}
   const sc=score(detected,s);

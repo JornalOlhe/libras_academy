@@ -1,11 +1,10 @@
 # Libras Academy
 
-Site para aprender Libras praticando com a câmera: o navegador lê as mãos (MediaPipe Hands) e compara com o sinal escolhido. A IA Gemini gera os passos de qualquer palavra.
+Site para aprender Libras praticando com a câmera. O navegador lê as mãos (MediaPipe Hands) e compara com o sinal escolhido, mostrando quais dedos ajustar.
 
-## Como usar
-Abra `index.html` no Chrome (ou publique no GitHub Pages) e permita a câmera.
+- Alfabeto manual A–Z com desenho de referência
+- Qualquer palavra é soletrada letra por letra; alguns sinais comuns já vêm prontos
+- Modo livre: sem palavra escolhida, mostra a letra mais provável da sua mão
+- Tudo roda no navegador, sem instalar nada e sem enviar vídeo
 
-## Chave Gemini
-Reconhecimento: ângulo das articulações, suavização por 5 quadros, orientação da mão e modo livre (sem palavra escolhida, mostra a letra mais provável). O botão "Verificar com IA" envia 4 quadros ao Gemini para avaliar sinais com movimento.
-
-A chave **não** fica no código (o repositório é público). Cole-a na seção "Chave da API Gemini" da página; ela é guardada só no `localStorage` do seu navegador. Sem chave, o site soletra as palavras offline.
+Ferramenta de apoio ao estudo. Para aprender Libras de verdade, procure professores e comunidades surdas.
