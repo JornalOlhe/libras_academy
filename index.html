@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0b1118"><link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes">
 <title>Libras Academy — Aprenda Libras com a câmera</title>
 <meta name="description" content="Aprenda Libras praticando: escolha uma palavra, veja como posicionar as mãos e receba correção em tempo real pela câmera,.">
 <script>document.documentElement.classList.add('js')</script>
@@ -163,6 +163,72 @@ footer{padding-top:6rem}footer .top{grid-template-columns:repeat(12,1fr)}footer 
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,::before,::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;transition-delay:0ms!important}
 html.js .reveal:not(.is-visible),html.js .reveal:not(.is-visible) .split-word>span{opacity:1;filter:none;transform:none}html.js .reveal:not(.is-visible)>.rule{transform:none}html.js .scrub>span{opacity:1}.hero-media,.hero-copy,.footer-mark>span{transform:none}.hero-copy{opacity:1}}
 .hv{margin:0;display:grid;gap:.35rem;justify-items:center}.hv canvas{width:7.5rem!important}.hv figcaption{font-size:.7rem;line-height:1.3;color:var(--muted-fg);text-align:center;max-width:8rem}
+/* ===== plataforma de aprendizado ===== */
+.trail{background:var(--night);color:var(--paper);padding:6.5rem 0 3rem;position:relative}
+.lstats{display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap;margin-bottom:1.5rem;position:sticky;top:4.25rem;z-index:5;padding:.5rem 0;background:linear-gradient(var(--night) 70%,transparent)}
+.lchip{display:flex;align-items:baseline;gap:.4rem;border:1px solid color-mix(in oklab,var(--paper) 18%,transparent);border-radius:999px;padding:.45rem .9rem;font-size:1.05rem}
+.lchip b{font-family:var(--font-display);font-weight:600}.lchip small{font-size:.65rem;color:color-mix(in oklab,var(--paper) 55%,transparent)}
+#path{max-width:30rem;margin:0 auto}
+.unit{margin-bottom:2.5rem}
+.ub{background:oklch(.5 .14 var(--h));border-radius:1rem;padding:1rem 1.25rem;margin-bottom:1.5rem;color:#fff}
+.ub small{font-size:.65rem;letter-spacing:.14em;opacity:.8;font-weight:600}.ub h3{font-size:1.4rem;margin:.1rem 0}.ub p{font-size:.85rem;opacity:.9}
+.nodes{display:flex;flex-direction:column;align-items:center;gap:1.25rem}
+.nrow{position:relative;transform:translateX(var(--x));display:flex;flex-direction:column;align-items:center}
+.nd{width:4.6rem;height:4.6rem;border-radius:50%;font-size:1.6rem;font-weight:700;display:grid;place-items:center;border:0;color:#fff;background:oklch(.55 .15 var(--h));box-shadow:0 .4rem 0 oklch(.38 .12 var(--h));transition:transform .15s,box-shadow .15s;cursor:pointer}
+.nd:active{transform:translateY(.3rem);box-shadow:0 .1rem 0 oklch(.38 .12 var(--h))}
+.nd.done{background:oklch(.78 .15 85);box-shadow:0 .4rem 0 oklch(.58 .13 80);color:#5a3d00}
+.nd.lock{background:oklch(.32 .01 250);box-shadow:0 .4rem 0 oklch(.22 .01 250);color:#8a94a0}
+.nd.cur{animation:pulse 1.6s ease-in-out infinite}.nd.ch{border-radius:1.2rem}
+@keyframes pulse{50%{transform:scale(1.07)}}
+.go{position:absolute;top:-1.7rem;background:#fff;color:var(--night);font-weight:700;font-size:.7rem;letter-spacing:.08em;padding:.3rem .7rem;border-radius:.6rem;animation:bob 1.4s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-4px)}}
+.sr2{font-size:.7rem;color:oklch(.85 .15 85);letter-spacing:.1em;margin-top:.2rem}
+.reset{text-align:center;margin-top:1rem}.reset button{font-size:.75rem;color:color-mix(in oklab,var(--paper) 45%,transparent);text-decoration:underline}
+.lesson{position:fixed;inset:0;z-index:90;background:var(--night);color:var(--paper);display:flex;flex-direction:column;height:100dvh}.lesson[hidden],#sheet[hidden]{display:none}
+.lh{display:flex;align-items:center;gap:.9rem;padding:.8rem 1rem;padding-top:calc(.8rem + env(safe-area-inset-top));max-width:42rem;width:100%;margin:0 auto}
+.lh>button{font-size:1.3rem;width:2.5rem;height:2.5rem;color:color-mix(in oklab,var(--paper) 70%,transparent)}
+.lbar{flex:1;height:.85rem;border-radius:1rem;background:color-mix(in oklab,var(--paper) 14%,transparent);overflow:hidden}.lbar i{display:block;height:100%;width:0;background:var(--signal);border-radius:1rem;transition:width .45s var(--ease-out)}
+#lhearts{font-weight:700;color:#ff6b7a;min-width:3rem;text-align:right}
+.lb{flex:1;overflow-y:auto;padding:1rem 1rem 2rem;display:flex;flex-direction:column;align-items:center;gap:1rem;max-width:42rem;width:100%;margin:0 auto;-webkit-overflow-scrolling:touch}
+.lk{font-size:.7rem;letter-spacing:.16em;color:var(--signal);font-weight:700}.ln{font-size:2.6rem}.lq{font-size:1.5rem;text-align:center}.ld{text-align:center;color:color-mix(in oklab,var(--paper) 75%,transparent);max-width:30rem}
+.lhands{display:flex;gap:1rem;justify-content:center}.lhands figure,.lone{margin:0;text-align:center;font-size:.72rem;color:color-mix(in oklab,var(--paper) 60%,transparent)}
+.lhands canvas,.lone canvas{background:color-mix(in oklab,var(--paper) 6%,transparent);border-radius:1rem}
+.lopts{display:grid;gap:.7rem;width:100%}.lgrid{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;width:100%}
+.opt{border:2px solid color-mix(in oklab,var(--paper) 22%,transparent);border-bottom-width:4px;border-radius:1rem;padding:.9rem 1rem;font-weight:600;font-size:1.05rem;color:var(--paper);background:transparent;display:flex;justify-content:center;align-items:center;min-height:3.4rem}
+.hopt{padding:.4rem}.hopt canvas{border-radius:.6rem}
+.opt.sel{border-color:var(--signal);background:color-mix(in oklab,var(--signal) 18%,transparent)}.opt.right{border-color:#58cc02;background:rgba(88,204,2,.18)}.opt.wrong{border-color:#ff4b4b;background:rgba(255,75,75,.18)}
+.lpairs{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;width:100%}.lcol{display:grid;gap:.7rem;align-content:start}
+.lans{min-height:3.6rem;width:100%;border-bottom:2px solid color-mix(in oklab,var(--paper) 25%,transparent);display:flex;flex-wrap:wrap;gap:.5rem;padding:.4rem 0}.lbank{display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center}
+.wd{border:2px solid color-mix(in oklab,var(--paper) 25%,transparent);border-bottom-width:4px;border-radius:.8rem;padding:.55rem .9rem;font-weight:600;color:var(--paper);min-height:2.75rem}.wd:disabled{opacity:.25}
+.lf{padding:1rem;padding-bottom:calc(1rem + env(safe-area-inset-bottom));display:flex;gap:1rem;align-items:center;justify-content:center;border-top:1px solid color-mix(in oklab,var(--paper) 12%,transparent)}
+.lf>div{flex:1;display:grid}.lf>div b{font-size:1.2rem}.lf>div span{font-size:.85rem;opacity:.9}
+.lf.ok{background:oklch(.3 .08 145);justify-content:space-between}.lf.bad{background:oklch(.3 .1 27);justify-content:space-between}
+.lbtn{min-height:3.2rem;min-width:9rem;padding:0 1.6rem;border-radius:1rem;background:var(--signal);color:var(--on-signal);font-weight:700;letter-spacing:.04em;box-shadow:0 .25rem 0 color-mix(in oklab,var(--signal) 55%,black)}
+.lbtn:disabled{background:color-mix(in oklab,var(--paper) 14%,transparent);box-shadow:none;color:color-mix(in oklab,var(--paper) 40%,transparent)}.lbtn.skip{background:transparent;color:color-mix(in oklab,var(--paper) 70%,transparent);box-shadow:none;border:2px solid color-mix(in oklab,var(--paper) 25%,transparent)}
+.lend{text-align:center;display:grid;gap:.8rem;justify-items:center;padding-top:1.5rem}.lend .big{font-size:3.5rem;color:oklch(.85 .15 85);letter-spacing:.2rem}.lend .up{color:var(--signal);font-weight:700}
+.lsum{display:flex;gap:.8rem}.lsum div{border:2px solid color-mix(in oklab,var(--paper) 20%,transparent);border-radius:1rem;padding:.7rem 1rem;min-width:5.2rem}.lsum b{display:block;font-size:1.4rem;font-family:var(--font-display)}.lsum small{font-size:.65rem;letter-spacing:.1em;opacity:.7}
+.lcam{width:100%}.lmode .row.first,.lmode #msg,.lmode #prev,.lmode #restart,.lmode .legend,.lmode .hint,.lmode h4{display:none}
+.lmode{grid-template-columns:1fr!important}.lmode .card{background:transparent;border:0;padding:0}
+#sheet{position:fixed;inset:0;z-index:95;background:rgba(0,0,0,.6);display:flex;align-items:flex-end;justify-content:center}
+.sbox{background:var(--night);border:1px solid color-mix(in oklab,var(--paper) 18%,transparent);border-radius:1.4rem 1.4rem 0 0;padding:1.5rem;width:min(100%,32rem);display:grid;gap:.8rem;padding-bottom:calc(1.5rem + env(safe-area-inset-bottom));color:var(--paper);animation:up .35s var(--ease-out)}
+@keyframes up{from{transform:translateY(100%)}}.sbox small{font-size:.65rem;letter-spacing:.14em;color:var(--signal);font-weight:700}.sbox h3{font-size:1.6rem}.sbox .lbtn{width:100%}
+@media(min-width:640px){#sheet{align-items:center}.sbox{border-radius:1.4rem}}
+.cf{position:absolute;top:-10px;width:9px;height:14px;border-radius:2px;animation:fall 1.8s ease-in forwards;pointer-events:none}
+@keyframes fall{to{transform:translate(var(--dx),110vh) rotate(720deg);opacity:.8}}
+.toast{position:fixed;left:50%;bottom:6rem;transform:translateX(-50%);background:#fff;color:var(--night);padding:.7rem 1.1rem;border-radius:.9rem;font-weight:600;z-index:120;font-size:.9rem;box-shadow:0 10px 30px rgba(0,0,0,.4);max-width:90vw;text-align:center}
+.tabbar{display:none}
+.dbg{position:absolute;left:.5rem;bottom:.5rem;font:600 .65rem/1 system-ui;color:#fff;background:rgba(0,0,0,.5);padding:.3rem .45rem;border-radius:.4rem;pointer-events:none;z-index:3;transform:none!important}
+/* mobile */
+@media(max-width:767px){
+ body{padding-bottom:calc(4.2rem + env(safe-area-inset-bottom))}
+ .tabbar{display:grid;grid-template-columns:repeat(4,1fr);position:fixed;bottom:0;left:0;right:0;z-index:70;background:color-mix(in oklab,var(--night) 92%,transparent);backdrop-filter:blur(14px);border-top:1px solid color-mix(in oklab,var(--paper) 14%,transparent);padding-bottom:env(safe-area-inset-bottom)}
+ .tabbar a{display:grid;justify-items:center;gap:.15rem;padding:.55rem 0;font-size:.65rem;font-weight:600;letter-spacing:.05em;color:color-mix(in oklab,var(--paper) 55%,transparent)}.tabbar a.cur{color:var(--signal)}.tabbar svg{width:1.4rem;height:1.4rem;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+ .fab{display:none}.sec{padding:4rem 0}.hero h1{font-size:clamp(2.2rem,11vw,3rem)}
+ .cam{aspect-ratio:3/4;max-height:68dvh}.app{gap:1rem}.card{padding:1rem!important}
+ .row{flex-wrap:wrap}.row .btn,.btn{min-height:3rem}.stat{grid-template-columns:repeat(2,1fr)}.fing{gap:.25rem}
+ .ref{justify-content:center}.ref canvas#bust{width:10.5rem}.hv canvas{width:6.2rem!important}
+ .lstats{top:3.75rem}.trail{padding-top:5.5rem}
+}
 </style>
 </head>
 <body>
@@ -170,12 +236,12 @@ html.js .reveal:not(.is-visible),html.js .reveal:not(.is-visible) .split-word>sp
 <header class="hdr" id="hdr"><div class="shell barx">
   <a href="#inicio" class="brand hero-in" aria-label="Libras Academy — início"><b>L</b>IBRAS <small>Academy</small></a>
   <nav class="nav hero-in" aria-label="Navegação principal">
-    <a class="l label" href="#alfabeto"><span>01</span>Alfabeto</a><a class="l label" href="#sobre"><span>02</span>Por quê</a><a class="l label" href="#metodo"><span>03</span>Método</a><a class="l label" href="#pratica"><span>04</span>Praticar</a>
+    <a class="l label" href="#trilha"><span>00</span>Aprender</a><a class="l label" href="#alfabeto"><span>01</span>Alfabeto</a><a class="l label" href="#sobre"><span>02</span>Por quê</a><a class="l label" href="#metodo"><span>03</span>Método</a><a class="l label" href="#pratica"><span>04</span>Praticar</a>
     <a class="cta" href="#pratica">Praticar agora <svg class="i" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></nav>
   <button class="burger" id="burger" type="button" aria-label="Abrir menu" aria-expanded="false"><svg class="i" viewBox="0 0 24 24"><path d="M4 12h16M4 6h16M4 18h16"/></svg></button>
 </div><div class="prog"><div id="bar"></div></div>
 <nav class="mnav" id="mnav" aria-label="Navegação móvel">
-  <a class="l ch-fade-up" href="#alfabeto">Alfabeto<span class="label sig">01</span></a><a class="l ch-fade-up" style="animation-delay:70ms" href="#sobre">Por quê<span class="label sig">02</span></a><a class="l ch-fade-up" style="animation-delay:140ms" href="#metodo">Método<span class="label sig">03</span></a><a class="l ch-fade-up" style="animation-delay:210ms" href="#pratica">Praticar<span class="label sig">04</span></a>
+  <a class="l ch-fade-up" href="#trilha">Aprender<span class="label sig">00</span></a><a class="l ch-fade-up" href="#alfabeto">Alfabeto<span class="label sig">01</span></a><a class="l ch-fade-up" style="animation-delay:70ms" href="#sobre">Por quê<span class="label sig">02</span></a><a class="l ch-fade-up" style="animation-delay:140ms" href="#metodo">Método<span class="label sig">03</span></a><a class="l ch-fade-up" style="animation-delay:210ms" href="#pratica">Praticar<span class="label sig">04</span></a>
   <a class="cta ch-fade-up" style="animation-delay:320ms" href="#pratica">Praticar agora</a></nav></header>
 
 <section class="hero" id="inicio" aria-labelledby="hero-title">
@@ -185,7 +251,7 @@ html.js .reveal:not(.is-visible),html.js .reveal:not(.is-visible) .split-word>sp
       <p class="label eyebrow hero-in" style="--d:150"><i class="ch-line"></i>Aprenda Libras praticando</p>
       <h1 id="hero-title"><span class="m"><span class="ch-rise" style="animation-delay:250ms">Fale com</span></span><span class="m"><span class="ch-rise" style="animation-delay:400ms;color:var(--signal)">as mãos.</span></span></h1>
       <p class="lead hero-in" style="--d:700">Digite uma palavra ou frase, veja como fazer cada sinal e receba correção ao vivo pela câmera. Sem instalar nada.</p>
-      <div class="ctas hero-in" style="--d:850"><a class="btn" href="#pratica">Começar a praticar <svg class="i" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><a class="btn sec2" href="#alfabeto">Ver o alfabeto</a></div>
+      <div class="ctas hero-in" style="--d:850"><a class="btn" href="#trilha">Começar a aprender <svg class="i" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><a class="btn sec2" href="#alfabeto">Ver o alfabeto</a></div>
     </div>
     <div class="hero-media handbox hero-focus" style="position:relative;inset:auto" aria-hidden="true"><div class="ring"></div><canvas id="heroHand" width="360" height="450"></canvas><span class="let" id="heroLet">L</span></div>
     <div class="foot hero-in" style="--d:1000"><div><strong>26</strong><span>letras para treinar</span></div><div><strong>543</strong><span>pontos de mãos, rosto e corpo</span></div><div><strong>A–Z</strong><span>soletre qualquer palavra</span></div></div>
@@ -193,6 +259,7 @@ html.js .reveal:not(.is-visible),html.js .reveal:not(.is-visible) .split-word>sp
 </section>
 
 <div class="over">
+<section class="trail" id="trilha" aria-label="Trilha de aprendizado"><div class="shell"><div class="lstats" id="lstats"></div><div id="path"></div></div></section>
 <section class="sec grid-bg" id="sobre"><div class="shell">
   <div class="reveal reveal-split heading"><span class="rule"></span><p class="label sig">01 / Por quê</p><h2 data-split>Aprender Libras é mais fácil quando alguém corrige você.</h2></div>
   <div class="about-g"><p class="lead scrub" id="scrub" data-scrub>Livros mostram a mão pronta. Aqui a câmera vê a sua mão, compara com o sinal certo e diz exatamente qual dedo ajustar.</p><p class="txt reveal">A Libras é uma língua com gramática própria, usada pela comunidade surda brasileira. A Libras Academy é uma ferramenta de apoio ao estudo: ela não substitui aulas com professores surdos, mas ajuda a treinar a forma das mãos todos os dias.</p></div>
@@ -229,9 +296,9 @@ html.js .reveal:not(.is-visible),html.js .reveal:not(.is-visible) .split-word>sp
     <div class="gi reveal" style="--i:2"><b>3</b><h3>Imite o boneco</h3><p>Ele mostra o formato da mão, o local do corpo, o movimento e a expressão.</p></div>
     <div class="gi reveal" style="--i:3"><b>4</b><h3>Segure</h3><p>Acertou tudo? A barra enche e o próximo sinal aparece.</p></div>
   </div>
-  <div class="app">
+  <div class="app" id="appBox">
     <div class="card reveal">
-      <div class="cam"><video id="v" playsinline muted></video><canvas id="c"></canvas><div class="gf" id="gf">Coloque a mão aqui</div><div class="badge" id="badge">Câmera desligada</div><div class="pts" id="pts"></div></div>
+      <div class="cam"><video id="v" playsinline muted></video><canvas id="c"></canvas><div class="dbg" id="dbg"></div><div class="gf" id="gf">Coloque a mão aqui</div><div class="badge" id="badge">Câmera desligada</div><div class="pts" id="pts"></div></div>
       <div class="bar"><i id="hold"></i></div>
       <div class="row"><button class="btn" id="camBtn" type="button">Ligar câmera</button><label class="chk"><input type="checkbox" id="skel" checked> mostrar pontos rastreados</label><label class="chk"><input type="checkbox" id="inv"> inverter palma/dorso</label></div>
       <div class="fing" id="fing"></div>
@@ -259,6 +326,9 @@ html.js .reveal:not(.is-visible),html.js .reveal:not(.is-visible) .split-word>sp
   <p class="footer-mark" id="mark" aria-hidden="true"><span style="--i:0">L</span><span style="--i:1">I</span><span style="--i:2">B</span><span style="--i:3">R</span><span style="--i:4">A</span><span style="--i:5">S</span></p></footer>
 </div></main>
 
+<div id="sheet" hidden></div>
+<div class="lesson" id="lesson" hidden role="dialog" aria-label="Lição"><div class="lh"><button id="lx" type="button" aria-label="Sair da lição">✕</button><div class="lbar"><i id="lprog"></i></div><span id="lhearts">❤ 5</span></div><div class="lb" id="lbody"></div><div class="lf" id="lfoot"></div></div>
+<nav class="tabbar" aria-label="Menu do aplicativo"><a href="#trilha"><svg viewBox="0 0 24 24"><path d="M12 3l2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.6 6.6 19.5l1.2-6L3.3 9.3l6.1-.7z"/></svg>Aprender</a><a href="#alfabeto"><svg viewBox="0 0 24 24"><path d="M5 20L12 4l7 16M8 14h8"/></svg>Alfabeto</a><a href="#pratica"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="3"/><circle cx="12" cy="12.5" r="3.5"/></svg>Praticar</a><a href="#inicio"><svg viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v9H4z"/></svg>Início</a></nav>
 <script>
 const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
 const clamp=(n,a=0,b=1)=>Math.min(b,Math.max(a,n));
@@ -375,7 +445,7 @@ function drawHand(cv,d,spread,op){
 (function(){
   const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("is-visible");io.unobserve(e.target)}}),{threshold:.12,rootMargin:"0px 0px -6% 0px"});
   $$(".reveal").forEach(el=>io.observe(el));
-  const hdr=$("#hdr"),bar=$("#bar"),links=$$(".nav a.l"),ids=["alfabeto","sobre","metodo","pratica"],hero=$("#inicio");
+  const hdr=$("#hdr"),bar=$("#bar"),links=$$(".nav a.l"),ids=["trilha","alfabeto","sobre","metodo","pratica"],hero=$("#inicio");
   frame(()=>{const y=scrollY;hdr.classList.toggle("on",y>40||$("#mnav").classList.contains("open"));hdr.classList.toggle("sm",y>40);
     const max=document.documentElement.scrollHeight-innerHeight;bar.style.transform=`scaleX(${max>0?clamp(y/max):0})`;
     const mid=innerHeight*.4;let cur="";ids.forEach(id=>{const el=document.getElementById(id);if(el&&el.getBoundingClientRect().top<=mid)cur=id});
@@ -512,13 +582,13 @@ function analyze(L,isRight){
   const palm=dist(L[0],L[9])||1e-3,d=[];
   const ts=(ang(L[1],L[2],L[3])+ang(L[2],L[3],L[4]))/2,td=dist(L[4],L[5])/palm;
   d.push(ts>150&&td>.75?2:td<.5?0:1);
-  [[5,6,7,8],[9,10,11,12],[13,14,15,16],[17,18,19,20]].forEach(([m,p,i,t])=>{const a=(ang(L[m],L[p],L[i])+ang(L[p],L[i],L[t]))/2;d.push(a>155?2:a>115?1:0)});
+  [[5,6,7,8],[9,10,11,12],[13,14,15,16],[17,18,19,20]].forEach(([m,p,i,t])=>{const a=(ang(L[m],L[p],L[i])+ang(L[p],L[i],L[t]))/2,r=d3(L[t],L[0])/(d3(L[m],L[0])||1e-3),as=a>150?2:a>108?1:0,rs=r>1.55?2:r<1.15?0:1;d.push(Math.abs(as-rs)===2?1:as)});
   const dx=L[9].x-L[0].x,dy=L[9].y-L[0].y;
   const cr=(L[5].x-L[0].x)*(L[17].y-L[0].y)-(L[5].y-L[0].y)*(L[17].x-L[0].x),face=Math.abs(cr)/(palm*palm)>.1?((cr<0)===!!isRight?'frente':'dentro'):null;
   return{d,palm,face,orient:Math.abs(dx)>Math.abs(dy)*1.1?'lado':dy>0?'baixo':'cima',touch:dist(L[4],L[8])/palm<.35,spread:dist(L[8],L[12])/palm>.38};
 }
 const hist=[];
-function smooth(a){hist.push(a);if(hist.length>5)hist.shift();
+function smooth(a){hist.push(a);if(hist.length>3)hist.shift();
   const d=a.d.map((_,i)=>{const c=[0,0,0];hist.forEach(h=>c[h.d[i]]++);return c.indexOf(Math.max(...c))});
   const maj=k=>hist.filter(h=>h[k]).length>hist.length/2,oc={};hist.forEach(h=>oc[h.orient]=(oc[h.orient]||0)+1);
   const fo={};hist.forEach(h=>fo[h.face]=(fo[h.face]||0)+1);const fb=Object.keys(fo).sort((x,y)=>fo[y]-fo[x])[0];
@@ -738,10 +808,10 @@ function onResults(res){
   const r=evalStep(s,f,now);renderStat(r,f);
   if(r.ok){holdT+=dt;setBadge('✓ Segure...',true)}else{holdT=Math.max(0,holdT-dt*2);
     setBadge(r.bad.length?fixMsg(r.bad,s):r.need.loc&&r.loc!==true?(f.loc==null?'Mostre rosto e ombros':'Leve a mão ao local: '+s.loc):r.need.mov&&!r.mov?'Faça o movimento':r.need.expr&&!r.expr?'Use a expressão do rosto':'Quase...',false)}
-  const need=s.mov&&s.mov!=='estatico'?500:700;$('#hold').style.width=Math.min(100,holdT/need*100)+'%';
+  const need=450;$('#hold').style.width=Math.min(100,holdT/need*100)+'%';
   if(holdT>=need){holdT=0;buf.length=0;movUntil=0;
     if(cur<steps.length-1){cur++;render();setBadge('Passo concluído!',true)}
-    else{$('#steps').innerHTML=items.map(it=>`<span class="chip done">✓ ${esc(it.label)}</span>`).join('');$('#instr').innerHTML='<b>🎉 Parabéns!</b><span>Você completou a frase. Digite outra ou clique em Reiniciar.</span>';setBadge('Frase concluída!',true)}}
+    else{$('#steps').innerHTML=items.map(it=>`<span class="chip done">✓ ${esc(it.label)}</span>`).join('');$('#instr').innerHTML='<b>🎉 Parabéns!</b><span>Você completou a frase. Digite outra ou clique em Reiniciar.</span>';setBadge('Frase concluída!',true);if(window.__done){const f=window.__done;window.__done=null;f()}}}
 }
 let INV=false;try{INV=localStorage.getItem('libras_inv')==='1'}catch(e){}$('#inv').checked=INV;$('#inv').onchange=e=>{INV=e.target.checked;try{localStorage.setItem('libras_inv',INV?'1':'0')}catch(x){}};
 const TV='https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14',MM='https://storage.googleapis.com/mediapipe-models/';
@@ -754,19 +824,22 @@ $('#camBtn').onclick=async()=>{
     setBadge('Carregando o detector de mãos...',false);
     const V=await import(TV+'/vision_bundle.mjs'),fs=await V.FilesetResolver.forVisionTasks(TV+'/wasm');
     const mk=async(C,u,o)=>{for(const del of ['GPU','CPU']){try{return await C.createFromOptions(fs,{baseOptions:{modelAssetPath:MM+u,delegate:del},runningMode:'VIDEO',...o})}catch(e){if(del==='CPU')throw e}}};
-    const HL=await mk(V.HandLandmarker,'hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task',{numHands:2,minHandDetectionConfidence:.35,minHandPresenceConfidence:.35,minTrackingConfidence:.35});
-    let PL=null,FL=null,poseR=null,faceR=null,lastV=-1,fc=0;
+    let HL=await mk(V.HandLandmarker,'hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task',{numHands:2,minHandDetectionConfidence:.35,minHandPresenceConfidence:.35,minTrackingConfidence:.35});
+    let PL=null,FL=null,poseR=null,faceR=null,lastV=-1,fc=0,seen=0,dlg='GPU',t0=performance.now(),HLr=HL;
+    $('.cam').style.aspectRatio=vd.videoWidth+'/'+vd.videoHeight;
     mk(V.PoseLandmarker,'pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task',{}).then(m=>PL=m).catch(e=>console.warn('pose',e));
     mk(V.FaceLandmarker,'face_landmarker/face_landmarker/float16/1/face_landmarker.task',{}).then(m=>FL=m).catch(e=>console.warn('face',e));
     setBadge('Mostre a mão (rosto neutro por 1 s para calibrar)',false);
-    const loop=()=>{
+    const loop=async()=>{
       if(vd.readyState>=2&&vd.currentTime!==lastV){lastV=vd.currentTime;const ts=performance.now();fc++;
         try{
-          const hr=HL.detectForVideo(vd,ts);
+          const hr=HL.detectForVideo(vd,ts);if(hr.landmarks.length)seen++;
+          if(!seen&&fc===150&&dlg==='GPU'){dlg='CPU';HL=await V.HandLandmarker.createFromOptions(fs,{baseOptions:{modelAssetPath:MM+'hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task',delegate:'CPU'},runningMode:'VIDEO',numHands:2,minHandDetectionConfidence:.3,minHandPresenceConfidence:.3,minTrackingConfidence:.3})}
+          if(fc%15===0){$('#dbg').textContent=dlg+' · '+Math.round(fc/((performance.now()-t0)/1000))+' fps · mãos '+hr.landmarks.length+(PL?' · corpo':'')+(FL?' · rosto':'')}
           if(PL&&fc%3===0){const p=PL.detectForVideo(vd,ts);poseR=(p.landmarks&&p.landmarks[0])||null}
           if(FL&&fc%2===0){const f=FL.detectForVideo(vd,ts);faceR=(f.faceLandmarks&&f.faceLandmarks[0])||null}
           let lh=null,rh=null;
-          (hr.landmarks||[]).forEach((L,i)=>{const right=(hr.handedness[i][0].categoryName==='Left')!==INV;if(right&&!rh)rh=L;else if(!lh)lh=L;else if(!rh)rh=L});
+          (hr.landmarks||[]).forEach((L,i)=>{const right=(hr.handedness[i][0].categoryName==='Right')!==INV;if(right&&!rh)rh=L;else if(!lh)lh=L;else if(!rh)rh=L});
           onResults({image:{width:vd.videoWidth,height:vd.videoHeight},poseLandmarks:poseR,faceLandmarks:faceR,leftHandLandmarks:lh,rightHandLandmarks:rh,isRight:!!rh});
         }catch(e){console.error(e);setBadge('Erro no detector: '+e.message,false)}}
       requestAnimationFrame(loop)};
@@ -774,6 +847,128 @@ $('#camBtn').onclick=async()=>{
   }catch(e){running=false;setBadge('Erro: '+e.message,false);msg('Não consegui iniciar: '+e.message+' (use Chrome, HTTPS e permita a câmera).')}
 };
 drawHand($('#ref'),[1,1,1,1,1]);drawHand($('#ref2'),[1,1,1,1,1],0,{back:true});renderFingers();renderStat(null,null);
+
+/* ===== plataforma de aprendizado: trilha, lições, XP, ofensiva e vidas ===== */
+const PK='libras_prog',HMAX=5,HREG=300000;
+let P={xp:0,streak:0,last:'',done:{},hearts:HMAX,hAt:0};
+try{P={...P,...JSON.parse(localStorage.getItem(PK)||'{}')}}catch(e){}
+const savP=()=>{try{localStorage.setItem(PK,JSON.stringify(P))}catch(e){}};
+const dstr=d=>d.toLocaleDateString('sv'),todayS=()=>dstr(new Date()),yestS=()=>{const d=new Date();d.setDate(d.getDate()-1);return dstr(d)};
+function regen(){if(P.hearts>=HMAX){P.hearts=HMAX;P.hAt=0;return}const n=Date.now();if(!P.hAt)P.hAt=n;const k=Math.floor((n-P.hAt)/HREG);if(k>0){P.hearts=Math.min(HMAX,P.hearts+k);P.hAt=P.hearts>=HMAX?0:P.hAt+k*HREG}}
+const streakNow=()=>P.last===todayS()||P.last===yestS()?P.streak:0,lvl=()=>Math.floor(P.xp/100)+1;
+const sh=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const el=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e};
+let AC;const beep=(f,d=.12,at=0)=>{try{AC=AC||new AudioContext();const o=AC.createOscillator(),g=AC.createGain();o.type='sine';o.frequency.value=f;g.gain.value=.06;o.connect(g);g.connect(AC.destination);o.start(AC.currentTime+at);o.stop(AC.currentTime+at+d)}catch(e){}};
+const vib=p=>{try{navigator.vibrate&&navigator.vibrate(p)}catch(e){}};
+
+/* currículo */
+const UN=[
+ {id:'a1',t:'Alfabeto 1',d:'As primeiras letras',h:190,L:[{k:['A','B','C','D']},{k:['E','F','G','H']},{k:['I','L','M','N']}]},
+ {id:'a2',t:'Alfabeto 2',d:'Mais letras, com orientação da mão',h:160,L:[{k:['O','P','Q','R']},{k:['S','T','U','V']},{k:['W','X','Y','Z']},{k:['J','K']}]},
+ {id:'cu',t:'Cumprimentos',d:'Dizer oi com educação',h:260,L:[{k:['OI','TCHAU','OBRIGADO','POR_FAVOR'],ph:['oi']},{k:['BOM','DIA','TARDE','NOITE'],ph:['bom dia','boa noite']},{k:['TUDO_BEM','PRAZER','LEGAL','FELIZ'],ph:['oi tudo bem','muito prazer']}]},
+ {id:'pe',t:'Pessoas',d:'Eu, você e a família',h:320,L:[{k:['EU','VOCE','ELE','NOS'],ph:['eu e você']},{k:['MEU','NOME','AMIGO','AMOR'],ph:['meu nome é Ana']},{k:['FAMILIA','PAI','MAE','FILHO'],ph:['meu pai e minha mãe']}]},
+ {id:'ac',t:'Ações',d:'O que fazemos no dia',h:30,L:[{k:['QUERER','GOSTAR','TER','IR'],ph:['eu quero ir']},{k:['COMER','BEBER','AGUA','COMIDA'],ph:['eu quero beber água']},{k:['TRABALHAR','APRENDER','ESTUDAR','ENTENDER'],ph:['eu estudo libras']},{k:['FALAR','AJUDAR','SABER','PRECISAR'],ph:['eu preciso de ajuda']}]},
+ {id:'pg',t:'Perguntas',d:'Pergunte usando o rosto',h:350,L:[{k:['QUE','COMO','ONDE','QUEM'],ph:['quem é você?']},{k:['PORQUE','QUANDO','QUAL','QUANTO'],ph:['você quer beber água?']}]},
+ {id:'di',t:'Dia a dia',d:'Frases completas',h:100,L:[{k:['CASA','ESCOLA','HOJE','AMANHA'],ph:['eu vou para casa hoje']},{k:['MUITO','GRANDE','BONITO','PEQUENO'],ph:['muito bonito']},{k:['SIM','NAO','AGORA','DESCULPA'],ph:['sim eu quero','desculpa']}]}
+];
+const FLAT=[];UN.forEach(u=>{const all=[...new Set(u.L.flatMap(l=>l.k))],phs=u.L.flatMap(l=>l.ph||[]);u.L.push({k:all,ph:phs.slice(-2),ch:true});u.L.forEach((l,j)=>{l.id=u.id+j;l.u=u;l.j=j;l.n=j+1;FLAT.push(l)})});
+const sg=k=>{if(k.length===1){const a=ALPHA[k];return{key:'L:'+k,name:k,d:a.d,o:a.o,toque:!!a.touch,abertos:!!a.spread,pm:a.o?undefined:'frente',i:a.t,t:'Letra '+k,g:k}}const e=LEX[k];return{...e,key:'S:'+k,name:e.t,g:e.t}};
+const hcv=(s,w,back)=>{const c=el('canvas');c.width=190;c.height=238;drawHand(c,s.d,s.abertos,{o:s.o,touch:s.toque,cross:s.key==='L:R',back:!!back});c.style.width=w;return c};
+const reqs=s=>{const r=[];if(s.o)r.push('mão apontando para '+(s.o==='lado'?'o lado':'baixo'));if(s.pm)r.push('palma para '+(s.pm==='frente'?'a câmera':'você'));if(s.loc&&s.loc!=='neutro')r.push('local: '+s.loc);if(s.mov&&s.mov!=='estatico')r.push('movimento: '+MOVN[s.mov]);if(s.exprReq||s.expr)r.push('expressão: '+EXN[s.exprReq||s.expr]);if(s.head)r.push('cabeça: '+(s.head==='negar'?'negando':'acenando'));return r};
+
+/* estado da lição */
+const LES=$('#lesson'),LB=$('#lbody'),LF=$('#lfoot'),appBox=$('#appBox');let L=null;
+const footBtn=(txt,cls,fn,dis)=>{LF.className='lf '+(cls||'');LF.innerHTML='';const b=el('button','lbtn '+(cls||''),txt);b.disabled=!!dis;b.onclick=fn;LF.append(b);return b};
+const feedback=(ok,msg,next)=>{LF.className='lf '+(ok?'ok':'bad');LF.innerHTML=`<div><b>${ok?'Correto!':'Ops!'}</b><span>${esc(msg||'')}</span></div>`;const b=el('button','lbtn','Continuar');b.onclick=next;LF.append(b);b.focus()};
+const updH=()=>{$('#lhearts').textContent='❤ '+P.hearts};
+function leaveCam(){if(appBox.parentNode!==$('#pratica .shell')){window.__done=null;$('#pratica .shell').append(appBox);appBox.classList.remove('lmode')}}
+function res(ok,msg,e){
+  if(ok){L.right++;L.xp+=10;beep(660,.1);beep(880,.16,.1);vib(20)}
+  else{L.wrong++;P.hearts=Math.max(0,P.hearts-1);if(!P.hAt)P.hAt=Date.now();savP();beep(180,.3);vib([60,40,60]);if(e&&!e.rq){L.ex.push({...e,rq:1});L.total++}}
+  updH();feedback(ok,msg,()=>{if(!ok&&P.hearts<=0)return fail();L.i++;show()})}
+function openLesson(i){
+  regen();if(P.hearts<=0){toast('Sem vidas por enquanto. Elas voltam com o tempo.');return}
+  const ls=FLAT[i],ks=ls.k,pool=[...new Set(ls.u.L.flatMap(l=>l.k))],ex=[],T=(type,k)=>({type,k});
+  if(ls.ch){sh(ks).slice(0,6).forEach(k=>{ex.push(T('pick',k));ex.push(T('pickHand',k))});ex.push({type:'pairs',ks:sh(ks).slice(0,4)});sh(ks).slice(0,3).forEach(k=>ex.push(T('cam',k)))}
+  else{ks.forEach(k=>{ex.push(T('learn',k));ex.push(T('pick',k))});ex.push({type:'pairs',ks});sh(ks).slice(0,2).forEach(k=>ex.push(T('pickHand',k)));sh(ks).slice(0,2).forEach(k=>ex.push(T('cam',k)))}
+  (ls.ph||[]).forEach(p=>ex.push({type:'phrase',text:p}));if(ls.ph&&ls.ph.length)ex.push({type:'camPhrase',text:ls.ph[0]});
+  L={ls,i:0,ex,pool,total:ex.length,right:0,wrong:0,xp:0,skip:0,idx:i};
+  LES.hidden=false;document.body.style.overflow='hidden';updH();show()}
+function closeLesson(ask){if(ask&&L&&L.i>0&&!confirm('Sair agora? Você perde o progresso desta lição.'))return;leaveCam();LES.hidden=true;document.body.style.overflow='';L=null;renderPath()}
+function show(){
+  if(!L)return;const e=L.ex[L.i];$('#lprog').style.width=Math.min(100,L.i/L.total*100)+'%';
+  if(!e)return finish();leaveCam();LB.scrollTop=0;LB.innerHTML='';
+  ({learn,pick,pickHand,pairs,phrase,cam:()=>cam(e),camPhrase:()=>cam(e,true)}[e.type]||(()=>{}))(e)}
+function learn(e){const s=sg(e.k),r=reqs(s);
+  const hv=el('div','lhands');[[0,'Quem está à sua frente vê'],[1,'Você vê']].forEach(([b,t])=>{const f=el('figure');const back=(s.pm==='dentro')?!b:!!b;f.append(hcv(s,'8.5rem',back),el('figcaption',0,t+': '+(back?'dorso':'palma')));hv.append(f)});
+  LB.append(el('p','lk','NOVO SINAL'),el('h2','ln',esc(s.name)),hv,el('p','ld',esc(s.i)),el('div','fl',r.map(x=>`<em>${esc(x)}</em>`).join('')));
+  footBtn('Entendi','',()=>{L.i++;show()})}
+function opts4(k){const o=sh(L.pool.filter(x=>x!==k)).slice(0,3);return sh([k,...o])}
+function pick(e){const s=sg(e.k);let sel=null;
+  LB.append(el('h2','lq','Qual é este sinal?'));const f=el('div','lone');f.append(hcv(s,'11rem',s.pm==='dentro'));LB.append(f);
+  const g=el('div','lopts');opts4(e.k).forEach(k=>{const b=el('button','opt',esc(sg(k).name));b.onclick=()=>{[...g.children].forEach(x=>x.classList.remove('sel'));b.classList.add('sel');sel=k;v.disabled=false};g.append(b)});LB.append(g);
+  const v=footBtn('Verificar','',()=>{const ok=sel===e.k;[...g.children].forEach(b=>{b.disabled=true;if(b.textContent===sg(e.k).name)b.classList.add('right');else if(b.classList.contains('sel'))b.classList.add('wrong')});res(ok,ok?'':'Era '+s.name,e)},1)}
+function pickHand(e){const s=sg(e.k);let sel=null;LB.append(el('h2','lq','Qual mão faz «'+esc(s.name)+'»?'));
+  const g=el('div','lgrid');opts4(e.k).forEach(k=>{const b=el('button','opt hopt');b.append(hcv(sg(k),'7rem',sg(k).pm==='dentro'));b.onclick=()=>{[...g.children].forEach(x=>x.classList.remove('sel'));b.classList.add('sel');sel=k;v.disabled=false};b.dataset.k=k;g.append(b)});LB.append(g);
+  const v=footBtn('Verificar','',()=>{const ok=sel===e.k;[...g.children].forEach(b=>{b.disabled=true;if(b.dataset.k===e.k)b.classList.add('right');else if(b.classList.contains('sel'))b.classList.add('wrong')});res(ok,ok?'':'Esta é a mão certa, marcada em verde.',e)},1)}
+function pairs(e){const S=e.ks.map(sg);let a=null,done=0;LB.append(el('h2','lq','Combine os pares'));
+  const g=el('div','lpairs'),c1=el('div','lcol'),c2=el('div','lcol');
+  sh(S).forEach(s=>{const b=el('button','opt',esc(s.name));b.dataset.k=s.key;c1.append(b)});
+  sh(S).forEach(s=>{const b=el('button','opt hopt');b.append(hcv(s,'4.6rem',s.pm==='dentro'));b.dataset.k=s.key;c2.append(b)});
+  g.append(c1,c2);LB.append(g);footBtn('Continuar','',()=>{},1);
+  g.onclick=ev=>{const b=ev.target.closest('.opt');if(!b||b.disabled||b.classList.contains('right'))return;
+    if(b.parentNode===c1){[...c1.children].forEach(x=>x.classList.remove('sel'));b.classList.add('sel');a=b;return}
+    if(!a){beep(300,.05);return}
+    if(a.dataset.k===b.dataset.k){a.classList.remove('sel');a.classList.add('right');b.classList.add('right');a.disabled=b.disabled=true;a=null;beep(700,.08);if(++done===S.length){L.right++;L.xp+=10;footBtn('Continuar','',()=>{L.i++;show()})}}
+    else{b.classList.add('wrong');setTimeout(()=>b.classList.remove('wrong'),400);L.wrong++;P.hearts=Math.max(0,P.hearts-1);if(!P.hAt)P.hAt=Date.now();savP();updH();beep(180,.25);vib([60,40,60]);if(P.hearts<=0)fail()}}}
+function phrase(e){const r=buildPhrase(e.text),want=r.items.map(i=>i.label),dis=sh(L.pool.map(k=>sg(k).name).filter(n=>!want.includes(n))).slice(0,2);
+  const bank=sh([...want,...dis]).map((t,i)=>({t,i})),ans=[];
+  LB.append(el('h2','lq','Monte a frase'),el('p','ld','«'+esc(e.text)+'»'));
+  const A=el('div','lans'),B=el('div','lbank');LB.append(A,B);
+  const draw=()=>{A.innerHTML='';ans.forEach(x=>{const c=el('button','wd',esc(x.t));c.onclick=()=>{ans.splice(ans.indexOf(x),1);draw()};A.append(c)});B.innerHTML='';bank.forEach(x=>{const c=el('button','wd',esc(x.t));c.disabled=ans.includes(x);c.onclick=()=>{ans.push(x);draw()};B.append(c)});v.disabled=!ans.length};
+  const v=footBtn('Verificar','',()=>{const ok=ans.map(x=>x.t).join('|')===want.join('|');res(ok,ok?'':'Ordem certa: '+want.join(' → '),e)},1);draw()}
+function cam(e,isPhrase){
+  const s=isPhrase?null:sg(e.k),P2=isPhrase?buildPhrase(e.text):null;
+  LB.append(el('h2','lq',isPhrase?'Faça a frase na câmera':'Faça o sinal na câmera'),el('p','ld',isPhrase?'«'+esc(e.text)+'»':esc(s.name)));
+  const slot=el('div','lcam');LB.append(slot);slot.append(appBox);appBox.classList.add('lmode');$$('.reveal',appBox).forEach(x=>x.classList.add('is-visible'));
+  try{$('#v').play().catch(()=>{})}catch(x){}
+  if(isPhrase){steps=P2.steps;items=P2.items}else{steps=[{...s,g:s.name}];items=[{label:s.name,steps}]}
+  cur=0;holdT=0;buf.length=0;movUntil=0;render();setBadge(running?'Mostre a mão':'Ligue a câmera',false);
+  window.__done=()=>{L.right++;L.xp+=15;beep(660,.1);beep(880,.16,.1);vib(20);feedback(true,'Muito bem!',()=>{leaveCam();L.i++;show()})};
+  footBtn('Pular (sem câmera)','skip',()=>{window.__done=null;leaveCam();L.skip++;L.i++;show()})}
+function fail(){leaveCam();LB.innerHTML='';LB.append(el('div','lend','<h2>Sem vidas</h2><p>Elas voltam uma a cada 5 minutos. Revise o alfabeto na seção abaixo e volte já já.</p>'));footBtn('Sair','',()=>closeLesson(false))}
+function finish(){
+  const ls=L.ls,tot=L.right+L.wrong,acc=tot?Math.round(L.right/tot*100):100,stars=L.wrong===0?3:L.wrong<=2?2:1,before=lvl();
+  const gain=L.xp+20+(L.wrong===0?10:0)+(ls.ch?20:0);P.xp+=gain;P.done[ls.id]=Math.max(P.done[ls.id]||0,stars);
+  if(P.last!==todayS()){P.streak=P.last===yestS()?P.streak+1:1;P.last=todayS()}savP();
+  leaveCam();$('#lprog').style.width='100%';LB.innerHTML='';
+  LB.append(el('div','lend',`<div class="big">${'★'.repeat(stars)}${'☆'.repeat(3-stars)}</div><h2>Lição concluída!</h2><div class="lsum"><div><b>+${gain}</b><small>XP</small></div><div><b>${acc}%</b><small>acertos</small></div><div><b>${streakNow()}</b><small>dias seguidos</small></div></div>${lvl()>before?'<p class="up">Você subiu para o nível '+lvl()+'!</p>':''}${L.skip?'<p class="ld">Você pulou '+L.skip+' prática(s) com a câmera.</p>':''}`));
+  burst();beep(523,.12);beep(659,.12,.12);beep(784,.25,.24);
+  footBtn('Continuar','',()=>closeLesson(false))}
+function burst(){for(let i=0;i<36;i++){const s=el('i','cf');s.style.cssText=`left:${Math.random()*100}%;background:hsl(${Math.random()*360},80%,60%);animation-delay:${Math.random()*.4}s;--dx:${(Math.random()-.5)*160}px`;LES.append(s);setTimeout(()=>s.remove(),2200)}}
+function toast(t){const x=el('div','toast',esc(t));document.body.append(x);setTimeout(()=>x.remove(),2400)}
+
+/* trilha */
+const OFF=[0,34,54,34,0,-34,-54,-34];
+function renderPath(){
+  regen();savP();const cur=FLAT.findIndex(l=>!P.done[l.id]);
+  $('#lstats').innerHTML=`<div class="lchip" title="Dias seguidos">🔥<b>${streakNow()}</b></div><div class="lchip" title="Pontos de experiência">⭐<b>${P.xp}</b><small>nível ${lvl()}</small></div><div class="lchip" title="Vidas">❤<b>${P.hearts}</b>${P.hearts<HMAX?'<small>+1 em '+Math.max(1,Math.ceil((HREG-(Date.now()-P.hAt))/60000))+' min</small>':''}</div>`;
+  let h='';UN.forEach(u=>{h+=`<div class="unit" style="--h:${u.h}"><div class="ub"><div><small>UNIDADE ${UN.indexOf(u)+1}</small><h3>${esc(u.t)}</h3><p>${esc(u.d)}</p></div></div><div class="nodes">`;
+    u.L.forEach((l,j)=>{const i=FLAT.indexOf(l),st=P.done[l.id]?'done':i===cur?'cur':i<cur?'done':'lock';
+      h+=`<div class="nrow" style="--x:${OFF[j%8]}px"><button class="nd ${st}${l.ch?' ch':''}" data-i="${i}" aria-label="${l.ch?'Desafio da unidade':'Lição '+l.n}${st==='lock'?' (bloqueada)':''}">${st==='lock'?'🔒':l.ch?'🏆':st==='done'?'✓':'★'}</button>${st==='cur'?'<span class="go">COMEÇAR</span>':''}${P.done[l.id]?'<span class="sr2">'+'★'.repeat(P.done[l.id])+'</span>':''}</div>`});
+    h+='</div></div>'});
+  h+='<p class="reset"><button type="button" id="rstP">Reiniciar progresso</button></p>';$('#path').innerHTML=h;
+  $('#rstP').onclick=()=>{if(confirm('Apagar XP, ofensiva e lições concluídas?')){P={xp:0,streak:0,last:'',done:{},hearts:HMAX,hAt:0};savP();renderPath()}}}
+$('#path').onclick=ev=>{const b=ev.target.closest('.nd');if(!b)return;const i=+b.dataset.i;
+  if(b.classList.contains('lock')){toast('Complete a lição anterior para desbloquear.');return}
+  const l=FLAT[i],S=[...new Set(l.k)].slice(0,6).map(k=>sg(k).name);
+  $('#sheet').innerHTML=`<div class="sbox"><small>${esc(l.u.t.toUpperCase())}${l.ch?' · DESAFIO':' · LIÇÃO '+l.n}</small><h3>${l.ch?'Desafio da unidade':esc(S.slice(0,4).join(', '))}</h3><p>${l.ch?'Sem dicas: mistura tudo da unidade, com prática na câmera.':'Aprenda, treine e faça os sinais na câmera.'} Ganhe até ${l.ch?'+70':'+50'} XP.</p><button class="lbtn" id="sgo">Começar</button><button class="lbtn skip" id="sno">Agora não</button></div>`;
+  $('#sheet').hidden=false;$('#sgo').onclick=()=>{$('#sheet').hidden=true;openLesson(i)};$('#sno').onclick=()=>{$('#sheet').hidden=true}};
+$('#sheet').onclick=ev=>{if(ev.target.id==='sheet')$('#sheet').hidden=true};
+$('#lx').onclick=()=>closeLesson(true);
+addEventListener('keydown',e=>{if(e.key==='Escape'&&!LES.hidden)closeLesson(true)});
+renderPath();setInterval(()=>{if(LES.hidden)renderPath()},60000);
+if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js').catch(()=>{});
 </script>
 </body>
 </html>

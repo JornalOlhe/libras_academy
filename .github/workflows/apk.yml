@@ -1,0 +1,37 @@
+name: Gerar APK
+on:
+  workflow_dispatch:
+  push:
+    tags: ['v*']
+permissions:
+  contents: write
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: 17 }
+      - uses: android-actions/setup-android@v3
+      - name: Montar app Android (Capacitor)
+        run: |
+          mkdir -p app/www && cp index.html manifest.json sw.js icon-192.png icon-512.png app/www/
+          cd app
+          npm init -y >/dev/null
+          npm i @capacitor/core@6 @capacitor/cli@6 @capacitor/android@6
+          npx cap init "Libras Academy" br.com.libras.academy --web-dir www
+          npx cap add android
+          sed -i 's#</manifest>#<uses-permission android:name="android.permission.CAMERA"/><uses-feature android:name="android.hardware.camera" android:required="false"/></manifest>#' android/app/src/main/AndroidManifest.xml
+          mkdir -p android/app/src/main/res/mipmap-xxxhdpi
+          for f in ic_launcher ic_launcher_round ic_launcher_foreground; do cp icon-192.png android/app/src/main/res/mipmap-xxxhdpi/$f.png 2>/dev/null || cp www/icon-192.png android/app/src/main/res/mipmap-xxxhdpi/$f.png; done
+          npx cap sync android
+          cd android && ./gradlew assembleDebug --no-daemon
+      - name: Publicar release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cp app/android/app/build/outputs/apk/debug/app-debug.apk LibrasAcademy.apk
+          TAG="apk-${{ github.run_number }}"
+          gh release create "$TAG" LibrasAcademy.apk --target "${{ github.sha }}" --title "Libras Academy (Android) $TAG" --notes "APK para instalar no celular Android. Abra o arquivo, permita instalar de fontes desconhecidas e conceda acesso à câmera quando o app pedir."
