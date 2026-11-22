@@ -229,6 +229,15 @@ html.js .reveal:not(.is-visible),html.js .reveal:not(.is-visible) .split-word>sp
  .ref{justify-content:center}.ref canvas#bust{width:10.5rem}.hv canvas{width:6.2rem!important}
  .lstats{top:3.75rem}.trail{padding-top:5.5rem}
 }
+
+.lb>*{animation:lin .4s var(--ease-out) both}@keyframes lin{from{opacity:0;transform:translateY(14px)}}
+.opt.right{animation:pop .4s}@keyframes pop{40%{transform:scale(1.05)}}
+.opt.wrong,.lhit{animation:shake .4s}@keyframes shake{20%{transform:translateX(-7px)}60%{transform:translateX(7px)}}
+#lhearts.hit{animation:shake .4s,flash .45s}@keyframes flash{50%{transform:scale(1.35)}}
+.nd:not(.cur){animation:ndp .5s var(--ease-out) both}@keyframes ndp{from{opacity:0;transform:scale(.4)}}
+.tip{background:color-mix(in oklab,var(--signal) 14%,transparent);border:1px solid color-mix(in oklab,var(--signal) 35%,transparent);border-radius:.9rem;padding:.7rem .9rem;font-size:.85rem;max-width:30rem;text-align:left;line-height:1.45}
+.big2{font-size:4rem}.ln2{font-size:1.9rem;text-align:center}.ld.wide{max-width:32rem;font-size:1.05rem;line-height:1.6}
+.sbox .tip{font-size:.8rem}
 </style>
 </head>
 <body>
@@ -814,13 +823,15 @@ function onResults(res){
     else{$('#steps').innerHTML=items.map(it=>`<span class="chip done">✓ ${esc(it.label)}</span>`).join('');$('#instr').innerHTML='<b>🎉 Parabéns!</b><span>Você completou a frase. Digite outra ou clique em Reiniciar.</span>';setBadge('Frase concluída!',true);if(window.__done){const f=window.__done;window.__done=null;f()}}}
 }
 let INV=false;try{INV=localStorage.getItem('libras_inv')==='1'}catch(e){}$('#inv').checked=INV;$('#inv').onchange=e=>{INV=e.target.checked;try{localStorage.setItem('libras_inv',INV?'1':'0')}catch(x){}};
+const MOB=matchMedia('(pointer:coarse)').matches,POSEN=MOB?5:3,FACEN=MOB?4:2;
 const TV='https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14',MM='https://storage.googleapis.com/mediapipe-models/';
 $('#camBtn').onclick=async()=>{
   if(running)return;
   try{
     setBadge('Abrindo a câmera...',false);
+    if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia)throw new Error('este navegador não permite câmera (use Chrome ou Safari com HTTPS)');
     const stream=await navigator.mediaDevices.getUserMedia({video:{width:{ideal:960},height:{ideal:720},facingMode:'user'},audio:false});
-    const vd=$('#v');vd.srcObject=stream;await vd.play();running=true;$('#camBtn').textContent='Câmera ligada';
+    const vd=$('#v');vd.srcObject=stream;await vd.play();running=true;try{navigator.wakeLock&&navigator.wakeLock.request('screen').catch(()=>{})}catch(x){}$('#camBtn').textContent='Câmera ligada';
     setBadge('Carregando o detector de mãos...',false);
     const V=await import(TV+'/vision_bundle.mjs'),fs=await V.FilesetResolver.forVisionTasks(TV+'/wasm');
     const mk=async(C,u,o)=>{for(const del of ['GPU','CPU']){try{return await C.createFromOptions(fs,{baseOptions:{modelAssetPath:MM+u,delegate:del},runningMode:'VIDEO',...o})}catch(e){if(del==='CPU')throw e}}};
@@ -836,15 +847,15 @@ $('#camBtn').onclick=async()=>{
           const hr=HL.detectForVideo(vd,ts);if(hr.landmarks.length)seen++;
           if(!seen&&fc===150&&dlg==='GPU'){dlg='CPU';HL=await V.HandLandmarker.createFromOptions(fs,{baseOptions:{modelAssetPath:MM+'hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task',delegate:'CPU'},runningMode:'VIDEO',numHands:2,minHandDetectionConfidence:.3,minHandPresenceConfidence:.3,minTrackingConfidence:.3})}
           if(fc%15===0){$('#dbg').textContent=dlg+' · '+Math.round(fc/((performance.now()-t0)/1000))+' fps · mãos '+hr.landmarks.length+(PL?' · corpo':'')+(FL?' · rosto':'')}
-          if(PL&&fc%3===0){const p=PL.detectForVideo(vd,ts);poseR=(p.landmarks&&p.landmarks[0])||null}
-          if(FL&&fc%2===0){const f=FL.detectForVideo(vd,ts);faceR=(f.faceLandmarks&&f.faceLandmarks[0])||null}
+          if(PL&&fc%POSEN===0){const p=PL.detectForVideo(vd,ts);poseR=(p.landmarks&&p.landmarks[0])||null}
+          if(FL&&fc%FACEN===0){const f=FL.detectForVideo(vd,ts);faceR=(f.faceLandmarks&&f.faceLandmarks[0])||null}
           let lh=null,rh=null;
           (hr.landmarks||[]).forEach((L,i)=>{const right=(hr.handedness[i][0].categoryName==='Right')!==INV;if(right&&!rh)rh=L;else if(!lh)lh=L;else if(!rh)rh=L});
           onResults({image:{width:vd.videoWidth,height:vd.videoHeight},poseLandmarks:poseR,faceLandmarks:faceR,leftHandLandmarks:lh,rightHandLandmarks:rh,isRight:!!rh});
         }catch(e){console.error(e);setBadge('Erro no detector: '+e.message,false)}}
       requestAnimationFrame(loop)};
     loop();
-  }catch(e){running=false;setBadge('Erro: '+e.message,false);msg('Não consegui iniciar: '+e.message+' (use Chrome, HTTPS e permita a câmera).')}
+  }catch(e){running=false;const n=e&&e.name,t=n==='NotAllowedError'?'Permissão da câmera negada. Libere o acesso nas configurações do navegador ou do app e tente de novo.':n==='NotFoundError'?'Nenhuma câmera encontrada neste aparelho.':n==='NotReadableError'?'A câmera está em uso por outro app. Feche-o e tente de novo.':'Não consegui iniciar: '+(e&&e.message);setBadge('Câmera indisponível',false);msg(t)}
 };
 drawHand($('#ref'),[1,1,1,1,1]);drawHand($('#ref2'),[1,1,1,1,1],0,{back:true});renderFingers();renderStat(null,null);
 
@@ -863,6 +874,18 @@ const vib=p=>{try{navigator.vibrate&&navigator.vibrate(p)}catch(e){}};
 
 /* currículo */
 const UN=[
+ {id:'in',t:'Primeiros passos',d:'Como a Libras funciona',h:230,L:[
+  {ex:[{type:'info',ic:'🤟',h:'Libras é uma língua',b:'A Língua Brasileira de Sinais é uma língua completa, com gramática própria. Foi reconhecida por lei em 2002 (Lei 10.436) e é usada por muitas pessoas surdas no Brasil. Não é mímica nem português com as mãos.'},
+   {type:'info',ic:'🔤',h:'O alfabeto manual',b:'Cada letra tem um formato de mão. O alfabeto serve para soletrar nomes e palavras que não têm sinal. Para conversar, usamos sinais.'},
+   {type:'q',q:'Para que serve o alfabeto manual?',o:['Soletrar nomes e palavras sem sinal','Substituir todos os sinais','Só para crianças'],a:0,why:'Ele é usado principalmente para nomes e palavras sem sinal.'},
+   {type:'q',q:'Libras é o mesmo que português sinalizado?',o:['Sim, é igual','Não, é uma língua com gramática própria'],a:1,why:'Libras tem estrutura própria, diferente do português.'}]},
+  {ex:[{type:'info',ic:'🖐️',h:'Cada sinal tem 5 pistas',b:'1) formato da mão · 2) local no corpo · 3) movimento · 4) direção da palma · 5) expressão do rosto. Mudar uma pista pode mudar o sinal.'},
+   {type:'info',ic:'😮',h:'O rosto também fala',b:'Perguntas com «o quê, onde, quem» usam as sobrancelhas franzidas. Perguntas de sim ou não usam as sobrancelhas levantadas. A expressão faz parte da gramática.'},
+   {type:'q',q:'Qual destas NÃO é uma pista do sinal?',o:['Local no corpo','Movimento','Cor da roupa','Expressão do rosto'],a:2,why:'Local, movimento e expressão fazem parte do sinal. A roupa não.'},
+   {type:'q',q:'Numa pergunta como «Onde?», o que o rosto faz?',o:['Sobrancelhas franzidas','Rosto sem expressão','Sorriso largo'],a:0,why:'Perguntas com «onde, quem, o quê» usam sobrancelhas franzidas.'}]},
+  {ex:[{type:'info',ic:'📷',h:'Como usar a câmera',b:'Boa luz de frente e fundo liso. Fique a um braço de distância, com a mão inteira no quadro. Nos primeiros segundos, deixe o rosto neutro para calibrar as expressões.'},
+   {type:'q',q:'Qual a melhor posição para a câmera ver a sua mão?',o:['A um braço de distância, mão inteira no quadro','Colada na câmera','Escondida atrás do corpo'],a:0,why:'A mão inteira precisa aparecer para a câmera ler todos os dedos.'}]}
+ ]},
  {id:'a1',t:'Alfabeto 1',d:'As primeiras letras',h:190,L:[{k:['A','B','C','D']},{k:['E','F','G','H']},{k:['I','L','M','N']}]},
  {id:'a2',t:'Alfabeto 2',d:'Mais letras, com orientação da mão',h:160,L:[{k:['O','P','Q','R']},{k:['S','T','U','V']},{k:['W','X','Y','Z']},{k:['J','K']}]},
  {id:'cu',t:'Cumprimentos',d:'Dizer oi com educação',h:260,L:[{k:['OI','TCHAU','OBRIGADO','POR_FAVOR'],ph:['oi']},{k:['BOM','DIA','TARDE','NOITE'],ph:['bom dia','boa noite']},{k:['TUDO_BEM','PRAZER','LEGAL','FELIZ'],ph:['oi tudo bem','muito prazer']}]},
@@ -871,9 +894,14 @@ const UN=[
  {id:'pg',t:'Perguntas',d:'Pergunte usando o rosto',h:350,L:[{k:['QUE','COMO','ONDE','QUEM'],ph:['quem é você?']},{k:['PORQUE','QUANDO','QUAL','QUANTO'],ph:['você quer beber água?']}]},
  {id:'di',t:'Dia a dia',d:'Frases completas',h:100,L:[{k:['CASA','ESCOLA','HOJE','AMANHA'],ph:['eu vou para casa hoje']},{k:['MUITO','GRANDE','BONITO','PEQUENO'],ph:['muito bonito']},{k:['SIM','NAO','AGORA','DESCULPA'],ph:['sim eu quero','desculpa']}]}
 ];
-const FLAT=[];UN.forEach(u=>{const all=[...new Set(u.L.flatMap(l=>l.k))],phs=u.L.flatMap(l=>l.ph||[]);u.L.push({k:all,ph:phs.slice(-2),ch:true});u.L.forEach((l,j)=>{l.id=u.id+j;l.u=u;l.j=j;l.n=j+1;FLAT.push(l)})});
+const TIPS=['Boa luz de frente e fundo liso ajudam muito a câmera.','Fique a um braço de distância, com a mão inteira no quadro.','Nos primeiros segundos, deixe o rosto neutro para calibrar as expressões.','Faça o sinal devagar e segure a posição até a barra encher.','Olhe o boneco: ele mostra onde a mão vai e como ela se move.','A expressão do rosto faz parte do sinal. Perguntas pedem sobrancelhas.','Se o seu jeito de fazer um sinal não é reconhecido, use «Gravar meu gesto».','Treine um pouco todo dia: a ofensiva cresce e você fixa melhor.'];
+const CONF={A:'S',S:'A',U:'V',V:'U',G:'L',L:'G',K:'P',P:'K',M:'N',N:'M',O:'C',C:'O',I:'J',J:'I',B:'F',F:'B',D:'X',X:'D',Q:'G',H:'U',R:'U',E:'S',T:'N'};
+function diffTip(k){const o=CONF[k];if(!o)return'';const a=sg(k),b=sg(o),df=[];a.d.forEach((v,i)=>{if(v!==b.d[i])df.push(NAMES[i].toLowerCase()+' '+ST[v])});if(!!a.abertos!==!!b.abertos)df.push(a.abertos?'dedos afastados':'dedos juntos');if(a.o!==b.o)df.push(a.o?'mão apontando '+(a.o==='lado'?'para o lado':'para baixo'):'mão para cima');if(!!a.toque!==!!b.toque)df.push(a.toque?'polegar toca o indicador':'sem tocar o polegar');return df.length?'Não confunda com '+o+': aqui '+df.join(', ')+'.':'Parecida com '+o+': o formato é quase igual. Confira a descrição com atenção.'}
+const FLAT=[];UN.forEach(u=>{const all=[...new Set(u.L.flatMap(l=>l.k||[]))],phs=u.L.flatMap(l=>l.ph||[]);if(all.length)u.L.push({k:all,ph:phs.slice(-2),ch:true});u.L.forEach((l,j)=>{l.id=u.id+j;l.u=u;l.j=j;l.n=j+1;FLAT.push(l)})});
 const sg=k=>{if(k.length===1){const a=ALPHA[k];return{key:'L:'+k,name:k,d:a.d,o:a.o,toque:!!a.touch,abertos:!!a.spread,pm:a.o?undefined:'frente',i:a.t,t:'Letra '+k,g:k}}const e=LEX[k];return{...e,key:'S:'+k,name:e.t,g:e.t}};
 const hcv=(s,w,back)=>{const c=el('canvas');c.width=190;c.height=238;drawHand(c,s.d,s.abertos,{o:s.o,touch:s.toque,cross:s.key==='L:R',back:!!back});c.style.width=w;return c};
+function animHand(s,w,back){const c=hcv(s,w,back),rest=[0,0,0,0,0],t0=performance.now(),ez=p=>p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2;
+  (function f(now){if(!c.isConnected&&now-t0>400)return;const T=(now-t0)%3400,p=T<700?0:T<1600?ez((T-700)/900):1;drawHand(c,s.d.map((v,i)=>lerp(rest[i],v,p)),s.abertos&&p>.9,{o:s.o,touch:s.toque&&p>.95,cross:s.key==='L:R'&&p>.9,back:!!back});requestAnimationFrame(f)})(t0);return c}
 const reqs=s=>{const r=[];if(s.o)r.push('mão apontando para '+(s.o==='lado'?'o lado':'baixo'));if(s.pm)r.push('palma para '+(s.pm==='frente'?'a câmera':'você'));if(s.loc&&s.loc!=='neutro')r.push('local: '+s.loc);if(s.mov&&s.mov!=='estatico')r.push('movimento: '+MOVN[s.mov]);if(s.exprReq||s.expr)r.push('expressão: '+EXN[s.exprReq||s.expr]);if(s.head)r.push('cabeça: '+(s.head==='negar'?'negando':'acenando'));return r};
 
 /* estado da lição */
@@ -885,11 +913,12 @@ function leaveCam(){if(appBox.parentNode!==$('#pratica .shell')){window.__done=n
 function res(ok,msg,e){
   if(ok){L.right++;L.xp+=10;beep(660,.1);beep(880,.16,.1);vib(20)}
   else{L.wrong++;P.hearts=Math.max(0,P.hearts-1);if(!P.hAt)P.hAt=Date.now();savP();beep(180,.3);vib([60,40,60]);if(e&&!e.rq){L.ex.push({...e,rq:1});L.total++}}
-  updH();feedback(ok,msg,()=>{if(!ok&&P.hearts<=0)return fail();L.i++;show()})}
+  updH();if(!ok){$('#lhearts').classList.add('hit');setTimeout(()=>$('#lhearts').classList.remove('hit'),450)}feedback(ok,msg,()=>{if(!ok&&P.hearts<=0)return fail();L.i++;show()})}
 function openLesson(i){
   regen();if(P.hearts<=0){toast('Sem vidas por enquanto. Elas voltam com o tempo.');return}
-  const ls=FLAT[i],ks=ls.k,pool=[...new Set(ls.u.L.flatMap(l=>l.k))],ex=[],T=(type,k)=>({type,k});
-  if(ls.ch){sh(ks).slice(0,6).forEach(k=>{ex.push(T('pick',k));ex.push(T('pickHand',k))});ex.push({type:'pairs',ks:sh(ks).slice(0,4)});sh(ks).slice(0,3).forEach(k=>ex.push(T('cam',k)))}
+  const ls=FLAT[i],ks=ls.k||[],pool=[...new Set(ls.u.L.flatMap(l=>l.k||[]))],ex=[],T=(type,k)=>({type,k});
+  if(ls.ex){ls.ex.forEach(x=>ex.push({...x}))}
+  else if(ls.ch){sh(ks).slice(0,6).forEach(k=>{ex.push(T('pick',k));ex.push(T('pickHand',k))});ex.push({type:'pairs',ks:sh(ks).slice(0,4)});sh(ks).slice(0,3).forEach(k=>ex.push(T('cam',k)))}
   else{ks.forEach(k=>{ex.push(T('learn',k));ex.push(T('pick',k))});ex.push({type:'pairs',ks});sh(ks).slice(0,2).forEach(k=>ex.push(T('pickHand',k)));sh(ks).slice(0,2).forEach(k=>ex.push(T('cam',k)))}
   (ls.ph||[]).forEach(p=>ex.push({type:'phrase',text:p}));if(ls.ph&&ls.ph.length)ex.push({type:'camPhrase',text:ls.ph[0]});
   L={ls,i:0,ex,pool,total:ex.length,right:0,wrong:0,xp:0,skip:0,idx:i};
@@ -898,19 +927,22 @@ function closeLesson(ask){if(ask&&L&&L.i>0&&!confirm('Sair agora? Você perde o 
 function show(){
   if(!L)return;const e=L.ex[L.i];$('#lprog').style.width=Math.min(100,L.i/L.total*100)+'%';
   if(!e)return finish();leaveCam();LB.scrollTop=0;LB.innerHTML='';
-  ({learn,pick,pickHand,pairs,phrase,cam:()=>cam(e),camPhrase:()=>cam(e,true)}[e.type]||(()=>{}))(e)}
+  ({learn,pick,pickHand,pairs,info,q:qz,phrase,cam:()=>cam(e),camPhrase:()=>cam(e,true)}[e.type]||(()=>{}))(e)}
 function learn(e){const s=sg(e.k),r=reqs(s);
-  const hv=el('div','lhands');[[0,'Quem está à sua frente vê'],[1,'Você vê']].forEach(([b,t])=>{const f=el('figure');const back=(s.pm==='dentro')?!b:!!b;f.append(hcv(s,'8.5rem',back),el('figcaption',0,t+': '+(back?'dorso':'palma')));hv.append(f)});
-  LB.append(el('p','lk','NOVO SINAL'),el('h2','ln',esc(s.name)),hv,el('p','ld',esc(s.i)),el('div','fl',r.map(x=>`<em>${esc(x)}</em>`).join('')));
+  const hv=el('div','lhands');[[0,'Quem está à sua frente vê'],[1,'Você vê']].forEach(([b,t])=>{const f=el('figure');const back=(s.pm==='dentro')?!b:!!b;f.append(animHand(s,'8.5rem',back),el('figcaption',0,t+': '+(back?'dorso':'palma')));hv.append(f)});
+  LB.append(el('p','lk','NOVO SINAL'),el('h2','ln',esc(s.name)),hv,el('p','ld',esc(s.i)),el('div','fl',r.map(x=>`<em>${esc(x)}</em>`).join('')),...(diffTip(e.k)?[el('p','tip','💡 '+esc(diffTip(e.k)))]:[]));
   footBtn('Entendi','',()=>{L.i++;show()})}
 function opts4(k){const o=sh(L.pool.filter(x=>x!==k)).slice(0,3);return sh([k,...o])}
 function pick(e){const s=sg(e.k);let sel=null;
   LB.append(el('h2','lq','Qual é este sinal?'));const f=el('div','lone');f.append(hcv(s,'11rem',s.pm==='dentro'));LB.append(f);
   const g=el('div','lopts');opts4(e.k).forEach(k=>{const b=el('button','opt',esc(sg(k).name));b.onclick=()=>{[...g.children].forEach(x=>x.classList.remove('sel'));b.classList.add('sel');sel=k;v.disabled=false};g.append(b)});LB.append(g);
-  const v=footBtn('Verificar','',()=>{const ok=sel===e.k;[...g.children].forEach(b=>{b.disabled=true;if(b.textContent===sg(e.k).name)b.classList.add('right');else if(b.classList.contains('sel'))b.classList.add('wrong')});res(ok,ok?'':'Era '+s.name,e)},1)}
+  const v=footBtn('Verificar','',()=>{const ok=sel===e.k;[...g.children].forEach(b=>{b.disabled=true;if(b.textContent===sg(e.k).name)b.classList.add('right');else if(b.classList.contains('sel'))b.classList.add('wrong')});res(ok,ok?'':'Era '+s.name+'. '+s.i+(diffTip(e.k)?' '+diffTip(e.k):''),e)},1)}
 function pickHand(e){const s=sg(e.k);let sel=null;LB.append(el('h2','lq','Qual mão faz «'+esc(s.name)+'»?'));
   const g=el('div','lgrid');opts4(e.k).forEach(k=>{const b=el('button','opt hopt');b.append(hcv(sg(k),'7rem',sg(k).pm==='dentro'));b.onclick=()=>{[...g.children].forEach(x=>x.classList.remove('sel'));b.classList.add('sel');sel=k;v.disabled=false};b.dataset.k=k;g.append(b)});LB.append(g);
-  const v=footBtn('Verificar','',()=>{const ok=sel===e.k;[...g.children].forEach(b=>{b.disabled=true;if(b.dataset.k===e.k)b.classList.add('right');else if(b.classList.contains('sel'))b.classList.add('wrong')});res(ok,ok?'':'Esta é a mão certa, marcada em verde.',e)},1)}
+  const v=footBtn('Verificar','',()=>{const ok=sel===e.k;[...g.children].forEach(b=>{b.disabled=true;if(b.dataset.k===e.k)b.classList.add('right');else if(b.classList.contains('sel'))b.classList.add('wrong')});res(ok,ok?'':'A mão certa está em verde. '+s.i,e)},1)}
+function info(e){LB.append(el('div','big2',e.ic),el('h2','ln2',esc(e.h)),el('p','ld wide',esc(e.b)));footBtn('Continuar','',()=>{L.i++;show()})}
+function qz(e){let sel=-1;LB.append(el('h2','lq',esc(e.q)));const g=el('div','lopts');e.o.forEach((t,i)=>{const b=el('button','opt',esc(t));b.onclick=()=>{[...g.children].forEach(x=>x.classList.remove('sel'));b.classList.add('sel');sel=i;v.disabled=false};g.append(b)});LB.append(g);
+  const v=footBtn('Verificar','',()=>{const ok=sel===e.a;[...g.children].forEach((b,i)=>{b.disabled=true;if(i===e.a)b.classList.add('right');else if(i===sel)b.classList.add('wrong')});res(ok,ok?e.why:e.why,e)},1)}
 function pairs(e){const S=e.ks.map(sg);let a=null,done=0;LB.append(el('h2','lq','Combine os pares'));
   const g=el('div','lpairs'),c1=el('div','lcol'),c2=el('div','lcol');
   sh(S).forEach(s=>{const b=el('button','opt',esc(s.name));b.dataset.k=s.key;c1.append(b)});
@@ -934,6 +966,7 @@ function cam(e,isPhrase){
   try{$('#v').play().catch(()=>{})}catch(x){}
   if(isPhrase){steps=P2.steps;items=P2.items}else{steps=[{...s,g:s.name}];items=[{label:s.name,steps}]}
   cur=0;holdT=0;buf.length=0;movUntil=0;render();setBadge(running?'Mostre a mão':'Ligue a câmera',false);
+  LB.append(el('p','tip','💡 '+esc(TIPS[Math.random()*TIPS.length|0])));
   window.__done=()=>{L.right++;L.xp+=15;beep(660,.1);beep(880,.16,.1);vib(20);feedback(true,'Muito bem!',()=>{leaveCam();L.i++;show()})};
   footBtn('Pular (sem câmera)','skip',()=>{window.__done=null;leaveCam();L.skip++;L.i++;show()})}
 function fail(){leaveCam();LB.innerHTML='';LB.append(el('div','lend','<h2>Sem vidas</h2><p>Elas voltam uma a cada 5 minutos. Revise o alfabeto na seção abaixo e volte já já.</p>'));footBtn('Sair','',()=>closeLesson(false))}
@@ -942,8 +975,8 @@ function finish(){
   const gain=L.xp+20+(L.wrong===0?10:0)+(ls.ch?20:0);P.xp+=gain;P.done[ls.id]=Math.max(P.done[ls.id]||0,stars);
   if(P.last!==todayS()){P.streak=P.last===yestS()?P.streak+1:1;P.last=todayS()}savP();
   leaveCam();$('#lprog').style.width='100%';LB.innerHTML='';
-  LB.append(el('div','lend',`<div class="big">${'★'.repeat(stars)}${'☆'.repeat(3-stars)}</div><h2>Lição concluída!</h2><div class="lsum"><div><b>+${gain}</b><small>XP</small></div><div><b>${acc}%</b><small>acertos</small></div><div><b>${streakNow()}</b><small>dias seguidos</small></div></div>${lvl()>before?'<p class="up">Você subiu para o nível '+lvl()+'!</p>':''}${L.skip?'<p class="ld">Você pulou '+L.skip+' prática(s) com a câmera.</p>':''}`));
-  burst();beep(523,.12);beep(659,.12,.12);beep(784,.25,.24);
+  LB.append(el('div','lend',`<div class="big">${'★'.repeat(stars)}${'☆'.repeat(3-stars)}</div><h2>Lição concluída!</h2><div class="lsum"><div><b id="xpc">+0</b><small>XP</small></div><div><b>${acc}%</b><small>acertos</small></div><div><b>${streakNow()}</b><small>dias seguidos</small></div></div>${lvl()>before?'<p class="up">Você subiu para o nível '+lvl()+'!</p>':''}${L.skip?'<p class="ld">Você pulou '+L.skip+' prática(s) com a câmera.</p>':''}`));
+  burst();{const t0=performance.now(),el2=$('#xpc');(function f(n){const p=Math.min(1,(n-t0)/900);if(el2)el2.textContent='+'+Math.round(gain*p);if(p<1)requestAnimationFrame(f)})(t0)}beep(523,.12);beep(659,.12,.12);beep(784,.25,.24);
   footBtn('Continuar','',()=>closeLesson(false))}
 function burst(){for(let i=0;i<36;i++){const s=el('i','cf');s.style.cssText=`left:${Math.random()*100}%;background:hsl(${Math.random()*360},80%,60%);animation-delay:${Math.random()*.4}s;--dx:${(Math.random()-.5)*160}px`;LES.append(s);setTimeout(()=>s.remove(),2200)}}
 function toast(t){const x=el('div','toast',esc(t));document.body.append(x);setTimeout(()=>x.remove(),2400)}
@@ -961,8 +994,8 @@ function renderPath(){
   $('#rstP').onclick=()=>{if(confirm('Apagar XP, ofensiva e lições concluídas?')){P={xp:0,streak:0,last:'',done:{},hearts:HMAX,hAt:0};savP();renderPath()}}}
 $('#path').onclick=ev=>{const b=ev.target.closest('.nd');if(!b)return;const i=+b.dataset.i;
   if(b.classList.contains('lock')){toast('Complete a lição anterior para desbloquear.');return}
-  const l=FLAT[i],S=[...new Set(l.k)].slice(0,6).map(k=>sg(k).name);
-  $('#sheet').innerHTML=`<div class="sbox"><small>${esc(l.u.t.toUpperCase())}${l.ch?' · DESAFIO':' · LIÇÃO '+l.n}</small><h3>${l.ch?'Desafio da unidade':esc(S.slice(0,4).join(', '))}</h3><p>${l.ch?'Sem dicas: mistura tudo da unidade, com prática na câmera.':'Aprenda, treine e faça os sinais na câmera.'} Ganhe até ${l.ch?'+70':'+50'} XP.</p><button class="lbtn" id="sgo">Começar</button><button class="lbtn skip" id="sno">Agora não</button></div>`;
+  const l=FLAT[i],S=[...new Set(l.k||[])].slice(0,6).map(k=>sg(k).name),tip=TIPS[Math.random()*TIPS.length|0];
+  $('#sheet').innerHTML=`<div class="sbox"><small>${esc(l.u.t.toUpperCase())}${l.ch?' · DESAFIO':' · LIÇÃO '+l.n}</small><h3>${l.ch?'Desafio da unidade':l.ex?(l.j===0?'A língua de sinais':l.j===1?'As 5 pistas de um sinal':'Como usar a câmera'):esc(S.slice(0,4).join(', '))}</h3><p>${l.ch?'Sem dicas: mistura tudo da unidade, com prática na câmera.':l.ex?'Leitura rápida e perguntas.':'Aprenda, treine e faça os sinais na câmera.'} Ganhe até ${l.ch?'+70':l.ex?'+40':'+50'} XP.</p><p class="tip">💡 ${esc(tip)}</p><button class="lbtn" id="sgo">Começar</button><button class="lbtn skip" id="sno">Agora não</button></div>`;
   $('#sheet').hidden=false;$('#sgo').onclick=()=>{$('#sheet').hidden=true;openLesson(i)};$('#sno').onclick=()=>{$('#sheet').hidden=true}};
 $('#sheet').onclick=ev=>{if(ev.target.id==='sheet')$('#sheet').hidden=true};
 $('#lx').onclick=()=>closeLesson(true);
