@@ -225,7 +225,7 @@ html.js .reveal:not(.is-visible),html.js .reveal:not(.is-visible) .split-word>sp
       <h4>Passos</h4><div id="steps"></div>
       <h4>Como fazer</h4>
       <div class="ref"><canvas id="ref" width="190" height="238"></canvas><div id="instr"><b>—</b><span>Digite uma palavra para começar.</span></div></div>
-      <div class="row"><button class="btn sec2" id="prev" type="button">‹ Anterior</button><button class="btn sec2" id="skip" type="button">Pular ›</button><button class="btn sec2" id="restart" type="button">Reiniciar</button></div>
+      <div class="row"><button class="btn sec2" id="prev" type="button">‹ Anterior</button><button class="btn sec2" id="skip" type="button">Pular ›</button><button class="btn sec2" id="restart" type="button">Reiniciar</button><button class="btn sec2" id="verify" type="button">🤖 Verificar com IA</button></div>
     </div></div></div></section>
 
 <footer><div class="shell"><div class="top">
@@ -263,8 +263,8 @@ C:{d:[1,1,1,1,1],t:'Mão curvada formando um "C".'},
 D:{d:[1,2,0,0,0],t:'Indicador para cima, demais dedos tocando o polegar.'},
 E:{d:[0,1,1,1,1],t:'Dedos dobrados sobre a palma, polegar embaixo.'},
 F:{d:[1,1,2,2,2],t:'Polegar e indicador em círculo; outros três esticados.',touch:1},
-G:{d:[2,2,0,0,0],t:'Indicador e polegar esticados, apontando para o lado.'},
-H:{d:[0,2,2,0,0],t:'Indicador e médio esticados juntos, apontando para o lado.'},
+G:{d:[2,2,0,0,0],o:'lado',t:'Indicador e polegar esticados, apontando para o lado.'},
+H:{d:[0,2,2,0,0],o:'lado',t:'Indicador e médio esticados juntos, apontando para o lado.'},
 I:{d:[0,0,0,0,2],t:'Só o mindinho esticado.'},
 J:{d:[0,0,0,0,2],t:'Mindinho esticado; desenhe um "J" no ar.'},
 K:{d:[2,2,2,0,0],t:'Indicador e médio em "V", polegar entre eles.'},
@@ -272,8 +272,8 @@ L:{d:[2,2,0,0,0],t:'Polegar e indicador formando um "L".'},
 M:{d:[0,0,0,0,0],t:'Três dedos sobre o polegar (punho).'},
 N:{d:[0,0,0,0,0],t:'Dois dedos sobre o polegar (punho).'},
 O:{d:[1,1,1,1,1],t:'Dedos curvados tocando o polegar, formando um "O".',touch:1},
-P:{d:[2,2,2,0,0],t:'Como o K, apontando para baixo.'},
-Q:{d:[2,2,0,0,0],t:'Como o G, apontando para baixo.'},
+P:{d:[2,2,2,0,0],o:'baixo',t:'Como o K, apontando para baixo.'},
+Q:{d:[2,2,0,0,0],o:'baixo',t:'Como o G, apontando para baixo.'},
 R:{d:[0,2,2,0,0],t:'Indicador e médio esticados e cruzados.'},
 S:{d:[0,0,0,0,0],t:'Punho fechado, polegar sobre os dedos.'},
 T:{d:[0,0,0,0,0],t:'Punho com o polegar entre indicador e médio.'},
@@ -359,7 +359,7 @@ $('#key').value=localStorage.getItem('libras_gemini_key')||'';
 if(location.hash.startsWith('#key=')){localStorage.setItem('libras_gemini_key',decodeURIComponent(location.hash.slice(5)));$('#key').value=localStorage.getItem('libras_gemini_key');history.replaceState(null,'',location.pathname)}
 $('#saveKey').onclick=()=>{localStorage.setItem('libras_gemini_key',$('#key').value.trim());msg('Chave salva neste navegador.')};
 
-const spell=w=>[...norm(w).toUpperCase()].filter(c=>ALPHA[c]).map(c=>({titulo:'Letra '+c,instrucao:ALPHA[c].t,d:ALPHA[c].d,toque:!!ALPHA[c].touch,abertos:!!ALPHA[c].spread}));
+const spell=w=>[...norm(w).toUpperCase()].filter(c=>ALPHA[c]).map(c=>({titulo:'Letra '+c,instrucao:ALPHA[c].t,d:ALPHA[c].d,o:ALPHA[c].o,toque:!!ALPHA[c].touch,abertos:!!ALPHA[c].spread}));
 
 /* modelos Gemini, do mais capaz ao mais leve; cai para o próximo se não houver acesso/cota no plano gratuito */
 const MODELS=['gemini-3.5-flash','gemini-3-flash','gemini-2.5-flash','gemini-2.5-flash-lite'];
@@ -376,6 +376,26 @@ Regras: dedos usa 0=fechado,1=curvo,2=esticado. "toque"=true se a ponta do poleg
   }
   throw new Error('sem cota nos modelos ('+last+')');
 }
+async function geminiParts(parts,key){let last='';
+  for(const m of MODELS){const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent`,{method:'POST',headers:{'content-type':'application/json','x-goog-api-key':key},body:JSON.stringify({contents:[{parts}],generationConfig:{responseMimeType:'application/json',temperature:.2}})});
+    if(r.ok){const j=await r.json();return{model:m,text:j.candidates[0].content.parts.map(p=>p.text||'').join('')}}
+    last=r.status;if([400,401,403].includes(r.status))throw new Error('chave inválida ou sem permissão ('+r.status+')')}
+  throw new Error('sem cota nos modelos ('+last+')')}
+async function verifyAI(){
+  const key=localStorage.getItem('libras_gemini_key');
+  if(!key){msg('Cole a chave Gemini para usar a verificação por IA.');$('#cfg').open=true;return}
+  if(!running){msg('Ligue a câmera primeiro.');return}
+  msg('Capturando imagens... mantenha o sinal.');
+  const v=$('#v'),cc=document.createElement('canvas');cc.width=480;cc.height=360;const g=cc.getContext('2d'),imgs=[];
+  for(let i=0;i<4;i++){g.drawImage(v,0,0,480,360);imgs.push(cc.toDataURL('image/jpeg',.7).split(',')[1]);await new Promise(r=>setTimeout(r,350))}
+  const s=steps[cur],alvo=s?`A pessoa tenta fazer o sinal "${$('#word').value}". Passo atual: ${s.titulo} — ${s.instrucao}`:'Não sei qual sinal a pessoa tenta fazer.';
+  const prompt=`Você é professor de Libras. ${alvo}\nAs ${imgs.length} imagens são quadros em sequência (cerca de 1 segundo) da câmera frontal. Analise formato das mãos, orientação, local no corpo e movimento. Responda APENAS JSON: {"sinal_provavel":"...","correto":true|false|null,"nota":0-100,"certo":"o que está certo","corrigir":"o que ajustar, curto"}. Seja honesto: se a imagem estiver ruim ou você não tiver certeza, diga em "corrigir" e use nota baixa.`;
+  msg('Analisando com Gemini...');
+  try{const r=await geminiParts([{text:prompt},...imgs.map(b=>({inline_data:{mime_type:'image/jpeg',data:b}}))],key);
+    const o=JSON.parse(r.text.slice(r.text.indexOf('{'),r.text.lastIndexOf('}')+1));
+    msg(`🤖 ${o.sinal_provavel?'Parece: '+o.sinal_provavel+' · ':''}nota ${o.nota}/100${o.certo?' — '+o.certo:''}${o.corrigir?' · Ajuste: '+o.corrigir:''} (${r.model})`)}
+  catch(e){msg('Gemini: '+e.message)}
+}
 $('#go').onclick=async()=>{
   const w=$('#word').value.trim();if(!w)return;const key=localStorage.getItem('libras_gemini_key');msg('Preparando...');
   try{
@@ -389,7 +409,7 @@ $('#go').onclick=async()=>{
 $('#word').addEventListener('keydown',e=>e.key==='Enter'&&$('#go').click());
 $('#prev').onclick=()=>{if(cur>0){cur--;holdT=0;render()}};
 $('#skip').onclick=()=>{if(cur<steps.length-1){cur++;holdT=0;render()}};
-$('#restart').onclick=()=>{cur=0;holdT=0;render()};
+$('#verify').onclick=verifyAI;$('#restart').onclick=()=>{cur=0;holdT=0;render()};
 
 function render(){
   $('#steps').innerHTML=steps.map((s,i)=>`<span class="chip ${i<cur?'done':i===cur?'cur':''}">${i<cur?'✓ ':''}${esc(s.titulo)}</span>`).join('');
@@ -403,25 +423,35 @@ function renderFingers(){
     return `<div class="${c}">${n}<br><b>${got==null?'—':ST[got]}</b><br><small>${want==null?'':'alvo: '+ST[want]}</small></div>`}).join('');
 }
 const dist=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
+const ang=(a,b,c)=>{const u=[a.x-b.x,a.y-b.y,a.z-b.z],v=[c.x-b.x,c.y-b.y,c.z-b.z];const m=Math.hypot(...u)*Math.hypot(...v)||1e-6;return Math.acos(clamp((u[0]*v[0]+u[1]*v[1]+u[2]*v[2])/m,-1,1))*180/Math.PI};
 function analyze(L){
-  const palm=dist(L[0],L[9])||1e-3,d=[];const t=dist(L[4],L[5])/palm;d.push(t>.95?2:t>.55?1:0);
-  [[8,5],[12,9],[16,13],[20,17]].forEach(([tip,mcp])=>{const r=dist(L[tip],L[0])/dist(L[mcp],L[0]);d.push(r>1.65?2:r>1.25?1:0)});
-  return{d,touch:dist(L[4],L[8])/palm<.35,spread:dist(L[8],L[12])/palm>.38};
+  const palm=dist(L[0],L[9])||1e-3,d=[];
+  const ts=(ang(L[1],L[2],L[3])+ang(L[2],L[3],L[4]))/2,td=dist(L[4],L[5])/palm;
+  d.push(ts>150&&td>.75?2:td<.5?0:1);
+  [[5,6,7,8],[9,10,11,12],[13,14,15,16],[17,18,19,20]].forEach(([m,p,i,t])=>{const a=(ang(L[m],L[p],L[i])+ang(L[p],L[i],L[t]))/2;d.push(a>155?2:a>115?1:0)});
+  const dx=L[9].x-L[0].x,dy=L[9].y-L[0].y;
+  return{d,orient:Math.abs(dx)>Math.abs(dy)*1.1?'lado':dy>0?'baixo':'cima',touch:dist(L[4],L[8])/palm<.35,spread:dist(L[8],L[12])/palm>.38};
 }
-function score(a,s){let sc=0;for(let i=0;i<5;i++){const df=Math.abs(a.d[i]-s.d[i]);sc+=df===0?1:df===1?.5:0}sc/=5;if(s.toque&&!a.touch)sc-=.2;if(s.abertos&&!a.spread)sc-=.2;return Math.max(0,sc)}
+const hist=[];
+function smooth(a){hist.push(a);if(hist.length>5)hist.shift();
+  const d=a.d.map((_,i)=>{const c=[0,0,0];hist.forEach(h=>c[h.d[i]]++);return c.indexOf(Math.max(...c))});
+  const maj=k=>hist.filter(h=>h[k]).length>hist.length/2,oc={};hist.forEach(h=>oc[h.orient]=(oc[h.orient]||0)+1);
+  return{d,orient:Object.keys(oc).sort((x,y)=>oc[y]-oc[x])[0],touch:maj('touch'),spread:maj('spread')}}
+function score(a,s){let sc=0;for(let i=0;i<5;i++){const df=Math.abs(a.d[i]-s.d[i]);sc+=df===0?1:df===1?.5:0}sc/=5;if(s.toque&&!a.touch)sc-=.2;if(s.abertos&&!a.spread)sc-=.2;if(s.o&&a.orient!==s.o)sc-=.25;return Math.max(0,sc)}
+function guess(a){const r=Object.entries(ALPHA).map(([k,v])=>[k,score(a,{d:v.d,toque:!!v.touch,abertos:!!v.spread,o:v.o})]).sort((x,y)=>y[1]-x[1]);const best=r[0][1];return{letters:r.filter(x=>best-x[1]<.01).slice(0,4).map(x=>x[0]),conf:best}}
 
 const cv=$('#c'),ctx=cv.getContext('2d');let running=false,hands;
 const setBadge=(t,ok)=>{$('#badge').textContent=t;$('#badge').className='badge'+(ok?' ok':'')};
 function onResults(res){
   cv.width=res.image.width;cv.height=res.image.height;ctx.clearRect(0,0,cv.width,cv.height);
   const now=performance.now(),dt=now-lastT;lastT=now;const L=res.multiHandLandmarks&&res.multiHandLandmarks[0];
-  if(!L){detected=null;holdT=0;$('#hold').style.width='0';setBadge('Mostre a mão',false);renderFingers();return}
+  if(!L){hist.length=0;detected=null;holdT=0;$('#hold').style.width='0';setBadge('Mostre a mão',false);renderFingers();return}
   if($('#skel').checked){ctx.strokeStyle='#34d399';ctx.lineWidth=3;[[0,1,2,3,4],[0,5,6,7,8],[9,10,11,12],[13,14,15,16],[0,17,18,19,20],[5,9,13,17]].forEach(p=>{ctx.beginPath();p.forEach((k,i)=>{const q=L[k];i?ctx.lineTo(q.x*cv.width,q.y*cv.height):ctx.moveTo(q.x*cv.width,q.y*cv.height)});ctx.stroke()});ctx.fillStyle='#fff';L.forEach(q=>{ctx.beginPath();ctx.arc(q.x*cv.width,q.y*cv.height,3,0,7);ctx.fill()})}
-  detected=analyze(L);renderFingers();const s=steps[cur];if(!s){setBadge('Escolha uma palavra',false);return}
+  detected=smooth(analyze(L));renderFingers();const s=steps[cur];if(!s){const g=guess(detected);setBadge('Parece: '+g.letters.join(' / ')+' ('+Math.round(g.conf*100)+'%)',g.conf>=.8);return}
   const sc=score(detected,s);
   if(sc>=.8){holdT+=dt;setBadge('✓ Quase! Segure...',true)}else{holdT=Math.max(0,holdT-dt*2);setBadge('Ajuste a mão ('+Math.round(sc*100)+'%)',false)}
-  $('#hold').style.width=Math.min(100,holdT/8)+'%';
-  if(holdT>=800){holdT=0;if(cur<steps.length-1){cur++;render();setBadge('Passo concluído!',true)}else{$('#steps').innerHTML=steps.map(s=>`<span class="chip done">✓ ${esc(s.titulo)}</span>`).join('');$('#instr').innerHTML='<b>🎉 Parabéns!</b><span>Você completou a palavra. Digite outra ou clique em Reiniciar.</span>';setBadge('Palavra concluída!',true)}}
+  $('#hold').style.width=Math.min(100,holdT/6)+'%';
+  if(holdT>=600){holdT=0;if(cur<steps.length-1){cur++;render();setBadge('Passo concluído!',true)}else{$('#steps').innerHTML=steps.map(s=>`<span class="chip done">✓ ${esc(s.titulo)}</span>`).join('');$('#instr').innerHTML='<b>🎉 Parabéns!</b><span>Você completou a palavra. Digite outra ou clique em Reiniciar.</span>';setBadge('Palavra concluída!',true)}}
 }
 $('#camBtn').onclick=async()=>{
   if(running)return;
